@@ -1,7 +1,6 @@
 import axios from "axios";
 import history from "./history";
 import { logout } from "../features/user/userSlice";
-import { clearAdvertStore } from "../features/advert/advertSlice";
 import {
   getSessionFromLocalStorage,
   setSessionInLocalStorage,
@@ -63,7 +62,7 @@ export const interceptor = (store) => {
       } else if (error.response.status === 403) {
         originalRequest._retry = false;
         // refresh token expired - logout the user
-        store.dispatch(clearAdvertStore());
+        // store.dispatch(clearAdvertStore());
         store.dispatch(logout());
         history.push("/landing");
       }
