@@ -22,6 +22,7 @@ import { useQueryClient } from "@tanstack/react-query";
 const initialState = {
   isLoading: false,
   viewState: "login",
+  status: 2,
   profile: getUserFromLocalStorage(),
   session: getSessionFromLocalStorage(),
 };
@@ -147,6 +148,9 @@ const userSlice = createSlice({
     setViewState: (state, { payload }) => {
       state.viewState = payload;
     },
+    setStatue: (state, { payload }) => {
+      state.status = payload;
+    },
     updateUserProfile: (state, { payload }) => {
       state.profile = payload;
     },
@@ -262,5 +266,6 @@ const userSlice = createSlice({
   },
 });
 
-export const { setViewState, logout, updateUserProfile } = userSlice.actions;
+export const { setViewState, logout, updateUserProfile, setStatue } =
+  userSlice.actions;
 export default userSlice.reducer;
