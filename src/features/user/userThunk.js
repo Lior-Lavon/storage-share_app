@@ -9,9 +9,18 @@ export const registerUserThunk = async (url, user, thunkAPI) => {
   }
 };
 
-export const loginUserThunk = async (url, user, thunkAPI) => {
+export const loginUserThunk = async (url, body, thunkAPI) => {
   try {
-    const resp = await customFetch.post(url, user);
+    const resp = await customFetch.post(url, body);
+    return resp.data;
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error.response?.data?.msg);
+  }
+};
+
+export const logoutUserThunk = async (url, body, thunkAPI) => {
+  try {
+    const resp = await customFetch.post(url, body);
     return resp.data;
   } catch (error) {
     return thunkAPI.rejectWithValue(error.response?.data?.msg);
@@ -40,6 +49,15 @@ export const uploadAvatarThunk = async (url, avatar, thunkAPI) => {
 export const refreshTokenThunk = async (url, avatar, thunkAPI) => {
   try {
     const resp = await customFetch.post(url, avatar);
+    return { token: resp.data };
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error.response?.data?.msg);
+  }
+};
+
+export const pingThunk = async (url, thunkAPI) => {
+  try {
+    const resp = await customFetch.get(url);
     return { token: resp.data };
   } catch (error) {
     return thunkAPI.rejectWithValue(error.response?.data?.msg);

@@ -1,6 +1,6 @@
 import axios from "axios";
 import history from "./history";
-import { logout } from "../features/user/userSlice";
+// import { logout } from "../features/user/userSlice";
 import {
   getSessionFromLocalStorage,
   setSessionInLocalStorage,
@@ -21,7 +21,6 @@ export const interceptor = (store) => {
       const session = getSessionFromLocalStorage();
       if (session) {
         config.headers["Authorization"] = `Bearer ${session.access_token}`;
-        config.headers["Access-Control-Allow-Origin"] = "*";
       }
       return config;
     },
@@ -62,9 +61,8 @@ export const interceptor = (store) => {
       } else if (error.response.status === 403) {
         originalRequest._retry = false;
         // refresh token expired - logout the user
-        // store.dispatch(clearAdvertStore());
-        store.dispatch(logout());
-        history.push("/landing");
+        // store.dispatch(logout());
+        // history.push("/landing");
       }
       return Promise.reject(error);
     }

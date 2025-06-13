@@ -5,6 +5,8 @@ import {
   updateUserThunk,
   uploadAvatarThunk,
   refreshTokenThunk,
+  pingThunk,
+  logoutUserThunk,
 } from "./userThunk";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -23,21 +25,33 @@ const initialState = {
   isLoading: false,
   viewState: "login",
   status: 0,
+  errorMsg: null,
   profile: getUserFromLocalStorage(),
   session: getSessionFromLocalStorage(),
 };
 
+export const pingUser = createAsyncThunk("user/pingUser", async (thunkAPI) => {
+  return pingThunk("/ping", thunkAPI);
+});
+
 export const registerUser = createAsyncThunk(
   "user/registerUser",
-  async (user, thunkAPI) => {
-    return registerUserThunk("/users", user, thunkAPI);
+  async (body, thunkAPI) => {
+    return registerUserThunk("/users", body, thunkAPI);
   }
 );
 
 export const loginUser = createAsyncThunk(
   "user/loginUser",
-  async (user, thunkAPI) => {
-    return loginUserThunk("/users/login", user, thunkAPI);
+  async (body, thunkAPI) => {
+    return loginUserThunk("/users/login", body, thunkAPI);
+  }
+);
+
+export const logoutUser = createAsyncThunk(
+  "user/logoutUser",
+  async (thunkAPI) => {
+    return logoutUserThunk("/users/logout", thunkAPI);
   }
 );
 
@@ -137,14 +151,6 @@ const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
-    logout: (state) => {
-      toast.success("Logout successful");
-      clearUserFromLocalStorage();
-      clearSessionFromLocalStorage();
-
-      state.profile = null;
-      state.session = null;
-    },
     setViewState: (state, { payload }) => {
       state.viewState = payload;
     },
@@ -159,24 +165,26 @@ const userSlice = createSlice({
     builder
       .addCase(registerUser.pending, (state) => {
         state.isLoading = true;
-        // console.log("registerUser - pending");
+        console.log("registerUser - pending");
       })
       .addCase(registerUser.fulfilled, (state, { payload }) => {
-        // console.log("registerUser - fulfilled");
+        console.log("registerUser - fulfilled");
         state.isLoading = false;
         state.viewState = "login";
 
         toast.success("Registered successful");
       })
-      .addCase(registerUser.rejected, (state) => {
+      .addCase(registerUser.rejected, (state, { payload }) => {
         state.isLoading = false;
-        // console.log("registerUser - rejected");
+        console.log("registerUser - rejected : ", payload);
+        state.errorMsg = payload.replace(/_/g, " ");
       })
       .addCase(loginUser.pending, (state) => {
         state.isLoading = true;
-        // console.log("loginUser - pending");
+        console.log("loginUser - pending");
       })
       .addCase(loginUser.fulfilled, (state, { payload }) => {
+        console.log("loginUser - fulfilled : ", payload);
         state.isLoading = false;
         const {
           user,
@@ -201,16 +209,36 @@ const userSlice = createSlice({
         setSessionInLocalStorage(session);
 
         // console.log("loginUser - fulfilled");
-        const { firstname } = user;
-        if (firstname !== "not_set") {
-          toast.success(`Welcome back ${firstname}`);
-        } else {
-          toast.success(`Welcome back`);
-        }
+        // const { firstname } = user;
+        // if (firstname !== "not_set") {
+        //   toast.success(`Welcome back ${firstname}`);
+        // } else {
+        //   toast.success(`Welcome back`);
+        // }
       })
-      .addCase(loginUser.rejected, (state) => {
+      .addCase(loginUser.rejected, (state, { payload }) => {
         state.isLoading = false;
-        // console.log("loginUser - rejected");
+        console.log("loginUser - rejected : ", payload);
+        state.errorMsg = payload.replace(/_/g, " ");
+      })
+      .addCase(logoutUser.pending, (state) => {
+        state.isLoading = true;
+        console.log("logoutUser - pending");
+      })
+      .addCase(logoutUser.fulfilled, (state, { payload }) => {
+        console.log("logoutUser - fulfilled : ", payload);
+        state.isLoading = false;
+
+        toast.success("Logout successful");
+        clearUserFromLocalStorage();
+        clearSessionFromLocalStorage();
+
+        state.profile = null;
+        state.session = null;
+      })
+      .addCase(logoutUser.rejected, (state) => {
+        state.isLoading = false;
+        console.log("logoutUser - rejected");
       })
       .addCase(updateUser.pending, (state) => {
         state.isLoading = true;
@@ -262,10 +290,18 @@ const userSlice = createSlice({
           access_token_expires_at,
         };
         setSessionInLocalStorage(newSession);
+      })
+      .addCase(pingUser.pending, (state) => {
+        // console.log("pingUser - pending");
+      })
+      .addCase(pingUser.fulfilled, (state, { payload }) => {
+        // console.log("pingUser - fulfilled - ", payload);
+      })
+      .addCase(pingUser.rejected, (state) => {
+        console.log("pingUser - rejected");
       });
   },
 });
 
-export const { setViewState, logout, updateUserProfile, setStatue } =
-  userSlice.actions;
+export const { setViewState, updateUserProfile, setStatue } = userSlice.actions;
 export default userSlice.reducer;

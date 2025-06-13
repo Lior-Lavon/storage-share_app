@@ -6,15 +6,12 @@ const InputField = ({
   placeholder,
   value,
   onChange,
-  id,
   autoComplete,
 }) => (
   <div className="flex flex-col gap-1">
-    <label htmlFor={id} className="text-base font-medium">
-      {label}
-    </label>
+    {/* <label htmlFor={id} className="text-base font-medium"> */}
+    <label className="text-base font-medium">{label}</label>
     <input
-      id={type}
       name={type}
       type={type}
       placeholder={placeholder}

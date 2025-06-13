@@ -3,8 +3,18 @@ import { unstable_HistoryRouter as HistoryRouter } from "react-router-dom";
 
 import { Landing, NotFound, ProtectiveRoute } from "./pages/index";
 import history from "./utils/history";
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { pingUser } from "./features/user/userSlice";
+import { ForgotPasswordView, LoginView, SignupView } from "./components";
 
 function App() {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(pingUser());
+  }, []);
+
   return (
     <HistoryRouter history={history}>
       <Routes>
@@ -15,6 +25,9 @@ function App() {
           {/* <Route index element={<StartPage />} /> */}
         </Route>
         <Route path="/landing" element={<Landing />} />
+        <Route path="/login" element={<LoginView />} />
+        <Route path="/register" element={<SignupView />} />
+        <Route path="/forgot_password" element={<ForgotPasswordView />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </HistoryRouter>

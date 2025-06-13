@@ -1,34 +1,36 @@
 import React, { useEffect, useState } from "react";
 import { ForgotPasswordView, LoginView, SignupView } from "../../components";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import useViewportHeight from "../../utils/useViewportHeight";
+import PrimaryButton from "../../components/SharedComponents/PrimaryButton";
+import { useNavigate } from "react-router-dom";
+import { logoutUser } from "../../features/user/userSlice";
 
 const Dashboard = () => {
-  const { status } = useSelector((store) => store.user);
-  const [viewportHeight, setViewportHeight] = useState(window.innerHeight);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const viewHeight = useViewportHeight();
 
-  useEffect(() => {
-    const updateHeight = () => {
-      setViewportHeight(window.visualViewport?.height || window.innerHeight);
-    };
+  const { profile } = useSelector((store) => store.user);
 
-    updateHeight(); // set on mount
-    window.visualViewport?.addEventListener("resize", updateHeight);
-    window.addEventListener("resize", updateHeight);
-
-    return () => {
-      window.visualViewport?.removeEventListener("resize", updateHeight);
-      window.removeEventListener("resize", updateHeight);
-    };
-  }, []);
+  const handleLogout = () => {
+    dispatch(logoutUser());
+  };
 
   return (
     <div
-      className="w-full flex items-center justify-center"
-      style={{ height: viewportHeight }}
+      className="w-full flex items-center justify-center bg-white"
+      style={{ height: viewHeight }}
     >
-      {status == 0 && <LoginView />}
-      {status == 1 && <SignupView />}
-      {status == 2 && <ForgotPasswordView />}
+      <div className="w-[90%]">
+        {profile == null ? (
+          <PrimaryButton onClick={() => navigate("/login")}>
+            Sign in
+          </PrimaryButton>
+        ) : (
+          <PrimaryButton onClick={() => handleLogout()}>Sign out</PrimaryButton>
+        )}
+      </div>
     </div>
   );
 };
