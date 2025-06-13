@@ -22,7 +22,7 @@ import { useQueryClient } from "@tanstack/react-query";
 const initialState = {
   isLoading: false,
   viewState: "login",
-  status: 2,
+  status: 0,
   profile: getUserFromLocalStorage(),
   session: getSessionFromLocalStorage(),
 };
