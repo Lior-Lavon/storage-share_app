@@ -34,7 +34,7 @@ const ForgotPasswordView = () => {
           dispatch(setStatue(0));
         }}
       >
-        Already have an account{" "}
+        Already have an account ?
         <a href="#" className="text-violet-600">
           Sign in
         </a>
