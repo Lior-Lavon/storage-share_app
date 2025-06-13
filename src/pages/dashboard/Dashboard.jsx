@@ -23,7 +23,7 @@ const Dashboard = () => {
 
   return (
     <div
-      className="w-full bg-red-400 flex items-center justify-center"
+      className="w-full flex items-center justify-center"
       style={{ height: viewportHeight }}
     >
       {status == 0 && <LoginView />}
