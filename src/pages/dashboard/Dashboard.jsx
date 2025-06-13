@@ -6,7 +6,7 @@ const Dashboard = () => {
   const { status } = useSelector((store) => store.user);
 
   return (
-    <div className="w-full h-screen flex items-center justify-center">
+    <div className="w-full h-full bg-red-400 flex items-center justify-center">
       {status == 0 && <LoginView />}
       {status == 1 && <SignupView />}
       {status == 2 && <ForgotPasswordView />}
