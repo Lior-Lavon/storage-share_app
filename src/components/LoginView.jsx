@@ -22,10 +22,8 @@ const LoginView = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault(); // prevent page refresh
-    console.log("111");
 
     if (email == "" || password == "") return;
-    console.log("222");
     dispatch(
       loginUser({
         email: email,

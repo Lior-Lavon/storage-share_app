@@ -55,6 +55,13 @@ export const logoutUser = createAsyncThunk(
   }
 );
 
+export const passwordResetRequest = createAsyncThunk(
+  "user/passwordResetRequest",
+  async (body, thunkAPI) => {
+    return loginUserThunk("/users/reset_password_request", body, thunkAPI);
+  }
+);
+
 export const updateUser = createAsyncThunk(
   "user/updateUser",
   async (user, thunkAPI) => {
@@ -290,6 +297,18 @@ const userSlice = createSlice({
           access_token_expires_at,
         };
         setSessionInLocalStorage(newSession);
+      })
+      .addCase(passwordResetRequest.pending, (state) => {
+        state.isLoading = true;
+        console.log("passwordResetRequest - pending");
+      })
+      .addCase(passwordResetRequest.fulfilled, (state, { payload }) => {
+        console.log("passwordResetRequest - fulfilled : ", payload);
+        state.isLoading = false;
+      })
+      .addCase(passwordResetRequest.rejected, (state) => {
+        state.isLoading = false;
+        console.log("passwordResetRequest - rejected");
       })
       .addCase(pingUser.pending, (state) => {
         // console.log("pingUser - pending");

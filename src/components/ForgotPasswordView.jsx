@@ -1,20 +1,36 @@
-import React from "react";
+import React, { useState } from "react";
 import InputField from "./SharedComponents/InputField";
 import PrimaryButton from "./SharedComponents/PrimaryButton";
 import AuthCard from "./SharedComponents/AuthCard";
-import { setStatue } from "../features/user/userSlice";
+import { passwordResetRequest, setStatue } from "../features/user/userSlice";
 import { useDispatch } from "react-redux";
 import useViewportHeight from "../utils/useViewportHeight";
+import { useNavigate } from "react-router-dom";
 
 const ForgotPasswordView = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const [email, setEmail] = useState("");
   const viewHeight = useViewportHeight();
 
   const handleSubmit = (e) => {
     e.preventDefault(); // prevent page refresh
-    console.log("handleSubmit");
-    console.log("Password:", password);
-    // You can now send this to your backend or process it further
+
+    if (email == "") return;
+
+    dispatch(
+      passwordResetRequest({
+        email: email,
+      })
+    )
+      .unwrap()
+      .then(() => {
+        navigate("/login");
+      })
+      .catch((err) => {
+        console.error("Login failed:", err);
+      });
   };
 
   return (
@@ -27,12 +43,19 @@ const ForgotPasswordView = () => {
           Please enter your email to recover your password
         </p>
         <form onSubmit={handleSubmit} className="flex flex-col gap-4 mb-4">
-          <InputField label="Your email" type="email" placeholder="email" />
-        </form>
+          <InputField
+            label="Your email"
+            type="email"
+            value={email}
+            placeholder="email"
+            onChange={(e) => setEmail(e.target.value)}
+            autoComplete="username"
+          />
 
-        <div className="mt-8">
-          <PrimaryButton>Send</PrimaryButton>
-        </div>
+          <div className="mt-8">
+            <PrimaryButton type="submit">Send</PrimaryButton>
+          </div>
+        </form>
 
         <div className="text-base mt-6 flex gap-2 items-center justify-center">
           <p>Already have an account ? </p>

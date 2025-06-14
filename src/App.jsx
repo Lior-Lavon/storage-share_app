@@ -11,14 +11,7 @@ import { ForgotPasswordView, LoginView, SignupView } from "./components";
 function App() {
   const dispatch = useDispatch();
 
-  const validateUrl = () => {
-    console.log("11111");
-    const baseURL = import.meta.env.VITE_API_BASE_URL;
-    console.log("baseURL : ", baseURL);
-    console.log("22222");
-  };
   useEffect(() => {
-    validateUrl();
     dispatch(pingUser());
   }, []);
 
