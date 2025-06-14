@@ -10,6 +10,7 @@ import {
   validateResetPasswordThunk,
   resetPasswordThunk,
   verifyEmailThunk,
+  deleteUserThunk,
 } from "./userThunk";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -77,6 +78,13 @@ export const resetPassword = createAsyncThunk(
   "user/resetPassword",
   async (body, thunkAPI) => {
     return resetPasswordThunk("/users/reset_password", body, thunkAPI);
+  }
+);
+
+export const deleteUser = createAsyncThunk(
+  "user/deleteUser",
+  async (body, thunkAPI) => {
+    return deleteUserThunk("/users/hard_user_delete", body, thunkAPI);
   }
 );
 
@@ -365,6 +373,20 @@ const userSlice = createSlice({
         state.isLoading = false;
         state.errorMsg = payload;
         console.log("resetPassword - rejected ");
+      })
+
+      .addCase(deleteUser.pending, (state) => {
+        state.isLoading = true;
+        console.log("deleteUser - pending");
+      })
+      .addCase(deleteUser.fulfilled, (state, { payload }) => {
+        console.log("deleteUser - fulfilled : ");
+        state.isLoading = false;
+      })
+      .addCase(deleteUser.rejected, (state, { payload }) => {
+        state.isLoading = false;
+        state.errorMsg = payload;
+        console.log("deleteUser - rejected ");
       })
 
       .addCase(verifyEmailRequest.pending, (state) => {

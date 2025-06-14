@@ -8,6 +8,7 @@ import { useDispatch } from "react-redux";
 import { pingUser } from "./features/user/userSlice";
 import {
   ForgotPasswordView,
+  HardDeleteUser,
   LoginView,
   ResetPassword,
   SignupView,
@@ -36,6 +37,7 @@ function App() {
         <Route path="/reset_password/:token" element={<ResetPassword />} />
         <Route path="/verify_email/:token" element={<VerifyEmail />} />
         <Route path="/forgot_password" element={<ForgotPasswordView />} />
+        <Route path="/delete_user" element={<HardDeleteUser />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </HistoryRouter>

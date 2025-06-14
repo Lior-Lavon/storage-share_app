@@ -25,9 +25,15 @@ const Dashboard = () => {
     >
       <div className="w-[90%]">
         {profile == null ? (
-          <PrimaryButton onClick={() => navigate("/login")}>
-            Sign in
-          </PrimaryButton>
+          <div className="flex flex-col space-y-2">
+            <PrimaryButton onClick={() => navigate("/login")}>
+              Sign in
+            </PrimaryButton>
+
+            <PrimaryButton onClick={() => navigate("/delete_user")}>
+              Delete user
+            </PrimaryButton>
+          </div>
         ) : (
           <form onSubmit={handleSubmit}>
             <PrimaryButton type="submit">Sign out</PrimaryButton>
