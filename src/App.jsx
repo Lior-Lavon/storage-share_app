@@ -6,7 +6,12 @@ import history from "./utils/history";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { pingUser } from "./features/user/userSlice";
-import { ForgotPasswordView, LoginView, SignupView } from "./components";
+import {
+  ForgotPasswordView,
+  LoginView,
+  ResetPassword,
+  SignupView,
+} from "./components";
 
 function App() {
   const dispatch = useDispatch();
@@ -27,6 +32,7 @@ function App() {
         <Route path="/landing" element={<Landing />} />
         <Route path="/login" element={<LoginView />} />
         <Route path="/register" element={<SignupView />} />
+        <Route path="/reset_password/:token" element={<ResetPassword />} />
         <Route path="/forgot_password" element={<ForgotPasswordView />} />
         <Route path="*" element={<NotFound />} />
       </Routes>

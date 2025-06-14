@@ -7,6 +7,8 @@ import {
   refreshTokenThunk,
   pingThunk,
   logoutUserThunk,
+  validateResetPasswordThunk,
+  resetPasswordThunk,
 } from "./userThunk";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -59,6 +61,21 @@ export const passwordResetRequest = createAsyncThunk(
   "user/passwordResetRequest",
   async (body, thunkAPI) => {
     return loginUserThunk("/users/reset_password_request", body, thunkAPI);
+  }
+);
+
+export const validateResetPassword = createAsyncThunk(
+  "user/validateResetPassword",
+  async (token, thunkAPI) => {
+    const url = `/users/validate_reset_password/${token}`;
+    return validateResetPasswordThunk(url, thunkAPI);
+  }
+);
+
+export const resetPassword = createAsyncThunk(
+  "user/resetPassword",
+  async (body, thunkAPI) => {
+    return resetPasswordThunk("/users/reset_password", body, thunkAPI);
   }
 );
 
@@ -310,6 +327,34 @@ const userSlice = createSlice({
         state.isLoading = false;
         console.log("passwordResetRequest - rejected");
       })
+      .addCase(validateResetPassword.pending, (state) => {
+        state.isLoading = true;
+        console.log("validateResetPassword - pending");
+      })
+      .addCase(validateResetPassword.fulfilled, (state, { payload }) => {
+        console.log("validateResetPassword - fulfilled : ");
+        state.isLoading = false;
+      })
+      .addCase(validateResetPassword.rejected, (state, { payload }) => {
+        state.isLoading = false;
+        state.errorMsg = payload;
+        console.log("validateResetPassword - rejected ");
+      })
+
+      .addCase(resetPassword.pending, (state) => {
+        state.isLoading = true;
+        console.log("resetPassword - pending");
+      })
+      .addCase(resetPassword.fulfilled, (state, { payload }) => {
+        console.log("resetPassword - fulfilled : ");
+        state.isLoading = false;
+      })
+      .addCase(resetPassword.rejected, (state, { payload }) => {
+        state.isLoading = false;
+        state.errorMsg = payload;
+        console.log("resetPassword - rejected ");
+      })
+
       .addCase(pingUser.pending, (state) => {
         // console.log("pingUser - pending");
       })

@@ -63,3 +63,21 @@ export const pingThunk = async (url, thunkAPI) => {
     return thunkAPI.rejectWithValue(error.response?.data?.msg);
   }
 };
+
+export const validateResetPasswordThunk = async (url, thunkAPI) => {
+  try {
+    const resp = await customFetch.get(url);
+    return { data: resp.data };
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error.response?.data?.msg);
+  }
+};
+
+export const resetPasswordThunk = async (url, body, thunkAPI) => {
+  try {
+    const resp = await customFetch.post(url, body);
+    return { data: resp.data };
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error.response?.data?.msg);
+  }
+};
