@@ -13,7 +13,8 @@ const Dashboard = () => {
 
   const { profile } = useSelector((store) => store.user);
 
-  const handleLogout = () => {
+  const handleSubmit = (e) => {
+    e.preventDefault(); // prevent page refresh
     dispatch(logoutUser());
   };
 
@@ -28,7 +29,9 @@ const Dashboard = () => {
             Sign in
           </PrimaryButton>
         ) : (
-          <PrimaryButton onClick={() => handleLogout()}>Sign out</PrimaryButton>
+          <form onSubmit={handleSubmit}>
+            <PrimaryButton type="submit">Sign out</PrimaryButton>
+          </form>
         )}
       </div>
     </div>
