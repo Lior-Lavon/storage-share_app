@@ -6,6 +6,7 @@ import AuthCard from "./SharedComponents/AuthCard";
 import InputField from "./SharedComponents/InputField";
 import PrimaryButton from "./SharedComponents/PrimaryButton";
 import {
+  clearError,
   resetPassword,
   validateResetPassword,
 } from "../features/user/userSlice";
@@ -24,6 +25,10 @@ const ResetPassword = () => {
   const [userEmail, setUserEmail] = useState(null);
 
   const viewHeight = useViewportHeight();
+
+  useEffect(() => {
+    dispatch(clearError());
+  }, []);
 
   useEffect(() => {
     // call the /users/validate_reset_password

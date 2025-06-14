@@ -1,11 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import InputField from "./SharedComponents/InputField";
 import PrimaryButton from "./SharedComponents/PrimaryButton";
 import AuthCard from "./SharedComponents/AuthCard";
 
 import googlePng from "../assets/google.png";
 import { useDispatch, useSelector } from "react-redux";
-import { loginUser } from "../features/user/userSlice";
+import { clearError, loginUser } from "../features/user/userSlice";
 import useViewportHeight from "../utils/useViewportHeight";
 import { useNavigate } from "react-router-dom";
 
@@ -19,6 +19,10 @@ const LoginView = () => {
   const [password, setPassword] = useState("");
 
   const viewHeight = useViewportHeight();
+
+  useEffect(() => {
+    dispatch(clearError());
+  }, []);
 
   const handleSubmit = (e) => {
     e.preventDefault(); // prevent page refresh

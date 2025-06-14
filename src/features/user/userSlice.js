@@ -9,6 +9,7 @@ import {
   logoutUserThunk,
   validateResetPasswordThunk,
   resetPasswordThunk,
+  verifyEmailThunk,
 } from "./userThunk";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -76,6 +77,14 @@ export const resetPassword = createAsyncThunk(
   "user/resetPassword",
   async (body, thunkAPI) => {
     return resetPasswordThunk("/users/reset_password", body, thunkAPI);
+  }
+);
+
+export const verifyEmailRequest = createAsyncThunk(
+  "user/verifyEmail",
+  async (token, thunkAPI) => {
+    const url = `/users/verify_email/${token}`;
+    return verifyEmailThunk(url, thunkAPI);
   }
 );
 
@@ -175,6 +184,9 @@ const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
+    clearError: (state) => {
+      state.errorMsg = null;
+    },
     setViewState: (state, { payload }) => {
       state.viewState = payload;
     },
@@ -355,6 +367,20 @@ const userSlice = createSlice({
         console.log("resetPassword - rejected ");
       })
 
+      .addCase(verifyEmailRequest.pending, (state) => {
+        state.isLoading = true;
+        console.log("verifyEmail - pending");
+      })
+      .addCase(verifyEmailRequest.fulfilled, (state, { payload }) => {
+        console.log("verifyEmail - fulfilled : ");
+        state.isLoading = false;
+      })
+      .addCase(verifyEmailRequest.rejected, (state, { payload }) => {
+        state.isLoading = false;
+        state.errorMsg = payload;
+        console.log("verifyEmail - rejected ");
+      })
+
       .addCase(pingUser.pending, (state) => {
         // console.log("pingUser - pending");
       })
@@ -367,5 +393,6 @@ const userSlice = createSlice({
   },
 });
 
-export const { setViewState, updateUserProfile, setStatue } = userSlice.actions;
+export const { setViewState, updateUserProfile, setStatue, clearError } =
+  userSlice.actions;
 export default userSlice.reducer;

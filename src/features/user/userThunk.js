@@ -81,3 +81,12 @@ export const resetPasswordThunk = async (url, body, thunkAPI) => {
     return thunkAPI.rejectWithValue(error.response?.data?.msg);
   }
 };
+
+export const verifyEmailThunk = async (url, thunkAPI) => {
+  try {
+    const resp = await customFetch.get(url);
+    return { data: resp.data };
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error.response?.data?.msg);
+  }
+};

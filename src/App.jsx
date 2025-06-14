@@ -11,6 +11,7 @@ import {
   LoginView,
   ResetPassword,
   SignupView,
+  VerifyEmail,
 } from "./components";
 
 function App() {
@@ -33,6 +34,7 @@ function App() {
         <Route path="/login" element={<LoginView />} />
         <Route path="/register" element={<SignupView />} />
         <Route path="/reset_password/:token" element={<ResetPassword />} />
+        <Route path="/verify_email/:token" element={<VerifyEmail />} />
         <Route path="/forgot_password" element={<ForgotPasswordView />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
