@@ -4,11 +4,12 @@ import googlePng from "../assets/google.png";
 
 import React from "react";
 
-const GoogleRegisterButton = () => {
+const GoogleRegisterButton = ({ label, handleSuccess }) => {
   const login = useGoogleLogin({
     onSuccess: async (tokenResponse) => {
+      console.log("tokenResponse : ", tokenResponse);
+
       try {
-        // tokenResponse.access_token is for Google APIs
         // You want to get the ID token, which you can do with userinfo API
         const userInfo = await axios.get(
           "https://www.googleapis.com/oauth2/v3/userinfo",
@@ -18,18 +19,8 @@ const GoogleRegisterButton = () => {
             },
           }
         );
-
         console.log("userInfo.data : ", userInfo.data);
-
-        // Send to your backend
-        // const res = await axios.post("http://localhost:8000/api/auth/google", {
-        //   id_token: tokenResponse.access_token, // not technically id_token, but used for userinfo
-        //   user: userInfo.data,
-        // });
-
-        // console.log("Backend response:", res.data);
-        // // Store your backend's token (if any)
-        // localStorage.setItem("token", res.data.token);
+        handleSuccess(userInfo.data.email, userInfo.data.sub);
       } catch (err) {
         console.error("Error authenticating user:", err);
       }
@@ -43,11 +34,11 @@ const GoogleRegisterButton = () => {
   //   return <button onClick={() => login()}>Register with Google</button>;
   return (
     <button
-      className="w-full py-2 border rounded-lg flex items-center justify-center gap-2"
+      className="w-full py-2 cursor-pointer border rounded-lg flex items-center justify-center gap-2"
       onClick={() => login()}
     >
       <img src={googlePng} alt="Google" className="w-5 h-5" />
-      Log in with Google
+      {`${label} with Google`}
     </button>
   );
 };

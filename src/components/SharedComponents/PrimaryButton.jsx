@@ -32,7 +32,7 @@ const PrimaryButton = ({ children, type = "submit", onClick, disabled }) => {
       type={type}
       onClick={handleClick}
       disabled={isLoading || disabled}
-      className={`w-full h-10 py-2 rounded-lg transition text-white flex items-center justify-center ${
+      className={`w-full h-10 py-2 cursor-pointer rounded-lg transition text-white flex items-center justify-center ${
         isLoading ? "bg-gray-600" : "bg-violet-600"
       }`}
     >

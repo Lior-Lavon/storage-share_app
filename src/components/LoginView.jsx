@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { clearError, loginUser } from "../features/user/userSlice";
 import useViewportHeight from "../utils/useViewportHeight";
 import { useNavigate } from "react-router-dom";
+import GoogleRegisterButton from "./GoogleRegisterButton";
 
 const LoginView = () => {
   const dispatch = useDispatch();
@@ -28,10 +29,23 @@ const LoginView = () => {
     e.preventDefault(); // prevent page refresh
 
     if (email == "" || password == "") return;
+
+    handleLogin(email, password);
+  };
+
+  const handleGoogleSuccess = (email, google_id) => {
+    console.log(email, google_id);
+    handleLogin(email, google_id);
+  };
+
+  const handleLogin = (email, password = "", google_id = "") => {
+    console.log("handleLogin");
+
     dispatch(
       loginUser({
         email: email,
         password: password,
+        google_id: google_id,
         remember_me: "false",
       })
     )
@@ -86,12 +100,14 @@ const LoginView = () => {
                 Or
               </div>
             </div>
-            <button className="w-full py-2 border rounded-lg flex items-center justify-center gap-2">
-              <img src={googlePng} alt="Google" className="w-5 h-5" />
-              Log in with Google
-            </button>
           </div>
         </form>
+
+        <GoogleRegisterButton
+          label={"Log in"}
+          handleSuccess={handleGoogleSuccess}
+        />
+
         <div className="mt-6 text-base text-center space-y-5 ">
           <div className="flex gap-2 items-center justify-center">
             <p>Don’t have an account ? </p>

@@ -48,6 +48,8 @@ export const registerUser = createAsyncThunk(
 export const loginUser = createAsyncThunk(
   "user/loginUser",
   async (body, thunkAPI) => {
+    console.log("body : ", body);
+
     return loginUserThunk("/users/login", body, thunkAPI);
   }
 );

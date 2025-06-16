@@ -38,10 +38,19 @@ const SignupView = () => {
       return;
     }
 
+    register(email, password);
+  };
+
+  const handleGoogleSuccess = (email, google_id) => {
+    register(email, google_id);
+  };
+
+  const register = (email, password = "", google_id = "") => {
     dispatch(
       registerUser({
         email: email,
         password: password,
+        google_id: google_id,
         role: "renter", // renter, host, admin
       })
     )
@@ -52,10 +61,6 @@ const SignupView = () => {
       .catch((err) => {
         console.error("Login failed:", err);
       });
-  };
-
-  const handleGoogle = () => {
-    console.log("handleGoogle");
   };
 
   return (
@@ -112,14 +117,19 @@ const SignupView = () => {
                 Or
               </div>
             </div>
-            {/* <button className="w-full py-2 border rounded-lg flex items-center justify-center gap-2">
-              <img src={googlePng} alt="Google" className="w-5 h-5" />
-              Log in with Google
-            </button> */}
           </div>
         </form>
 
-        <GoogleRegisterButton />
+        {/* <GoogleLogin
+          className="w-full"
+          onSuccess={handleSuccess}
+          onError={() => console.log("Login failed")}
+          auto_select={true}
+        /> */}
+        <GoogleRegisterButton
+          label={"Sign up"}
+          handleSuccess={handleGoogleSuccess}
+        />
 
         <div className="text-base mt-6 flex gap-2 items-center justify-center">
           <p>Already have an account ? </p>
