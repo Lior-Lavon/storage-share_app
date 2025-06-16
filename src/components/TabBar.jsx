@@ -14,7 +14,7 @@ const TabBar = ({ activeTab, setActiveTab }) => {
         <button
           key={tab.id}
           onClick={() => setActiveTab(tab.id)}
-          className={`flex flex-col items-center justify-center text-sm ${
+          className={`flex flex-col items-center justify-center text-sm cursor-pointer ${
             activeTab === tab.id ? "text-blue-600" : "text-gray-500"
           }`}
         >
