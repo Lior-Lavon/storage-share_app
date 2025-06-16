@@ -39,7 +39,6 @@ const Dashboard = () => {
             <PrimaryButton type="submit">Sign out</PrimaryButton>
           </form>
         )}
-        <p>{import.meta.env.VITE_GOOGLE_API_KEY}</p>
       </div>
     </div>
   );
