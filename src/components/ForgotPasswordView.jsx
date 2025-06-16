@@ -3,13 +3,15 @@ import InputField from "./SharedComponents/InputField";
 import PrimaryButton from "./SharedComponents/PrimaryButton";
 import AuthCard from "./SharedComponents/AuthCard";
 import { passwordResetRequest, setStatue } from "../features/user/userSlice";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import useViewportHeight from "../utils/useViewportHeight";
 import { useNavigate } from "react-router-dom";
 
 const ForgotPasswordView = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const { errorMsg } = useSelector((store) => store.user);
 
   const [email, setEmail] = useState("");
   const viewHeight = useViewportHeight();
@@ -42,6 +44,12 @@ const ForgotPasswordView = () => {
         <p className="text-center text-base mb-4">
           Please enter your email to recover your password
         </p>
+
+        {/* <p className="text-center text-base mb-4">Set up a new password</p> */}
+        {errorMsg != null && (
+          <p className="w-full text-center text-red-400">{errorMsg}</p>
+        )}
+
         <form onSubmit={handleSubmit} className="flex flex-col gap-4 mb-4">
           <InputField
             label="Your email"

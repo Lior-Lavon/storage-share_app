@@ -23,12 +23,23 @@ const ResetPassword = () => {
   const [password2, setPassword2] = useState("");
   const [userId, setUserId] = useState(null);
   const [userEmail, setUserEmail] = useState(null);
+  const [error, setError] = useState(null);
 
   const viewHeight = useViewportHeight();
 
   useEffect(() => {
     dispatch(clearError());
   }, []);
+
+  useEffect(() => {
+    console.log("userId : ", userId);
+    console.log("userEmail : ", userEmail);
+  }, [userId, userEmail]);
+
+  const isValidEmail = (email) => {
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return re.test(email);
+  };
 
   useEffect(() => {
     // call the /users/validate_reset_password
@@ -52,8 +63,15 @@ const ResetPassword = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (password1 == "" || password2 == "") return;
-    if (password1 != password2) return;
+    if (password1 == "" || password2 == "" || password1 != password2) {
+      setError("password does not match");
+      return;
+    }
+    // validate email
+    if (!isValidEmail(userEmail)) {
+      setError("Invalid email address");
+      return;
+    }
 
     dispatch(
       resetPassword({
@@ -83,6 +101,9 @@ const ResetPassword = () => {
         <p className="text-center text-base mb-4">Set up a new password</p>
         {errorMsg != null && (
           <p className="w-full text-center text-red-400">{errorMsg}</p>
+        )}
+        {error != null && (
+          <p className="w-full text-center text-red-400">{error}</p>
         )}
 
         <form onSubmit={handleSubmit}>

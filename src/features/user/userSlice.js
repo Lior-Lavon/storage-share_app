@@ -48,8 +48,6 @@ export const registerUser = createAsyncThunk(
 export const loginUser = createAsyncThunk(
   "user/loginUser",
   async (body, thunkAPI) => {
-    console.log("body : ", body);
-
     return loginUserThunk("/users/login", body, thunkAPI);
   }
 );
@@ -282,9 +280,10 @@ const userSlice = createSlice({
         state.profile = null;
         state.session = null;
       })
-      .addCase(logoutUser.rejected, (state) => {
+      .addCase(logoutUser.rejected, (state, { payload }) => {
         state.isLoading = false;
-        console.log("logoutUser - rejected");
+        console.log("logoutUser - rejected ", payload);
+        state.errorMsg = payload.replace(/_/g, " ");
       })
       .addCase(updateUser.pending, (state) => {
         state.isLoading = true;
@@ -345,9 +344,10 @@ const userSlice = createSlice({
         console.log("passwordResetRequest - fulfilled : ", payload);
         state.isLoading = false;
       })
-      .addCase(passwordResetRequest.rejected, (state) => {
+      .addCase(passwordResetRequest.rejected, (state, { payload }) => {
         state.isLoading = false;
-        console.log("passwordResetRequest - rejected");
+        state.errorMsg = payload;
+        console.log("passwordResetRequest - rejected ", payload);
       })
       .addCase(validateResetPassword.pending, (state) => {
         state.isLoading = true;
