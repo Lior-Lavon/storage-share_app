@@ -6,7 +6,7 @@ import { registerUser } from "../features/user/userSlice";
 import { useDispatch, useSelector } from "react-redux";
 import useViewportHeight from "../utils/useViewportHeight";
 import { useNavigate } from "react-router-dom";
-import googlePng from "../assets/google.png";
+import GoogleRegisterButton from "./GoogleRegisterButton";
 
 const SignupView = () => {
   const dispatch = useDispatch();
@@ -52,6 +52,10 @@ const SignupView = () => {
       .catch((err) => {
         console.error("Login failed:", err);
       });
+  };
+
+  const handleGoogle = () => {
+    console.log("handleGoogle");
   };
 
   return (
@@ -108,12 +112,14 @@ const SignupView = () => {
                 Or
               </div>
             </div>
-            <button className="w-full py-2 border rounded-lg flex items-center justify-center gap-2">
+            {/* <button className="w-full py-2 border rounded-lg flex items-center justify-center gap-2">
               <img src={googlePng} alt="Google" className="w-5 h-5" />
               Log in with Google
-            </button>
+            </button> */}
           </div>
         </form>
+
+        <GoogleRegisterButton />
 
         <div className="text-base mt-6 flex gap-2 items-center justify-center">
           <p>Already have an account ? </p>
