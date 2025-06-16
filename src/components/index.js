@@ -5,6 +5,8 @@ import ForgotPasswordView from "./ForgotPasswordView";
 import VerifyEmail from "./VerifyEmail";
 import HardDeleteUser from "./HardDeleteUser";
 import GoogleRegisterButton from "./GoogleRegisterButton";
+import TopBar from "./TopBar";
+import TabBar from "./TabBar";
 
 export {
   LoginView,
@@ -14,4 +16,6 @@ export {
   VerifyEmail,
   HardDeleteUser,
   GoogleRegisterButton,
+  TopBar,
+  TabBar,
 };
