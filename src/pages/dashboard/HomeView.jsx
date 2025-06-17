@@ -22,7 +22,7 @@ const HomeView = () => {
       className="w-full flex items-center justify-center bg-white"
       style={{ height: viewHeight }}
     >
-      <div className="w-[90%]">
+      {/* <div className="w-[90%]">
         {profile == null ? (
           <div className="flex flex-col space-y-2">
             <PrimaryButton onClick={() => navigate("/login")}>
@@ -38,7 +38,7 @@ const HomeView = () => {
             <PrimaryButton type="submit">Sign out</PrimaryButton>
           </form>
         )}
-      </div>
+      </div> */}
     </div>
   );
 };

@@ -1,7 +1,7 @@
 import { Route, Routes } from "react-router-dom";
 import { unstable_HistoryRouter as HistoryRouter } from "react-router-dom";
 
-import { Landing, NotFound, ProtectiveRoute } from "./pages/index";
+import { Dashboard, Landing, NotFound, ProtectiveRoute } from "./pages/index";
 import history from "./utils/history";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
@@ -27,7 +27,7 @@ function App() {
       <Routes>
         <Route
           path="/"
-          element={<ProtectiveRoute>{/* <Dashboard /> */}</ProtectiveRoute>}
+          element={<ProtectiveRoute>{<Dashboard />}</ProtectiveRoute>}
         >
           {/* <Route index element={<StartPage />} /> */}
         </Route>

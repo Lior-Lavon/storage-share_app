@@ -56,7 +56,7 @@ const SignupView = () => {
     )
       .unwrap()
       .then(() => {
-        navigate("/login");
+        navigate("/");
       })
       .catch((err) => {
         console.error("Login failed:", err);

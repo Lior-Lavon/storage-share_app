@@ -34,13 +34,10 @@ const LoginView = () => {
   };
 
   const handleGoogleSuccess = (email, google_id) => {
-    console.log(email, google_id);
     handleLogin(email, google_id);
   };
 
   const handleLogin = (email, password = "", google_id = "") => {
-    console.log("handleLogin");
-
     dispatch(
       loginUser({
         email: email,
@@ -51,7 +48,7 @@ const LoginView = () => {
     )
       .unwrap()
       .then(() => {
-        navigate("/landing");
+        navigate("/");
       })
       .catch((err) => {
         console.error("Login failed:", err);
