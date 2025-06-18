@@ -52,7 +52,7 @@ const MyProfileView = ({ isVisible }) => {
       {/* delete account */}
       <div
         ref={bottomRef}
-        className="absolute bottom-4 left-1/2 transform -translate-x-1/2 w-[90%] text-xl text-red-400 text-center rounded-2xl bg-white py-2 border-[0.5px] border-gray-400"
+        className="absolute bottom-4 left-1/2 transform -translate-x-1/2 w-[90%] text-xl text-red-400 text-center rounded-2xl bg-white py-2 border-[0.5px] border-red-400"
         onClick={() => {
           dispatch(logoutUser())
             .unwrap()
