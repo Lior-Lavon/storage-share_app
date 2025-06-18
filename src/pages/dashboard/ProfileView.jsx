@@ -71,7 +71,7 @@ const ProfileView = ({ isVisible }) => {
         <UserAvatar />
 
         {/* menu */}
-        <div className="w-[90%] mx-auto my-8 flex flex-col text-left border-b border-gray-300">
+        <div className="w-[90%] mx-auto my-4 flex flex-col text-left border-b border-gray-300">
           {menu.map((item) => (
             <button
               key={item.id}
@@ -86,7 +86,7 @@ const ProfileView = ({ isVisible }) => {
                   activeId === item.id ? "bg-gray-100" : ""
                 }`}
               >
-                <div className="w-full text-left my-2 space-y-2 py-4">
+                <div className="w-full text-left my-2 space-y-2 py-1">
                   <p className="w-full text-xl">{item.title}</p>
                   <p className="w-full text-sm text-gray-400">
                     {item.description}
