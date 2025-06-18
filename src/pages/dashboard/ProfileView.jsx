@@ -97,23 +97,23 @@ const ProfileView = ({ isVisible }) => {
             </button>
           ))}
         </div>
-
-        <div
-          className="absolute bottom-4 left-1/2 transform -translate-x-1/2 w-[90%] text-xl text-[#724EFF] text-center rounded-2xl bg-white py-2 border-[0.5px] border-gray-400"
-          onClick={() => {
-            dispatch(logoutUser())
-              .unwrap()
-              .then(() => {
-                handleHideProfileView();
-              })
-              .catch((err) => {
-                console.error("Logout failed:", err);
-                // navigate("/");
-              });
-          }}
-        >
-          Log out
-        </div>
+      </div>
+      {/* logout */}
+      <div
+        className="absolute bottom-4 left-1/2 transform -translate-x-1/2 w-[90%] text-xl text-[#724EFF] text-center rounded-2xl bg-white py-2 border-[0.5px] border-gray-400"
+        onClick={() => {
+          dispatch(logoutUser())
+            .unwrap()
+            .then(() => {
+              handleHideProfileView();
+            })
+            .catch((err) => {
+              console.error("Logout failed:", err);
+              // navigate("/");
+            });
+        }}
+      >
+        Log out
       </div>
     </div>
   );
