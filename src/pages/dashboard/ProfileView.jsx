@@ -29,6 +29,7 @@ const ProfileView = ({ isVisible }) => {
   const [height, setHeight] = useState(0);
   const [activeId, setActiveId] = useState(null);
   const topRef = useRef(null);
+  const bottomRef = useRef(null);
   const handleHideProfileView = () => {
     dispatch(showProfile());
   };
@@ -37,7 +38,7 @@ const ProfileView = ({ isVisible }) => {
     const updateHeight = () => {
       if (topRef.current) {
         const topBottom = topRef.current.getBoundingClientRect().bottom;
-        const bottomTop = window.innerHeight;
+        const bottomTop = bottomRef.current.getBoundingClientRect().top;
         setHeight(bottomTop - topBottom);
       }
     };
@@ -54,7 +55,7 @@ const ProfileView = ({ isVisible }) => {
 
   return (
     <div
-      className={`w-full h-full z-90 fixed top-0 right-0 transition-transform duration-500 flex flex-col bg-blue-300 ${
+      className={`w-full h-full z-90 fixed top-0 right-0 transition-transform duration-500 flex flex-col bg-white ${
         isVisible ? "translate-x-0" : "translate-x-full"
       }`}
     >
@@ -64,7 +65,7 @@ const ProfileView = ({ isVisible }) => {
         title={"Profile"}
       />
       <div
-        className="w-full mt-[56px] bg-white relative"
+        className="w-full mt-[56px] relative bg-white"
         style={{ height: `${height}px` }}
       >
         {/* logout */}
@@ -100,6 +101,7 @@ const ProfileView = ({ isVisible }) => {
       </div>
       {/* logout */}
       <div
+        ref={bottomRef}
         className="absolute bottom-4 left-1/2 transform -translate-x-1/2 w-[90%] text-xl text-[#724EFF] text-center rounded-2xl bg-white py-2 border-[0.5px] border-gray-400"
         onClick={() => {
           dispatch(logoutUser())
