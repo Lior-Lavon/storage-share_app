@@ -5,6 +5,7 @@ const initialState = {
   isLoading: false,
   viewState: "login",
   isProfile: false,
+  isMyProfile: false,
 };
 
 const dashboardSlice = createSlice({
@@ -14,9 +15,12 @@ const dashboardSlice = createSlice({
     showProfile: (state) => {
       state.isProfile = !state.isProfile;
     },
+    showMyProfile: (state) => {
+      state.isMyProfile = !state.isMyProfile;
+    },
   },
   extraReducers: (builder) => {},
 });
 
-export const { showProfile } = dashboardSlice.actions;
+export const { showProfile, showMyProfile } = dashboardSlice.actions;
 export default dashboardSlice.reducer;

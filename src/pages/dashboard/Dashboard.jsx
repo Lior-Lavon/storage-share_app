@@ -43,7 +43,7 @@ const Dashboard = () => {
       {/* Bottom TabBar */}
       <TabBar activeTab={activeTab} setActiveTab={setActiveTab} />
 
-      {/* show property view */}
+      {/* show profile view */}
       <ProfileView isVisible={isProfile} closeProfileView={handleShowProfile} />
     </div>
   );

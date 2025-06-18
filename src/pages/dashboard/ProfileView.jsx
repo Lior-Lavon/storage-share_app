@@ -1,10 +1,14 @@
 import React, { useEffect, useRef, useState } from "react";
 import { TopBar, UserAvatar } from "../../components";
-import { showProfile } from "../../features/dashboard/dashboardSlice";
-import { useDispatch } from "react-redux";
+import {
+  showMyProfile,
+  showProfile,
+} from "../../features/dashboard/dashboardSlice";
+import { useDispatch, useSelector } from "react-redux";
 import { logoutUser } from "../../features/user/userSlice";
 import { useNavigate } from "react-router-dom";
 import { GoArrowRight } from "react-icons/go";
+import MyProfileView from "./MyProfileView";
 
 const menu = [
   {
@@ -30,6 +34,8 @@ const ProfileView = ({ isVisible }) => {
   const [activeId, setActiveId] = useState(null);
   const topRef = useRef(null);
   const bottomRef = useRef(null);
+  const { isMyProfile } = useSelector((store) => store.dashboard);
+
   const handleHideProfileView = () => {
     dispatch(showProfile());
   };
@@ -50,6 +56,18 @@ const ProfileView = ({ isVisible }) => {
     setActiveId(id);
     setTimeout(() => {
       setActiveId(null); // Optional: remove highlight after a short delay
+
+      switch (id) {
+        case 1:
+          dispatch(showMyProfile());
+          break;
+        case 2:
+          console.log("2");
+          break;
+        case 3:
+          console.log("3");
+          break;
+      }
     }, 150);
   };
 
@@ -70,10 +88,9 @@ const ProfileView = ({ isVisible }) => {
         title={"Profile"}
       />
       <div
-        className="w-full mt-[56px] relative bg-white"
+        className="w-full mt-[56px] relative bg-white overflow-y-auto"
         style={{ height: `${height}px` }}
       >
-        {/* logout */}
         <UserAvatar />
 
         {/* menu */}
@@ -122,6 +139,8 @@ const ProfileView = ({ isVisible }) => {
       >
         Log out
       </div>
+
+      <MyProfileView isVisible={isMyProfile} />
     </div>
   );
 };
