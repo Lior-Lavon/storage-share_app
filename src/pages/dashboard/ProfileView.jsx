@@ -58,6 +58,11 @@ const ProfileView = ({ isVisible }) => {
       className={`w-full h-full z-90 fixed top-0 right-0 transition-transform duration-500 flex flex-col bg-white ${
         isVisible ? "translate-x-0" : "translate-x-full"
       }`}
+      style={{
+        WebkitOverflowScrolling: "touch",
+        overscrollBehavior: "contain", // prevent pull-to-refresh
+        touchAction: "none", // stop passive scroll
+      }}
     >
       <TopBar
         ref={topRef}
