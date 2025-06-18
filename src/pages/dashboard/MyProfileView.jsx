@@ -45,6 +45,9 @@ const MyProfileView = ({ isVisible }) => {
     e.preventDefault();
     setChangePassword(false);
   };
+  const handleClose = (e) => {
+    setChangePassword(false);
+  };
 
   return (
     <div
@@ -56,6 +59,7 @@ const MyProfileView = ({ isVisible }) => {
         overscrollBehavior: "contain", // prevent pull-to-refresh
         touchAction: "none", // stop passive scroll
       }}
+      onClick={handleClose}
     >
       <TopBar
         ref={topRef}
