@@ -7,6 +7,7 @@ import HardDeleteUser from "./HardDeleteUser";
 import GoogleRegisterButton from "./GoogleRegisterButton";
 import TopBar from "./TopBar";
 import TabBar from "./TabBar";
+import UserAvatar from "./UserAvatar";
 
 export {
   LoginView,
@@ -18,4 +19,5 @@ export {
   GoogleRegisterButton,
   TopBar,
   TabBar,
+  UserAvatar,
 };
