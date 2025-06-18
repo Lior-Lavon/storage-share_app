@@ -125,7 +125,7 @@ const MyProfileView = ({ isVisible }) => {
           >
             Change password
           </PrimaryButton>
-          <div className="w-full h-16 bg-amber-500"></div>
+          <div className="w-full h-8"></div>
         </div>
       </div>
       {/* delete account */}
