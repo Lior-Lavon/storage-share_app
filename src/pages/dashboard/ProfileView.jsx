@@ -27,7 +27,7 @@ const menu = [
 const ProfileView = ({ isVisible }) => {
   const dispatch = useDispatch();
   const [height, setHeight] = useState(0);
-  const [clicked, setClicked] = useState(false);
+  const [activeId, setActiveId] = useState(null);
   const topRef = useRef(null);
   const handleHideProfileView = () => {
     dispatch(showProfile());
@@ -45,13 +45,11 @@ const ProfileView = ({ isVisible }) => {
     updateHeight(); // Call once on mount
   }, []);
 
-  const handleClick = () => {
-    setClicked(true);
+  const handleClick = (id) => {
+    setActiveId(id);
     setTimeout(() => {
-      setClicked(false);
-      // Place your actual click handler logic here
-      console.log("Clicked:", item.title);
-    }, 150); // 150ms delay
+      setActiveId(null); // Optional: remove highlight after a short delay
+    }, 150);
   };
 
   return (
@@ -73,20 +71,22 @@ const ProfileView = ({ isVisible }) => {
         <UserAvatar />
 
         {/* menu */}
-        <div className="w-[90%] mx-auto my-8 flex flex-col gap-2 text-left border-b border-gray-300">
+        <div className="w-[90%] mx-auto my-8 flex flex-col text-left border-b border-gray-300">
           {menu.map((item) => (
             <button
               key={item.id}
-              onClick={() => setActiveTab(tab.id)}
-              className={``}
+              onClick={() => {
+                setActiveId(item.id);
+                handleClick(item.id);
+              }}
+              className="text-left"
             >
               <div
-                onClick={handleClick}
                 className={`w-full flex items-center justify-between border-t border-gray-300 cursor-pointer transition-colors duration-150 ${
-                  clicked ? "bg-gray-100" : ""
+                  activeId === item.id ? "bg-gray-100" : ""
                 }`}
               >
-                <div className="w-full text-left my-2 space-y-2">
+                <div className="w-full text-left my-2 space-y-2 py-4">
                   <p className="w-full text-xl">{item.title}</p>
                   <p className="w-full text-sm text-gray-400">
                     {item.description}
