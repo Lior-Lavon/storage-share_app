@@ -176,7 +176,7 @@ const MyProfileView = ({ isVisible }) => {
 
                 <PrimaryButton type="submit">Submit</PrimaryButton>
               </form>
-              <div className="w-full h-10"></div>
+              <div className="w-full h-16 bg-amber-500"></div>
             </div>
           </div>
         </div>
