@@ -98,9 +98,10 @@ export const verifyEmailRequest = createAsyncThunk(
 
 export const updateUser = createAsyncThunk(
   "user/updateUser",
-  async (user, thunkAPI) => {
-    const reqBody = createRequestBody(user);
-    return updateUserThunk("/users", reqBody, thunkAPI);
+  async (body, thunkAPI) => {
+    console.log("body : ", body);
+
+    return updateUserThunk("/users", body, thunkAPI);
   }
 );
 
@@ -287,10 +288,10 @@ const userSlice = createSlice({
       })
       .addCase(updateUser.pending, (state) => {
         state.isLoading = true;
-        // console.log("updateUser - pending");
+        console.log("updateUser - pending");
       })
       .addCase(updateUser.fulfilled, (state, { payload }) => {
-        // console.log("updateUser - fulfilled");
+        console.log("updateUser - fulfilled");
         state.isLoading = false;
         const { user } = payload;
         state.profile = user;

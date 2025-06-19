@@ -7,7 +7,7 @@ import React from "react";
 const GoogleRegisterButton = ({ label, handleSuccess }) => {
   const login = useGoogleLogin({
     onSuccess: async (tokenResponse) => {
-      console.log("tokenResponse : ", tokenResponse);
+      // console.log("tokenResponse : ", tokenResponse);
 
       try {
         // You want to get the ID token, which you can do with userinfo API
@@ -19,7 +19,7 @@ const GoogleRegisterButton = ({ label, handleSuccess }) => {
             },
           }
         );
-        console.log("userInfo.data : ", userInfo.data);
+        // console.log("userInfo.data : ", userInfo.data);
         handleSuccess(userInfo.data.email, userInfo.data.sub);
       } catch (err) {
         console.error("Error authenticating user:", err);

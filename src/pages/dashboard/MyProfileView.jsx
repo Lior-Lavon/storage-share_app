@@ -2,34 +2,42 @@ import React, { useEffect, useRef, useState } from "react";
 
 import { TopBar, UserAvatar } from "../../components";
 import { showMyProfile } from "../../features/dashboard/dashboardSlice";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import InputField from "../../components/SharedComponents/InputField";
 import EditField from "../../components/SharedComponents/EditField";
 import SelectField from "../../components/SharedComponents/SelectField";
 import PrimaryButton from "../../components/SharedComponents/PrimaryButton";
+import { resetPassword, updateUser } from "../../features/user/userSlice";
+
+const titleOptions = [
+  { value: "not_set", label: "not set" },
+  { value: "mr", label: "mr" },
+  { value: "ms", label: "ms" },
+];
 
 const MyProfileView = ({ isVisible }) => {
   const dispatch = useDispatch();
   const [height, setHeight] = useState(0);
-  const [email, setEmail] = useState("");
+  const { profile } = useSelector((store) => store.user);
+
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [description, setDescription] = useState("");
-  const [selectedCountry, setSelectedCountry] = useState({
-    value: "nl",
-    label: "Netherlands",
-  });
+  const [selectedTitle, setSelectedTitle] = useState(titleOptions[0]);
   const [changePassword, setChangePassword] = useState("");
   const [password, setPassword] = useState("");
+  const [originalPassword, setOriginalPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [changePasswordError, setChangePasswordError] = useState(null);
   const topRef = useRef(null);
-  const bottomRef = useRef(null);
+  const isFirstRender = useRef(true);
+  const prevVisibleRef = useRef(isVisible);
 
   useEffect(() => {
     const updateHeight = () => {
       if (topRef.current) {
         const topBottom = topRef.current.getBoundingClientRect().bottom;
-        const bottomTop = bottomRef.current.getBoundingClientRect().top;
+        let bottomTop = window.innerHeight;
         setHeight(bottomTop - topBottom);
       }
     };
@@ -37,16 +45,104 @@ const MyProfileView = ({ isVisible }) => {
     updateHeight(); // Call once on mount
   }, []);
 
+  useEffect(() => {
+    setSelectedTitle(
+      titleOptions.find((option) => option.value === profile?.title)
+    );
+    setFirstName(profile?.firstname);
+    setLastName(profile?.lastname);
+    setDescription(profile?.description);
+  }, [profile]);
+
+  useEffect(() => {}, [selectedTitle]);
+
+  useEffect(() => {
+    if (!isFirstRender.current) {
+      if (isVisible == true) {
+        setChangePasswordError(null);
+      }
+      if (prevVisibleRef.current === true && isVisible == false) {
+        postProfile();
+      }
+    } else {
+      isFirstRender.current = false;
+    }
+
+    prevVisibleRef.current = isVisible;
+  }, [isVisible]);
+
   const hideMyProfileView = () => {
+    setChangePasswordError(null);
     dispatch(showMyProfile());
   };
 
   const handleChangePassword = (e) => {
     e.preventDefault();
-    setChangePassword(false);
+    // setChangePassword(false);
+    console.log("handleChangePassword");
+
+    if (originalPassword == "" || password == "" || confirmPassword == "") {
+      setChangePasswordError("missing input");
+      return;
+    }
+    if (password != confirmPassword) {
+      setChangePasswordError("password does not match");
+      return;
+    }
+
+    dispatch(
+      resetPassword({
+        id: profile.id,
+        email: profile.email,
+        currentEmail: originalPassword,
+        password: password,
+      })
+    )
+      .unwrap()
+      .then((res) => {
+        console.log("change password success: ", res);
+      })
+      .catch((err) => {
+        console.log("failed to change password");
+      });
   };
-  const handleClose = (e) => {
-    setChangePassword(false);
+
+  const postProfile = () => {
+    dispatch(
+      updateUser({
+        id: profile.id,
+        title: selectedTitle?.value,
+        first_name: firstName == undefined ? "" : firstName,
+        last_name: lastName == undefined ? "" : lastName,
+        description: description == undefined ? "" : description,
+      })
+    )
+      .unwrap()
+      .then(() => {
+        // navigate("/login");
+        console.log("updateUser success");
+      })
+      .catch((err) => {
+        console.error("updateUser failed");
+      });
+  };
+
+  const handleDeleteAccount = () => {
+    dispatch(logoutUser())
+      .unwrap()
+      .then(() => {
+        handleHideProfileView();
+      })
+      .catch((err) => {
+        console.error("Logout failed:", err);
+      });
+  };
+
+  const handleTitleChange = (e) => {
+    const matchedOption = titleOptions.find(
+      (option) => option.value === e.target.value
+    );
+    if (matchedOption != null) setSelectedTitle(matchedOption);
   };
 
   return (
@@ -59,7 +155,6 @@ const MyProfileView = ({ isVisible }) => {
         overscrollBehavior: "contain", // prevent pull-to-refresh
         touchAction: "none", // stop passive scroll
       }}
-      onClick={handleClose}
     >
       <TopBar
         ref={topRef}
@@ -78,22 +173,18 @@ const MyProfileView = ({ isVisible }) => {
           <InputField
             label="Email"
             type="email"
-            value={email}
+            value={profile.email}
             placeholder="Email"
-            onChange={(e) => setEmail(e.target.value)}
+            // onChange={(e) => setEmail(e.target.value)}
             autoComplete="email"
             disabled={true}
           />
           <div className="relative overflow-visible">
             <SelectField
-              label="Country"
-              value={selectedCountry}
-              onChange={(e) => setSelectedCountry(e.target.value)}
-              options={[
-                { value: "nl", label: "Netherlands" },
-                { value: "de", label: "Germany" },
-                { value: "us", label: "United States" },
-              ]}
+              label="Title"
+              value={selectedTitle.value}
+              onChange={handleTitleChange}
+              options={titleOptions}
             />
           </div>
           <InputField
@@ -125,50 +216,70 @@ const MyProfileView = ({ isVisible }) => {
           >
             Change password
           </PrimaryButton>
+
+          {/* delete account */}
+          <PrimaryButton
+            bgColor="bg-white"
+            textColor="text-red-500"
+            borderColor="border border-red-500"
+            onClick={() => {
+              handleDeleteAccount();
+            }}
+          >
+            Delete account
+          </PrimaryButton>
           <div className="w-full h-8"></div>
         </div>
       </div>
-      {/* delete account */}
-      <div
-        ref={bottomRef}
-        className="absolute bottom-4 left-1/2 transform -translate-x-1/2 w-[90%] text-xl text-red-400 text-center rounded-2xl bg-white py-2 border-[0.5px] border-red-400"
-        onClick={() => {
-          dispatch(logoutUser())
-            .unwrap()
-            .then(() => {
-              handleHideProfileView();
-            })
-            .catch((err) => {
-              console.error("Logout failed:", err);
-              // navigate("/");
-            });
-        }}
-      >
-        Delete account
-      </div>
 
       {changePassword && (
-        <div className="w-full h-screen absolute top-0 bg-transparent z-50 flex items-center justify-center">
-          <div className="w-[300px] bg-white border-1 border-gray-300 rounded-lg shadow-lg">
-            <div className="p-4 space-y-18">
-              <label className="text-base font-medium">Change password</label>
+        <div
+          className="w-full h-screen absolute top-0 bg-transparent z-50 flex items-center justify-center"
+          onClick={() => {
+            setChangePasswordError(null);
+            setChangePassword(false);
+          }}
+        >
+          <div
+            className="change_password w-[90%] max-w-[500px] bg-white border-1 border-gray-300 rounded-lg shadow-lg"
+            onClick={(e) => {
+              e.stopPropagation(); // Block "22" here
+            }}
+          >
+            <div className="p-4 space-y-1">
+              <label className="text-base font-bold">Change password</label>
+
+              {changePasswordError != null && (
+                <p className="w-full text-center text-red-400">
+                  {changePasswordError}
+                </p>
+              )}
 
               <form
                 onSubmit={handleChangePassword}
-                className="flex flex-col gap-4 my-4"
+                className="flex flex-col gap-4 mt-4"
               >
                 <InputField
-                  label="Password"
-                  type="password"
+                  label="Original password"
+                  type="text"
+                  value={originalPassword}
+                  placeholder="Original password"
+                  onChange={(e) => setOriginalPassword(e.target.value)}
+                  autoComplete="original_password"
+                />
+
+                <InputField
+                  label="New password"
+                  type="text"
                   value={password}
-                  placeholder="Password"
+                  placeholder="New password"
                   onChange={(e) => setPassword(e.target.value)}
                   autoComplete="password"
                 />
 
                 <InputField
                   label="Confirm password"
-                  type="password"
+                  type="text"
                   value={confirmPassword}
                   placeholder="Confirm password"
                   onChange={(e) => setConfirmPassword(e.target.value)}

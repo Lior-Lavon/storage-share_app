@@ -1,6 +1,14 @@
 import React, { useState, useRef } from "react";
 
-const PrimaryButton = ({ children, type = "submit", onClick, disabled }) => {
+const PrimaryButton = ({
+  children,
+  type = "submit",
+  onClick,
+  disabled,
+  bgColor = "bg-violet-600",
+  textColor = "text-white",
+  borderColor = "", // e.g., "border border-gray-300"
+}) => {
   const [isLoading, setIsLoading] = useState(false);
   const timeoutRef = useRef(null);
 
@@ -13,32 +21,32 @@ const PrimaryButton = ({ children, type = "submit", onClick, disabled }) => {
     timeoutRef.current = setTimeout(() => {
       setIsLoading(false);
 
-      // If user passed a custom onClick (like navigate()), call that
       if (onClick) {
         onClick(e);
         return;
       }
 
-      // Otherwise, try to submit enclosing form
       const form = e.target.closest("form");
       if (form) {
-        form.requestSubmit(); // triggers onSubmit
+        form.requestSubmit();
       }
     }, 500);
   };
+
+  const baseClasses = `w-full h-10 py-2 cursor-pointer rounded-lg transition flex items-center justify-center`;
+  const activeClasses = `${bgColor} ${textColor} ${borderColor}`;
+  const loadingClasses = `bg-gray-600 text-white`;
 
   return (
     <button
       type={type}
       onClick={handleClick}
       disabled={isLoading || disabled}
-      className={`w-full h-10 py-2 cursor-pointer rounded-lg transition text-white flex items-center justify-center ${
-        isLoading ? "bg-gray-600" : "bg-violet-600"
-      }`}
+      className={`${baseClasses} ${isLoading ? loadingClasses : activeClasses}`}
     >
       {isLoading ? (
         <svg
-          className="animate-spin h-5 w-5 text-white"
+          className="animate-spin h-5 w-5"
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
           viewBox="0 0 24 24"
