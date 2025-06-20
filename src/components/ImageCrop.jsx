@@ -11,8 +11,8 @@ import ReactCrop, {
 } from "react-image-crop";
 
 const MIN_DIMENSION = 1000;
-const MAX_WIDTH_DIMENSION = 4000;
-const MAX_HEIGHT_DIMENSION = 3000;
+const MAX_WIDTH_DIMENSION = 8000;
+const MAX_HEIGHT_DIMENSION = 6000;
 
 const ImageCrop = ({
   updateImage,
