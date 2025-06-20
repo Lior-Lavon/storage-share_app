@@ -18,8 +18,6 @@ const UserAvatar = ({
   const dispatch = useDispatch();
   const menuRef = useRef(null);
 
-  const baseUrl = import.meta.env.VITE_AWS_S3_BUCKET;
-
   const toggleMenu = () => setMenuVisible((prev) => !prev);
 
   useEffect(() => {
@@ -39,6 +37,7 @@ const UserAvatar = ({
   }, [menuVisible]);
 
   const getImageUrl = () => {
+    const baseUrl = import.meta.env.VITE_AWS_S3_BUCKET;
     return `${baseUrl}/${imageUrl}`;
   };
 

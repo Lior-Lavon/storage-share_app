@@ -1,8 +1,20 @@
-import React from "react";
+import React, { useState } from "react";
 import { CgProfile } from "react-icons/cg";
 import { TiArrowLeft } from "react-icons/ti";
+import { useSelector } from "react-redux";
 
 const TopBar = ({ ref, showBackIcon, showProfile, title = "" }) => {
+  const { profile } = useSelector((store) => store.user);
+  const [imageUrl, setImageUrl] = useState("");
+
+  useState(() => {
+    if (profile?.avatar != "") {
+      const baseUrl = import.meta.env.VITE_AWS_S3_BUCKET;
+      const url = `${baseUrl}/${profile?.avatar}`;
+      setImageUrl(url);
+    }
+  }, [profile]);
+
   return (
     <div
       ref={ref}
@@ -26,12 +38,22 @@ const TopBar = ({ ref, showBackIcon, showProfile, title = "" }) => {
         </div>
 
         {showProfile && (
-          <CgProfile
+          <div
+            className="w-8 h-8 rounded-full cursor-pointer  hover:scale-105 active:scale-95 transition-transform duration-150"
             onClick={() => {
               showProfile();
             }}
-            className="w-8 h-8 cursor-pointer hover:scale-105 active:scale-95 transition-transform duration-150"
-          />
+          >
+            {imageUrl == "" ? (
+              <CgProfile className="w-full h-full object-cover" />
+            ) : (
+              <img
+                src={imageUrl}
+                alt="avatar"
+                className="w-8 h-8 rounded-full cursor-pointer hover:scale-105 active:scale-95 transition-transform duration-150"
+              />
+            )}
+          </div>
         )}
       </div>
     </div>

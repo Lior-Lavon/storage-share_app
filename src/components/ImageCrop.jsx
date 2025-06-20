@@ -10,7 +10,7 @@ import ReactCrop, {
   makeAspectCrop,
 } from "react-image-crop";
 
-const MIN_DIMENSION = 140;
+const MIN_DIMENSION = 1000;
 const MAX_WIDTH_DIMENSION = 4000;
 const MAX_HEIGHT_DIMENSION = 3000;
 
@@ -59,7 +59,9 @@ const ImageCrop = ({
           naturalWidth > MAX_WIDTH_DIMENSION ||
           naturalHeight > MAX_HEIGHT_DIMENSION
         ) {
-          setError("Image should be max (1000 x 750) px");
+          setError(
+            `Image should be max (${MAX_WIDTH_DIMENSION} x ${MAX_HEIGHT_DIMENSION}) px`
+          );
           setImageSrc("");
           return;
         }
@@ -172,7 +174,7 @@ const ImageCrop = ({
           ) : (
             <div className="w-full h-full px-2 grid justify-center items-center">
               {/* IMAGE */}
-              <div className="w-full h-[300px] p-[0.1rem] grid place-items-center overflow-hidden border border-black">
+              <div className="w-full p-[0.1rem] grid place-items-center overflow-hidden border border-black">
                 <ReactCrop
                   crop={crop}
                   onChange={(pixelCrop, percentCrop) => {
