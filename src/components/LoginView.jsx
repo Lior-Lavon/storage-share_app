@@ -30,11 +30,11 @@ const LoginView = () => {
 
     if (email == "" || password == "") return;
 
-    handleLogin(email, password);
+    handleLogin(email, password, "");
   };
 
   const handleGoogleSuccess = (email, google_id) => {
-    handleLogin(email, google_id);
+    handleLogin(email, "", google_id);
   };
 
   const handleLogin = (email, password = "", google_id = "") => {

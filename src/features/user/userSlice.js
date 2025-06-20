@@ -10,7 +10,8 @@ import {
   validateResetPasswordThunk,
   resetPasswordThunk,
   verifyEmailThunk,
-  deleteUserThunk,
+  hardDeleteUserThunk,
+  softDeleteUserThunk,
 } from "./userThunk";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -81,10 +82,19 @@ export const resetPassword = createAsyncThunk(
   }
 );
 
-export const deleteUser = createAsyncThunk(
-  "user/deleteUser",
+export const hardDeleteUser = createAsyncThunk(
+  "user/hardDeleteUser",
   async (body, thunkAPI) => {
-    return deleteUserThunk("/users/hard_user_delete", body, thunkAPI);
+    return hardDeleteUserThunk("/users/hard_user_delete", body, thunkAPI);
+  }
+);
+
+export const softDeleteUser = createAsyncThunk(
+  "user/softDeleteUser",
+  async (body, thunkAPI) => {
+    console.log("body : ", body);
+
+    return softDeleteUserThunk("/users", body, thunkAPI);
   }
 );
 
@@ -99,8 +109,6 @@ export const verifyEmailRequest = createAsyncThunk(
 export const updateUser = createAsyncThunk(
   "user/updateUser",
   async (body, thunkAPI) => {
-    console.log("body : ", body);
-
     return updateUserThunk("/users", body, thunkAPI);
   }
 );
@@ -378,18 +386,39 @@ const userSlice = createSlice({
         console.log("resetPassword - rejected ");
       })
 
-      .addCase(deleteUser.pending, (state) => {
+      .addCase(hardDeleteUser.pending, (state) => {
         state.isLoading = true;
-        console.log("deleteUser - pending");
+        console.log("hardDeleteUser - pending");
       })
-      .addCase(deleteUser.fulfilled, (state, { payload }) => {
-        console.log("deleteUser - fulfilled : ");
+      .addCase(hardDeleteUser.fulfilled, (state, { payload }) => {
+        console.log("hardDeleteUser - fulfilled : ");
         state.isLoading = false;
       })
-      .addCase(deleteUser.rejected, (state, { payload }) => {
+      .addCase(hardDeleteUser.rejected, (state, { payload }) => {
         state.isLoading = false;
         state.errorMsg = payload;
-        console.log("deleteUser - rejected ");
+        console.log("hardDeleteUser - rejected ");
+      })
+
+      .addCase(softDeleteUser.pending, (state) => {
+        state.isLoading = true;
+        console.log("softDeleteUser - pending");
+      })
+      .addCase(softDeleteUser.fulfilled, (state, { payload }) => {
+        console.log("softDeleteUser - fulfilled : ");
+        state.isLoading = false;
+
+        toast.success("softDeleteUser successful");
+        clearUserFromLocalStorage();
+        clearSessionFromLocalStorage();
+
+        state.profile = null;
+        state.session = null;
+      })
+      .addCase(softDeleteUser.rejected, (state, { payload }) => {
+        state.isLoading = false;
+        state.errorMsg = payload;
+        console.log("softDeleteUser - rejected ");
       })
 
       .addCase(verifyEmailRequest.pending, (state) => {

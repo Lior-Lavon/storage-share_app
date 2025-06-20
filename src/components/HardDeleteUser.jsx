@@ -3,7 +3,7 @@ import InputField from "./SharedComponents/InputField";
 import PrimaryButton from "./SharedComponents/PrimaryButton";
 import AuthCard from "./SharedComponents/AuthCard";
 import {
-  deleteUser,
+  hardDeleteUser,
   passwordResetRequest,
   setStatue,
 } from "../features/user/userSlice";
@@ -25,7 +25,7 @@ const HardDeleteUser = () => {
     if (email == "") return;
 
     dispatch(
-      deleteUser({
+      hardDeleteUser({
         email: email,
       })
     )

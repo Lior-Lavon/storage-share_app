@@ -33,22 +33,14 @@ export const interceptor = (store) => {
       return response;
     },
     async (error) => {
-      console.log("interceptors error : ", error);
-
       const originalRequest = error.config;
       console.log("!!! error.response.status : ", error.response.status);
 
-      console.log("status : ", error.response.status);
-
       if (error.response.status === 401 && !originalRequest._retry) {
-        console.log("22");
         originalRequest._retry = true;
 
         const data = await refreshToken(store);
 
-        console.log("data : ", data);
-
-        console.log("got new refreshToken, updating ... : ", data);
         const access_token = data.access_token;
         const access_token_expires_at = data.access_token_expires_at;
 
@@ -65,13 +57,14 @@ export const interceptor = (store) => {
           "Authorization"
         ] = `Bearer ${access_token}`;
         return customFetch(originalRequest);
-      } else if (error.response.status === 403) {
-        console.log("33");
-        originalRequest._retry = false;
-        // refresh token expired - logout the user
-        store.dispatch(logout());
-        history.push("/");
       }
+      // else if (error.response.status === 403) {
+      //   console.log("33");
+      //   originalRequest._retry = false;
+      //   // refresh token expired - logout the user
+      //   store.dispatch(logout());
+      //   history.push("/");
+      // }
       return Promise.reject(error);
     }
   );

@@ -14,7 +14,7 @@ export const loginUserThunk = async (url, body, thunkAPI) => {
     const resp = await customFetch.post(url, body);
     return resp.data;
   } catch (error) {
-    console.log("loginUserThunk : ", error);
+    console.log("loginUserThunk : ", error.response?.data?.msg);
 
     return thunkAPI.rejectWithValue(error.response?.data?.msg);
   }
@@ -25,6 +25,7 @@ export const logoutUserThunk = async (url, body, thunkAPI) => {
     const resp = await customFetch.post(url, body);
     return resp.data;
   } catch (error) {
+    console.log("logoutUserThunk : ", error);
     return thunkAPI.rejectWithValue(error.response?.data?.msg);
   }
 };
@@ -86,9 +87,20 @@ export const resetPasswordThunk = async (url, body, thunkAPI) => {
   }
 };
 
-export const deleteUserThunk = async (url, body, thunkAPI) => {
+export const hardDeleteUserThunk = async (url, body, thunkAPI) => {
   try {
     const resp = await customFetch.post(url, body);
+    return { data: resp.data };
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error.response?.data?.msg);
+  }
+};
+
+export const softDeleteUserThunk = async (url, body, thunkAPI) => {
+  try {
+    const resp = await customFetch.delete(url, {
+      data: body,
+    });
     return { data: resp.data };
   } catch (error) {
     return thunkAPI.rejectWithValue(error.response?.data?.msg);

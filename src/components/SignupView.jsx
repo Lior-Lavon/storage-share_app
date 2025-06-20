@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import InputField from "./SharedComponents/InputField";
 import PrimaryButton from "./SharedComponents/PrimaryButton";
 import AuthCard from "./SharedComponents/AuthCard";
-import { registerUser } from "../features/user/userSlice";
+import { clearError, registerUser } from "../features/user/userSlice";
 import { useDispatch, useSelector } from "react-redux";
 import useViewportHeight from "../utils/useViewportHeight";
 import { useNavigate } from "react-router-dom";
@@ -25,6 +25,11 @@ const SignupView = () => {
     return re.test(email);
   };
 
+  useEffect(() => {
+    dispatch(clearError());
+    setError(null);
+  }, []);
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -38,11 +43,11 @@ const SignupView = () => {
       return;
     }
 
-    register(email, password);
+    register(email, password, "");
   };
 
   const handleGoogleSuccess = (email, google_id) => {
-    register(email, google_id);
+    register(email, "", google_id);
   };
 
   const register = (email, password = "", google_id = "") => {

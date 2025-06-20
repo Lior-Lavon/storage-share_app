@@ -7,7 +7,13 @@ import InputField from "../../components/SharedComponents/InputField";
 import EditField from "../../components/SharedComponents/EditField";
 import SelectField from "../../components/SharedComponents/SelectField";
 import PrimaryButton from "../../components/SharedComponents/PrimaryButton";
-import { resetPassword, updateUser } from "../../features/user/userSlice";
+import {
+  logoutUser,
+  resetPassword,
+  softDeleteUser,
+  updateUser,
+} from "../../features/user/userSlice";
+import { useNavigate } from "react-router-dom";
 
 const titleOptions = [
   { value: "not_set", label: "not set" },
@@ -17,6 +23,7 @@ const titleOptions = [
 
 const MyProfileView = ({ isVisible }) => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [height, setHeight] = useState(0);
   const { profile } = useSelector((store) => store.user);
 
@@ -46,6 +53,8 @@ const MyProfileView = ({ isVisible }) => {
   }, []);
 
   useEffect(() => {
+    console.log("profile : ", profile);
+
     setSelectedTitle(
       titleOptions.find((option) => option.value === profile?.title)
     );
@@ -79,7 +88,6 @@ const MyProfileView = ({ isVisible }) => {
   const handleChangePassword = (e) => {
     e.preventDefault();
     // setChangePassword(false);
-    console.log("handleChangePassword");
 
     if (originalPassword == "" || password == "" || confirmPassword == "") {
       setChangePasswordError("missing input");
@@ -119,7 +127,6 @@ const MyProfileView = ({ isVisible }) => {
     )
       .unwrap()
       .then(() => {
-        // navigate("/login");
         console.log("updateUser success");
       })
       .catch((err) => {
@@ -128,13 +135,19 @@ const MyProfileView = ({ isVisible }) => {
   };
 
   const handleDeleteAccount = () => {
-    dispatch(logoutUser())
+    dispatch(
+      softDeleteUser({
+        id: profile.id,
+        delete: "true",
+      })
+    )
       .unwrap()
       .then(() => {
-        handleHideProfileView();
+        console.log("handleDeleteAccount successful");
+        // navigate("/");
       })
       .catch((err) => {
-        console.error("Logout failed:", err);
+        console.error("deleted failed:", err);
       });
   };
 
@@ -143,6 +156,17 @@ const MyProfileView = ({ isVisible }) => {
       (option) => option.value === e.target.value
     );
     if (matchedOption != null) setSelectedTitle(matchedOption);
+  };
+
+  const isChangePasswordAllowed = () => {
+    let retVal = false;
+    if (profile == undefined) {
+      retVal = false;
+    }
+    if (profile.loginType == "Password") {
+      retVal = true;
+    }
+    return !retVal;
   };
 
   return (
@@ -210,6 +234,7 @@ const MyProfileView = ({ isVisible }) => {
             onChange={(e) => setDescription(e.target.value)}
           />
           <PrimaryButton
+            disabled={isChangePasswordAllowed()}
             onClick={() => {
               setChangePassword(true);
             }}

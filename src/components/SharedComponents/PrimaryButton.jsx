@@ -13,8 +13,8 @@ const PrimaryButton = ({
   const timeoutRef = useRef(null);
 
   const handleClick = (e) => {
-    if (isLoading) return;
-    e.preventDefault(); // prevent default submission
+    if (isLoading || disabled) return;
+    e.preventDefault();
 
     setIsLoading(true);
 
@@ -34,15 +34,23 @@ const PrimaryButton = ({
   };
 
   const baseClasses = `w-full h-10 py-2 cursor-pointer rounded-lg transition flex items-center justify-center`;
+
   const activeClasses = `${bgColor} ${textColor} ${borderColor}`;
   const loadingClasses = `bg-gray-600 text-white`;
+  const disabledClasses = `bg-gray-400 text-white cursor-not-allowed`;
+
+  const appliedClasses = isLoading
+    ? loadingClasses
+    : disabled
+    ? disabledClasses
+    : activeClasses;
 
   return (
     <button
       type={type}
       onClick={handleClick}
       disabled={isLoading || disabled}
-      className={`${baseClasses} ${isLoading ? loadingClasses : activeClasses}`}
+      className={`${baseClasses} ${appliedClasses}`}
     >
       {isLoading ? (
         <svg
