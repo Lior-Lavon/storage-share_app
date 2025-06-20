@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 
-import { TopBar, UserAvatar } from "../../components";
+import { AvatarLoader, TopBar, UserAvatar } from "../../components";
 import { showMyProfile } from "../../features/dashboard/dashboardSlice";
 import { useDispatch, useSelector } from "react-redux";
 import InputField from "../../components/SharedComponents/InputField";
@@ -12,8 +12,14 @@ import {
   resetPassword,
   softDeleteUser,
   updateUser,
+  updateUserProfile,
+  uploadAvatar,
+  deleteAvatar,
 } from "../../features/user/userSlice";
 import { useNavigate } from "react-router-dom";
+
+import womanAvatar from "../../assets/womanAvatar.png";
+import ImageCrop from "../../components/ImageCrop";
 
 const titleOptions = [
   { value: "not_set", label: "not set" },
@@ -24,6 +30,7 @@ const titleOptions = [
 const MyProfileView = ({ isVisible }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [cropModel, setCropModel] = useState(false);
   const [height, setHeight] = useState(0);
   const { profile } = useSelector((store) => store.user);
 
@@ -109,9 +116,11 @@ const MyProfileView = ({ isVisible }) => {
       .unwrap()
       .then((res) => {
         console.log("change password success: ", res);
+        setChangePassword(false);
       })
       .catch((err) => {
         console.log("failed to change password");
+        setChangePassword(false);
       });
   };
 
@@ -169,6 +178,19 @@ const MyProfileView = ({ isVisible }) => {
     return !retVal;
   };
 
+  const updateAvatar = (fileName, imgSrc) => {
+    console.log("updateAvatar : ");
+
+    // const updatedProfile = { ...profile, avatar: imgSrc };
+    // dispatch(updateUserProfile(updatedProfile));
+
+    // update server
+    const fd = new FormData();
+    fd.append("filename", fileName);
+    fd.append("body", imgSrc.substring("data:image/jpeg;base64,".length));
+    dispatch(uploadAvatar(fd));
+  };
+
   return (
     <div
       className={`w-full h-full z-90 fixed top-0 right-0 transition-transform duration-500 flex flex-col bg-white ${
@@ -190,7 +212,17 @@ const MyProfileView = ({ isVisible }) => {
         className="w-full mt-[56px] relative bg-white overflow-y-auto "
         style={{ height: `${height}px` }}
       >
-        <UserAvatar allowEditing={true} showInfo={false} />
+        <UserAvatar
+          allowEditing={true}
+          imageUrl={profile?.avatar}
+          firstname={profile?.firstName}
+          lastname={profile?.lastName}
+          email={profile?.email}
+          showInfo={false}
+          showModal={() => {
+            setCropModel(!cropModel);
+          }}
+        />
         <div className="px-4 mt-4 space-y-4">
           <p className="font-bold">My personal details</p>
 
@@ -316,6 +348,15 @@ const MyProfileView = ({ isVisible }) => {
             </div>
           </div>
         </div>
+      )}
+
+      {cropModel && (
+        <ImageCrop
+          updateImage={updateAvatar}
+          showCropModel={setCropModel}
+          useCirculate={true}
+          aspectRatio={1}
+        />
       )}
     </div>
   );

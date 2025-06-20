@@ -12,6 +12,7 @@ import {
   verifyEmailThunk,
   hardDeleteUserThunk,
   softDeleteUserThunk,
+  deleteAvatarThunk,
 } from "./userThunk";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -120,6 +121,13 @@ export const uploadAvatar = createAsyncThunk(
   }
 );
 
+export const deleteAvatar = createAsyncThunk(
+  "user/deleteAvatar",
+  async (thunkAPI) => {
+    return deleteAvatarThunk("/users/avatar", thunkAPI);
+  }
+);
+
 export const refreshToken = createAsyncThunk(
   "user/refreshToken",
   async (body, thunkAPI) => {
@@ -128,24 +136,7 @@ export const refreshToken = createAsyncThunk(
 );
 
 const createRequestBody = (user) => {
-  const {
-    role,
-    firstname,
-    lastname,
-    gender,
-    dob,
-    nationality,
-    description,
-    smoker,
-    member_of_student_association,
-    pet,
-    education,
-    country,
-    city,
-    status,
-    languages,
-    socials,
-  } = user;
+  const { role, firstname, lastname, description, status } = user;
 
   const retObj = {
     id: user.id,
@@ -324,6 +315,23 @@ const userSlice = createSlice({
         state.isLoading = false;
         console.log("uploadAvatar - rejected");
       })
+
+      .addCase(deleteAvatar.pending, (state) => {
+        state.isLoading = true;
+        // console.log("deleteAvatar - pending");
+      })
+      .addCase(deleteAvatar.fulfilled, (state, { payload }) => {
+        // console.log("deleteAvatar - fulfilled");
+        state.isLoading = false;
+        const { user } = payload;
+        state.profile = { ...state.profile, avatar: user.avatar };
+        setUserInLocalStorage(user);
+      })
+      .addCase(deleteAvatar.rejected, (state) => {
+        state.isLoading = false;
+        console.log("deleteAvatar - rejected");
+      })
+
       .addCase(refreshToken.fulfilled, (state, { payload }) => {
         // console.log("uploadAvatar - fulfilled");
         // update the token

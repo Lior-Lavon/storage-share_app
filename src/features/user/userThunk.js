@@ -51,6 +51,17 @@ export const uploadAvatarThunk = async (url, avatar, thunkAPI) => {
   }
 };
 
+export const deleteAvatarThunk = async (url, thunkAPI) => {
+  try {
+    const resp = await customFetch.delete(url);
+    return { user: resp.data };
+  } catch (error) {
+    console.log(error);
+
+    return thunkAPI.rejectWithValue(error.response?.data?.msg);
+  }
+};
+
 export const refreshTokenThunk = async (url, avatar, thunkAPI) => {
   try {
     const resp = await customFetch.post(url, avatar);

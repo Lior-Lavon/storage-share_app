@@ -35,6 +35,7 @@ const ProfileView = ({ isVisible }) => {
   const topRef = useRef(null);
   const bottomRef = useRef(null);
   const { isMyProfile } = useSelector((store) => store.dashboard);
+  const { profile } = useSelector((store) => store.user);
 
   const handleHideProfileView = () => {
     dispatch(showProfile());
@@ -91,7 +92,12 @@ const ProfileView = ({ isVisible }) => {
         className="w-full mt-[56px] relative bg-white overflow-y-auto"
         style={{ height: `${height}px` }}
       >
-        <UserAvatar />
+        <UserAvatar
+          imageUrl={profile?.avatar}
+          firstname={profile?.firstName}
+          lastname={profile?.lastName}
+          email={profile?.email}
+        />
 
         {/* menu */}
         <div className="w-[90%] mx-auto my-4 flex flex-col text-left border-b border-gray-300">
