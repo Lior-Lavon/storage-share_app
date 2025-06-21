@@ -372,7 +372,15 @@ const MyProfileView = ({ isVisible }) => {
                 "body",
                 base64String.substring("data:image/jpeg;base64,".length)
               );
-              dispatch(uploadAvatar(fd));
+              dispatch(uploadAvatar(fd))
+                .unwrap()
+                .then(() => {
+                  console.error("uploadAvatar success");
+                  setCropModel(!cropModel);
+                })
+                .catch((err) => {
+                  console.error("uploadAvatar failed:", err);
+                });
             });
           }}
         />
