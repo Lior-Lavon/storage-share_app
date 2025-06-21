@@ -361,6 +361,9 @@ const MyProfileView = ({ isVisible }) => {
 
       {cropModel && (
         <CircleImageCropper
+          closeModal={() => {
+            setCropModel(!cropModel);
+          }}
           onCropped={(blob) => {
             blobToBase64(blob).then((base64String) => {
               const fd = new FormData();

@@ -81,7 +81,7 @@ import Cropper from "react-easy-crop";
 import getCroppedImg from "../utils/cropImage";
 import PrimaryButton from "./SharedComponents/PrimaryButton";
 
-const CircleImageCropper = ({ onCropped }) => {
+const CircleImageCropper = ({ closeModal, onCropped }) => {
   const [imageSrc, setImageSrc] = useState(null);
   const [crop, setCrop] = useState({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
@@ -108,8 +108,16 @@ const CircleImageCropper = ({ onCropped }) => {
   };
 
   return (
-    <div className="w-full h-screen absolute top-0 flex items-center justify-center bg-black/70 z-50">
-      <div className="w-[90%] max-w-md mx-auto p-4 space-y-4 bg-white rounded-2xl shadow-2xl">
+    <div
+      className="w-full h-screen absolute top-0 flex items-center justify-center bg-black/70 z-50"
+      onClick={closeModal}
+    >
+      <div
+        className="w-[90%] max-w-md mx-auto p-4 space-y-4 bg-white rounded-2xl shadow-2xl"
+        onClick={(e) => {
+          e.stopPropagation();
+        }}
+      >
         {/* Hidden Inputs */}
         <input
           ref={inputRef}
@@ -132,11 +140,11 @@ const CircleImageCropper = ({ onCropped }) => {
             <p className="font-bold text-left">Upload or Take Photo</p>
             <div className="flex flex-col gap-5 w-[250px]">
               <PrimaryButton onClick={() => inputRef.current.click()}>
-                Select from Storage
+                Select
               </PrimaryButton>
-              <PrimaryButton onClick={() => inputCameraRef.current.click()}>
+              {/* <PrimaryButton onClick={() => inputCameraRef.current.click()}>
                 Capture from Camera
-              </PrimaryButton>
+              </PrimaryButton> */}
             </div>
           </div>
         )}
