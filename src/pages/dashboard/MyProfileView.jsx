@@ -375,7 +375,7 @@ const MyProfileView = ({ isVisible }) => {
               dispatch(uploadAvatar(fd))
                 .unwrap()
                 .then(() => {
-                  console.error("uploadAvatar success");
+                  console.log("uploadAvatar success");
                   setCropModel(!cropModel);
                 })
                 .catch((err) => {
