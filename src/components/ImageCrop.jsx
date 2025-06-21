@@ -1,5 +1,4 @@
 import "react-image-crop/dist/ReactCrop.css";
-import styled from "styled-components";
 import { FaTimes } from "react-icons/fa";
 import { useDispatch } from "react-redux";
 import { useRef, useState, useEffect } from "react";
@@ -11,8 +10,8 @@ import ReactCrop, {
 } from "react-image-crop";
 
 const MIN_DIMENSION = 1000;
-const MAX_WIDTH_DIMENSION = 8000;
-const MAX_HEIGHT_DIMENSION = 6000;
+const MAX_WIDTH_DIMENSION = 4000;
+const MAX_HEIGHT_DIMENSION = 3000;
 
 const ImageCrop = ({
   updateImage,
@@ -37,9 +36,15 @@ const ImageCrop = ({
     inputField.current.click();
   };
   const handleChange = (e) => {
+    console.log("handleChange");
+
     setIsLoading(true);
     const file = e.target.files?.[0];
     if (!file) return;
+
+    // check if the file is HEIC
+    console.log("MIME type:", file.type);
+
     setFileName(file.name);
 
     const reader = new FileReader();
@@ -60,7 +65,8 @@ const ImageCrop = ({
           naturalHeight > MAX_HEIGHT_DIMENSION
         ) {
           setError(
-            `Image should be max (${MAX_WIDTH_DIMENSION} x ${MAX_HEIGHT_DIMENSION}) px`
+            // `Image should be max (${MAX_WIDTH_DIMENSION} x ${MAX_HEIGHT_DIMENSION}) px`
+            ` naturalWidth = (${naturalWidth} x naturalHeight : ${naturalHeight}) px`
           );
           setImageSrc("");
           return;
@@ -148,7 +154,7 @@ const ImageCrop = ({
             <div className="w-full h-full grid place-items-center">
               <input
                 type="file"
-                // accept="image/*"
+                accept="image/jpeg,image/png"
                 onChange={handleChange}
                 ref={inputField}
                 style={{ display: "none" }}

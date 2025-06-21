@@ -116,8 +116,8 @@ export const updateUser = createAsyncThunk(
 
 export const uploadAvatar = createAsyncThunk(
   "user/uploadAvatar",
-  async (avatar, thunkAPI) => {
-    return uploadAvatarThunk("/users/avatar", avatar, thunkAPI);
+  async (body, thunkAPI) => {
+    return uploadAvatarThunk("/users/avatar", body, thunkAPI);
   }
 );
 
@@ -302,10 +302,10 @@ const userSlice = createSlice({
       })
       .addCase(uploadAvatar.pending, (state) => {
         state.isLoading = true;
-        // console.log("uploadAvatar - pending");
+        console.log("uploadAvatar - pending");
       })
       .addCase(uploadAvatar.fulfilled, (state, { payload }) => {
-        // console.log("uploadAvatar - fulfilled");
+        console.log("uploadAvatar - fulfilled");
         state.isLoading = false;
         const { user } = payload;
         state.profile = { ...state.profile, avatar: user.avatar };

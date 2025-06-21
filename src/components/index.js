@@ -8,7 +8,7 @@ import GoogleRegisterButton from "./GoogleRegisterButton";
 import TopBar from "./TopBar";
 import TabBar from "./TabBar";
 import UserAvatar from "./UserAvatar";
-import AvatarLoader from "./AvatarLoader";
+import CircleImageCropper from "./CircleImageCropper";
 
 export {
   LoginView,
@@ -21,5 +21,5 @@ export {
   TopBar,
   TabBar,
   UserAvatar,
-  AvatarLoader,
+  CircleImageCropper,
 };

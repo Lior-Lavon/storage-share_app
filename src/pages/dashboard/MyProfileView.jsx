@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 
-import { AvatarLoader, TopBar, UserAvatar } from "../../components";
+import { CircleImageCropper, TopBar, UserAvatar } from "../../components";
 import { showMyProfile } from "../../features/dashboard/dashboardSlice";
 import { useDispatch, useSelector } from "react-redux";
 import InputField from "../../components/SharedComponents/InputField";
@@ -191,6 +191,15 @@ const MyProfileView = ({ isVisible }) => {
     dispatch(uploadAvatar(fd));
   };
 
+  function blobToBase64(blob) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onloadend = () => resolve(reader.result);
+      reader.onerror = reject;
+      reader.readAsDataURL(blob); // produces base64 string
+    });
+  }
+
   return (
     <div
       className={`w-full h-full z-90 fixed top-0 right-0 transition-transform duration-500 flex flex-col bg-white ${
@@ -351,12 +360,25 @@ const MyProfileView = ({ isVisible }) => {
       )}
 
       {cropModel && (
-        <ImageCrop
-          updateImage={updateAvatar}
-          showCropModel={setCropModel}
-          useCirculate={true}
-          aspectRatio={1}
+        <CircleImageCropper
+          onCropped={(blob) => {
+            blobToBase64(blob).then((base64String) => {
+              const fd = new FormData();
+              fd.append("filename", "cropped.jpg");
+              fd.append(
+                "body",
+                base64String.substring("data:image/jpeg;base64,".length)
+              );
+              dispatch(uploadAvatar(fd));
+            });
+          }}
         />
+        // <ImageCrop
+        //   updateImage={updateAvatar}
+        //   showCropModel={setCropModel}
+        //   useCirculate={true}
+        //   aspectRatio={1}
+        // />
       )}
     </div>
   );
