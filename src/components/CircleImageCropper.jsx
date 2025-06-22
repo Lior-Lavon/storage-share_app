@@ -9,8 +9,8 @@ const CircleImageCropper = ({ closeModal, onCropped }) => {
   const [zoom, setZoom] = useState(1);
   const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
 
-  const IMAGE_WIDTH = 100;
-  const IMAGE_HEIGHT = 100;
+  const IMAGE_WIDTH = 800;
+  const IMAGE_HEIGHT = 800;
 
   const inputRef = useRef();
   const inputCameraRef = useRef();
