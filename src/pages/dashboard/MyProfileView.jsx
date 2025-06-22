@@ -224,10 +224,6 @@ const MyProfileView = ({ isVisible }) => {
         <UserAvatar
           allowEditing={true}
           imageUrl={profile?.avatar}
-          firstname={profile?.firstName}
-          lastname={profile?.lastName}
-          email={profile?.email}
-          showInfo={false}
           showModal={() => {
             setCropModel(!cropModel);
           }}

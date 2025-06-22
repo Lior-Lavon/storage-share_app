@@ -42,6 +42,10 @@ const ProfileView = ({ isVisible }) => {
   };
 
   useEffect(() => {
+    console.log("ProfileView : ", profile);
+  }, [profile]);
+
+  useEffect(() => {
     const updateHeight = () => {
       if (topRef.current) {
         const topBottom = topRef.current.getBoundingClientRect().bottom;
@@ -92,12 +96,15 @@ const ProfileView = ({ isVisible }) => {
         className="w-full mt-[56px] relative bg-white overflow-y-auto"
         style={{ height: `${height}px` }}
       >
-        <UserAvatar
-          imageUrl={profile?.avatar}
-          firstname={profile?.firstName}
-          lastname={profile?.lastName}
-          email={profile?.email}
-        />
+        <UserAvatar imageUrl={profile?.avatar} />
+
+        <div className="w-full flex flex-col items-center mt-4 space-y-2">
+          <p className="text-lg font-bold">{`${
+            profile.firstname !== "" ? profile.firstname : "Unknown"
+          } ${profile?.lastname !== "" ? profile?.lastname : "Unknown"}`}</p>
+
+          <p className="text-base text-gray-400">{profile?.email}</p>
+        </div>
 
         {/* menu */}
         <div className="w-[90%] mx-auto my-4 flex flex-col text-left border-b border-gray-300">

@@ -1,4 +1,4 @@
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import useScreenWidth from "../utils/useScreenWidth";
 import Dashboard from "./dashboard/Dashboard";
 import NotSupported from "./NotSupported";
@@ -6,9 +6,15 @@ import useViewportHeight from "../utils/useViewportHeight";
 import { TopBar } from "../components";
 import PrimaryButton from "../components/SharedComponents/PrimaryButton";
 import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
+import {
+  showMyProfile,
+  showProfile,
+} from "../features/dashboard/dashboardSlice";
 
 const Landing = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const { profile } = useSelector((store) => store.user);
   const screenWidth = useScreenWidth();
   const viewHeight = useViewportHeight();
@@ -17,9 +23,10 @@ const Landing = () => {
     return <NotSupported />;
   }
 
-  // if (profile != null) {
-  //   return <Dashboard />;
-  // }
+  useEffect(() => {
+    dispatch(showMyProfile("ForceClose"));
+    dispatch(showProfile("ForceClose"));
+  }, []);
 
   return (
     <div

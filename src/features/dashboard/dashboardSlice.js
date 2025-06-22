@@ -12,11 +12,19 @@ const dashboardSlice = createSlice({
   name: "dashboard",
   initialState,
   reducers: {
-    showProfile: (state) => {
-      state.isProfile = !state.isProfile;
+    showProfile: (state, { payload }) => {
+      if (payload == "ForceClose") {
+        state.isProfile = false;
+      } else {
+        state.isProfile = !state.isProfile;
+      }
     },
-    showMyProfile: (state) => {
-      state.isMyProfile = !state.isMyProfile;
+    showMyProfile: (state, { payload }) => {
+      if (payload == "ForceClose") {
+        state.isMyProfile = false;
+      } else {
+        state.isMyProfile = !state.isMyProfile;
+      }
     },
   },
   extraReducers: (builder) => {},

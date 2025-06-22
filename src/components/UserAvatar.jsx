@@ -5,15 +5,7 @@ import avatarImg from "../assets/avatar.png";
 import { CiEdit } from "react-icons/ci";
 import { deleteAvatar } from "../features/user/userSlice";
 
-const UserAvatar = ({
-  showModal,
-  imageUrl,
-  firstname,
-  lastname,
-  email,
-  allowEditing = false,
-  showInfo = true,
-}) => {
+const UserAvatar = ({ showModal, imageUrl, allowEditing = false }) => {
   const [menuVisible, setMenuVisible] = useState(false);
   const dispatch = useDispatch();
   const menuRef = useRef(null);
@@ -98,14 +90,6 @@ const UserAvatar = ({
             </div>
           )}
         </div>
-
-        {showInfo && (
-          <p className="text-lg font-bold">{`${
-            firstname !== "" ? firstname : "Unknown"
-          } ${lastname !== "" ? lastname : "Unknown"}`}</p>
-        )}
-
-        {showInfo && <p className="text-base text-gray-400">{email}</p>}
       </div>
     </div>
   );
