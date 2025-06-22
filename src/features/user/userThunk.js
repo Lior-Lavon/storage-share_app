@@ -126,3 +126,12 @@ export const verifyEmailThunk = async (url, thunkAPI) => {
     return thunkAPI.rejectWithValue(error.response?.data?.msg);
   }
 };
+
+export const updateSettingsThunk = async (url, avatar, thunkAPI) => {
+  try {
+    const resp = await customFetch.post(url, avatar);
+    return resp.data;
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error.response?.data?.msg);
+  }
+};

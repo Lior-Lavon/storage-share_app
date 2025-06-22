@@ -3,12 +3,14 @@ import { TopBar, UserAvatar } from "../../components";
 import {
   showMyProfile,
   showProfile,
+  showSettingsView,
 } from "../../features/dashboard/dashboardSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { logoutUser } from "../../features/user/userSlice";
 import { useNavigate } from "react-router-dom";
 import { GoArrowRight } from "react-icons/go";
 import MyProfileView from "./MyProfileView";
+import SettingsView from "./SettingsView";
 
 const menu = [
   {
@@ -34,7 +36,7 @@ const ProfileView = ({ isVisible }) => {
   const [activeId, setActiveId] = useState(null);
   const topRef = useRef(null);
   const bottomRef = useRef(null);
-  const { isMyProfile } = useSelector((store) => store.dashboard);
+  const { isMyProfile, isSettings } = useSelector((store) => store.dashboard);
   const { profile } = useSelector((store) => store.user);
 
   const handleHideProfileView = () => {
@@ -70,7 +72,7 @@ const ProfileView = ({ isVisible }) => {
           console.log("2");
           break;
         case 3:
-          console.log("3");
+          dispatch(showSettingsView());
           break;
       }
     }, 150);
@@ -154,6 +156,7 @@ const ProfileView = ({ isVisible }) => {
       </div>
 
       <MyProfileView isVisible={isMyProfile} />
+      <SettingsView isVisible={isSettings} />
     </div>
   );
 };

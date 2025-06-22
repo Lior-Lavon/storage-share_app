@@ -8,6 +8,7 @@ import MyStorageView from "./dashboard/MyStorageView";
 import ActivityView from "./dashboard/ActivityView";
 import ChatView from "./dashboard/ChatView";
 import ClearCache from "./dashboard/Clear";
+import SettingsView from "./dashboard/SettingsView";
 
 export {
   NotFound,
@@ -20,4 +21,5 @@ export {
   ActivityView,
   ChatView,
   ClearCache,
+  SettingsView,
 };

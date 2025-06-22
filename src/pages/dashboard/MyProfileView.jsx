@@ -229,7 +229,7 @@ const MyProfileView = ({ isVisible }) => {
           }}
         />
         <div className="px-4 mt-4 space-y-4">
-          <p className="font-bold">My personal details</p>
+          <p className="font-bold text-xl">My personal details</p>
 
           <InputField
             label="Email"

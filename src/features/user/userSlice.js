@@ -13,6 +13,7 @@ import {
   hardDeleteUserThunk,
   softDeleteUserThunk,
   deleteAvatarThunk,
+  updateSettingsThunk,
 } from "./userThunk";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -132,6 +133,13 @@ export const refreshToken = createAsyncThunk(
   "user/refreshToken",
   async (body, thunkAPI) => {
     return refreshTokenThunk("/token/renew_access", body, thunkAPI);
+  }
+);
+
+export const updateSettings = createAsyncThunk(
+  "user/updateSettings",
+  async (body, thunkAPI) => {
+    return updateSettingsThunk("/users/settings", body, thunkAPI);
   }
 );
 
@@ -460,6 +468,31 @@ const userSlice = createSlice({
       })
       .addCase(pingUser.rejected, (state) => {
         console.log("pingUser - rejected");
+      })
+
+      .addCase(updateSettings.pending, (state) => {
+        state.isLoading = true;
+        console.log("updateSettings - pending");
+      })
+      .addCase(updateSettings.fulfilled, (state, { payload }) => {
+        console.log("updateSettings - fulfilled : ", payload);
+        state.isLoading = false;
+
+        const settings = {
+          receive_email: payload.receive_email,
+          receive_notification: payload.receive_notification,
+        };
+        console.log("settings : ", settings);
+
+        state.profile = {
+          ...state.profile,
+          settings,
+        };
+      })
+      .addCase(updateSettings.rejected, (state, { payload }) => {
+        state.isLoading = false;
+        // state.errorMsg = payload;
+        console.log("updateSettings - rejected : ", payload);
       });
   },
 });
