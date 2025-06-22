@@ -192,6 +192,15 @@ const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
+    logout: (state) => {
+      console.log("logout called");
+
+      clearUserFromLocalStorage();
+      clearSessionFromLocalStorage();
+
+      state.profile = null;
+      state.session = null;
+    },
     clearError: (state) => {
       state.errorMsg = null;
     },
@@ -333,7 +342,7 @@ const userSlice = createSlice({
       })
 
       .addCase(refreshToken.fulfilled, (state, { payload }) => {
-        // console.log("uploadAvatar - fulfilled");
+        console.log("uploadAvatar - fulfilled : ", payload);
         // update the token
         const { token } = payload;
 
@@ -455,6 +464,11 @@ const userSlice = createSlice({
   },
 });
 
-export const { setViewState, updateUserProfile, setStatue, clearError } =
-  userSlice.actions;
+export const {
+  setViewState,
+  updateUserProfile,
+  setStatue,
+  clearError,
+  logout,
+} = userSlice.actions;
 export default userSlice.reducer;

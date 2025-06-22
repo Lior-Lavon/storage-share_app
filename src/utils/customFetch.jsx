@@ -5,6 +5,7 @@ import {
   getSessionFromLocalStorage,
   setSessionInLocalStorage,
 } from "./localStorage";
+import { logout } from "../features/user/userSlice";
 
 const customFetch = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL,
@@ -36,7 +37,7 @@ export const interceptor = (store) => {
       const originalRequest = error.config;
       console.log("!!! error.response.status : ", error.response.status);
 
-      if (error.response.status === 401 && !originalRequest._retry) {
+      if (error.response.status === 403 && !originalRequest._retry) {
         originalRequest._retry = true;
 
         const data = await refreshToken(store);
@@ -58,13 +59,12 @@ export const interceptor = (store) => {
         ] = `Bearer ${access_token}`;
         return customFetch(originalRequest);
       }
-      // else if (error.response.status === 403) {
-      //   console.log("33");
-      //   originalRequest._retry = false;
-      //   // refresh token expired - logout the user
-      //   store.dispatch(logout());
-      //   history.push("/");
-      // }
+      if (error.response.status === 403) {
+        originalRequest._retry = false;
+        // refresh token expired - logout the user
+        store.dispatch(logout());
+        history.push("/");
+      }
       return Promise.reject(error);
     }
   );
@@ -75,13 +75,10 @@ const refreshToken = async () => {
 
   try {
     const session = getSessionFromLocalStorage();
-    console.log("11 session : ", session);
 
     const resp = await customFetch.post("/token/renew_access", {
       refresh_token: session.refresh_token,
     });
-    console.log("22 resp : ", resp);
-    console.log("33 resp.data : ", resp.data);
 
     return resp.data;
   } catch (error) {
