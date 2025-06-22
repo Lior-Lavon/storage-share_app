@@ -50,7 +50,7 @@ const PrimaryButton = ({
       type={type}
       onClick={handleClick}
       disabled={isLoading || disabled}
-      className={`${baseClasses} ${appliedClasses}`}
+      className={`${baseClasses} ${appliedClasses} `}
     >
       {isLoading ? (
         <svg

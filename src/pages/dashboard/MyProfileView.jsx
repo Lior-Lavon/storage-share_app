@@ -309,7 +309,12 @@ const MyProfileView = ({ isVisible }) => {
             }}
           >
             <div className="p-4 space-y-1">
-              <label className="text-base font-bold">Change password</label>
+              <div className="w-full flex flex-col gap-2 font-bold">
+                <p className="text-violet-600 text-2xl text-center  ">
+                  Change password
+                </p>
+                <p className="text-center">Set up a new password</p>
+              </div>
 
               {changePasswordError != null && (
                 <p className="w-full text-center text-red-400">
@@ -322,10 +327,10 @@ const MyProfileView = ({ isVisible }) => {
                 className="flex flex-col gap-4 mt-4"
               >
                 <InputField
-                  label="Original password"
+                  label="Current password"
                   type="text"
                   value={originalPassword}
-                  placeholder="Original password"
+                  placeholder="Password"
                   onChange={(e) => setOriginalPassword(e.target.value)}
                   autoComplete="original_password"
                 />
@@ -334,21 +339,32 @@ const MyProfileView = ({ isVisible }) => {
                   label="New password"
                   type="text"
                   value={password}
-                  placeholder="New password"
+                  placeholder="Password"
                   onChange={(e) => setPassword(e.target.value)}
                   autoComplete="password"
                 />
 
                 <InputField
-                  label="Confirm password"
+                  label="Confirm new password"
                   type="text"
                   value={confirmPassword}
-                  placeholder="Confirm password"
+                  placeholder="Password"
                   onChange={(e) => setConfirmPassword(e.target.value)}
                   autoComplete="confirm_password"
                 />
 
-                <PrimaryButton type="submit">Submit</PrimaryButton>
+                <PrimaryButton type="submit">Set new password</PrimaryButton>
+
+                <PrimaryButton
+                  bgColor={"bg-while"}
+                  textColor={"text-violet-600"}
+                  borderColor={"border"}
+                  onClick={() => {
+                    setChangePassword(false);
+                  }}
+                >
+                  Cancel
+                </PrimaryButton>
               </form>
             </div>
           </div>
