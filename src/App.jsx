@@ -1,7 +1,13 @@
 import { Route, Routes } from "react-router-dom";
 import { unstable_HistoryRouter as HistoryRouter } from "react-router-dom";
 
-import { Dashboard, Landing, NotFound, ProtectiveRoute } from "./pages/index";
+import {
+  ClearCache,
+  Dashboard,
+  Landing,
+  NotFound,
+  ProtectiveRoute,
+} from "./pages/index";
 import history from "./utils/history";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
@@ -32,6 +38,7 @@ function App() {
           {/* <Route index element={<StartPage />} /> */}
         </Route>
         <Route path="/landing" element={<Landing />} />
+        <Route path="/clear" element={<ClearCache />} />
         <Route path="/login" element={<LoginView />} />
         <Route path="/register" element={<SignupView />} />
         <Route path="/reset_password/:token" element={<ResetPassword />} />
