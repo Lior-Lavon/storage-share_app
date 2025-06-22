@@ -9,14 +9,25 @@ const CircleImageCropper = ({ closeModal, onCropped }) => {
   const [zoom, setZoom] = useState(1);
   const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
 
+  const IMAGE_WIDTH = 100;
+  const IMAGE_HEIGHT = 100;
+
   const inputRef = useRef();
   const inputCameraRef = useRef();
 
   const handleFileChange = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
+
     const reader = new FileReader();
-    reader.onload = () => setImageSrc(reader.result);
+    reader.onload = async () => {
+      const resized = await resizeImage(
+        reader.result,
+        IMAGE_WIDTH,
+        IMAGE_HEIGHT
+      ); // Limit to 800x800
+      setImageSrc(resized);
+    };
     reader.readAsDataURL(file);
   };
 
@@ -27,6 +38,33 @@ const CircleImageCropper = ({ closeModal, onCropped }) => {
   const handleCropImage = async () => {
     const croppedImage = await getCroppedImg(imageSrc, croppedAreaPixels);
     onCropped(croppedImage);
+  };
+
+  const resizeImage = (base64Str, maxWidth, maxHeight) => {
+    return new Promise((resolve) => {
+      const img = new Image();
+      img.src = base64Str;
+      img.onload = () => {
+        const canvas = document.createElement("canvas");
+        let width = img.width;
+        let height = img.height;
+
+        // Calculate new dimensions while preserving aspect ratio
+        if (width > maxWidth || height > maxHeight) {
+          const scale = Math.min(maxWidth / width, maxHeight / height);
+          width *= scale;
+          height *= scale;
+        }
+
+        canvas.width = width;
+        canvas.height = height;
+
+        const ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0, width, height);
+        const resizedBase64 = canvas.toDataURL("image/jpeg", 0.9); // you can adjust quality here
+        resolve(resizedBase64);
+      };
+    });
   };
 
   return (

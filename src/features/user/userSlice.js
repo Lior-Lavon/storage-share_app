@@ -478,15 +478,12 @@ const userSlice = createSlice({
         console.log("updateSettings - fulfilled : ", payload);
         state.isLoading = false;
 
-        const settings = {
-          receive_email: payload.receive_email,
-          receive_notification: payload.receive_notification,
-        };
-        console.log("settings : ", settings);
-
         state.profile = {
           ...state.profile,
-          settings,
+          settings: {
+            receive_email: payload.receive_email,
+            receive_notification: payload.receive_notification,
+          },
         };
       })
       .addCase(updateSettings.rejected, (state, { payload }) => {
