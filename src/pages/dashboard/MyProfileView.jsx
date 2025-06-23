@@ -43,6 +43,7 @@ const MyProfileView = ({ isVisible }) => {
   const [originalPassword, setOriginalPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [changePasswordError, setChangePasswordError] = useState(null);
+  const [confirmationDialog, setConfirmationDialog] = useState(false);
   const topRef = useRef(null);
   const isFirstRender = useRef(true);
   const prevVisibleRef = useRef(isVisible);
@@ -285,7 +286,7 @@ const MyProfileView = ({ isVisible }) => {
             textColor="text-red-500"
             borderColor="border border-red-500"
             onClick={() => {
-              handleDeleteAccount();
+              setConfirmationDialog(true);
             }}
           >
             Delete account
@@ -402,6 +403,45 @@ const MyProfileView = ({ isVisible }) => {
         //   useCirculate={true}
         //   aspectRatio={1}
         // />
+      )}
+
+      {confirmationDialog && (
+        <div
+          className="w-full h-screen absolute top-0 z-100 flex items-center justify-center"
+          onClick={() => {
+            setConfirmationDialog(false);
+          }}
+        >
+          <div
+            className="w-[320px] mx-auto  bg-white border-1 rounded-xl shadow-2xl"
+            onClick={(e) => {
+              e.stopPropagation();
+            }}
+          >
+            <div className="flex flex-col gap-1 text-left p-4">
+              <p className="font-bold text-lg">Delete Account</p>
+              <p>Are you sure ?</p>
+              <div className="w-full flex justify-around gap-2 mt-4 text-white">
+                <button
+                  onClick={() => {
+                    handleDeleteAccount();
+                  }}
+                  className="w-[50%] py-2 rounded-xl bg-red-500 "
+                >
+                  Yes
+                </button>
+                <button
+                  onClick={() => {
+                    setConfirmationDialog(false);
+                  }}
+                  className="w-[50%] rounded-xl bg-gray-500"
+                >
+                  No
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );
