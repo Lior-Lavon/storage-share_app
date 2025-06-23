@@ -6,6 +6,9 @@ import {
   setSessionInLocalStorage,
 } from "./localStorage";
 import { logout } from "../features/user/userSlice";
+import { closeAllViews } from "../features/dashboard/dashboardSlice";
+import { refreshTokenThunk } from "../features/user/userThunk";
+import { refreshToken } from "../features/auth/authSlice";
 
 const customFetch = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL,
@@ -40,49 +43,34 @@ export const interceptor = (store) => {
       if (error.response.status === 403 && !originalRequest._retry) {
         originalRequest._retry = true;
 
-        const data = await refreshToken(store);
-
-        const access_token = data.access_token;
-        const access_token_expires_at = data.access_token_expires_at;
-
-        // update the state and the local storage
         const session = getSessionFromLocalStorage();
-        const newSession = {
-          ...session,
-          access_token,
-          access_token_expires_at,
-        };
-        setSessionInLocalStorage(newSession);
+        const resultAction = await store.dispatch(
+          refreshToken({ refresh_token: session.refresh_token })
+        );
 
-        customFetch.defaults.headers.common[
-          "Authorization"
-        ] = `Bearer ${access_token}`;
-        return customFetch(originalRequest);
-      }
-      if (error.response.status === 403) {
-        originalRequest._retry = false;
-        // refresh token expired - logout the user
-        store.dispatch(logout());
-        history.push("/");
+        if (resultAction.type == "auth/refreshToken/fulfilled") {
+          // console.log("refreshTokenThunk.fulfilled");
+
+          const session = getSessionFromLocalStorage();
+          customFetch.defaults.headers.common[
+            "Authorization"
+          ] = `Bearer ${session.access_token}`;
+
+          return customFetch(originalRequest);
+        }
+        if (resultAction.type == "auth/refreshToken/rejected") {
+          // console.log("refreshTokenThunk.rejected");
+
+          originalRequest._retry = false;
+          // refresh token expired - logout the user
+          store.dispatch(closeAllViews());
+          store.dispatch(logout());
+          history.push("/");
+        }
       }
       return Promise.reject(error);
     }
   );
 };
 
-const refreshToken = async () => {
-  console.log("refreshToken called");
-
-  try {
-    const session = getSessionFromLocalStorage();
-
-    const resp = await customFetch.post("/token/renew_access", {
-      refresh_token: session.refresh_token,
-    });
-
-    return resp.data;
-  } catch (error) {
-    console.log("refresh token expired ... redirecting user ");
-  }
-};
 export default customFetch;

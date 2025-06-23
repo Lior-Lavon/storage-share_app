@@ -13,6 +13,11 @@ const dashboardSlice = createSlice({
   name: "dashboard",
   initialState,
   reducers: {
+    closeAllViews: (state) => {
+      state.isProfile = false;
+      state.isMyProfile = false;
+      state.isSettings = false;
+    },
     showProfile: (state, { payload }) => {
       if (payload == "ForceClose") {
         state.isProfile = false;
@@ -38,6 +43,6 @@ const dashboardSlice = createSlice({
   extraReducers: (builder) => {},
 });
 
-export const { showProfile, showMyProfile, showSettingsView } =
+export const { closeAllViews, showProfile, showMyProfile, showSettingsView } =
   dashboardSlice.actions;
 export default dashboardSlice.reducer;

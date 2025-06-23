@@ -14,6 +14,7 @@ import {
   softDeleteUserThunk,
   deleteAvatarThunk,
   updateSettingsThunk,
+  getSettingsThunk,
 } from "./userThunk";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -143,6 +144,13 @@ export const updateSettings = createAsyncThunk(
   }
 );
 
+export const getUserSettings = createAsyncThunk(
+  "user/getUserSettings",
+  async (thunkAPI) => {
+    return getSettingsThunk("/users/settings", thunkAPI);
+  }
+);
+
 const createRequestBody = (user) => {
   const { role, firstname, lastname, description, status } = user;
 
@@ -267,15 +275,9 @@ const userSlice = createSlice({
           refresh_token_expires_at,
         };
         state.session = session;
-        setSessionInLocalStorage(session);
+        console.log("session : ", session);
 
-        // console.log("loginUser - fulfilled");
-        // const { firstname } = user;
-        // if (firstname !== "not_set") {
-        //   toast.success(`Welcome back ${firstname}`);
-        // } else {
-        //   toast.success(`Welcome back`);
-        // }
+        setSessionInLocalStorage(session);
       })
       .addCase(loginUser.rejected, (state, { payload }) => {
         state.isLoading = false;
@@ -490,6 +492,28 @@ const userSlice = createSlice({
         state.isLoading = false;
         // state.errorMsg = payload;
         console.log("updateSettings - rejected : ", payload);
+      })
+
+      .addCase(getUserSettings.pending, (state) => {
+        state.isLoading = true;
+        console.log("getUserSettings - pending");
+      })
+      .addCase(getUserSettings.fulfilled, (state, { payload }) => {
+        console.log("getUserSettings - fulfilled : ", payload);
+        state.isLoading = false;
+
+        state.profile = {
+          ...state.profile,
+          settings: {
+            receive_email: payload.receive_email,
+            receive_notification: payload.receive_notification,
+          },
+        };
+      })
+      .addCase(getUserSettings.rejected, (state, { payload }) => {
+        state.isLoading = false;
+        // state.errorMsg = payload;
+        console.log("getUserSettings - rejected : ", payload);
       });
   },
 });

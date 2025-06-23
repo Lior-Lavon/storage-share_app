@@ -8,6 +8,7 @@ import PrimaryButton from "../components/SharedComponents/PrimaryButton";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import {
+  closeAllViews,
   showMyProfile,
   showProfile,
 } from "../features/dashboard/dashboardSlice";
@@ -25,7 +26,7 @@ const Landing = () => {
 
   useEffect(() => {
     dispatch(showMyProfile("ForceClose"));
-    dispatch(showProfile("ForceClose"));
+    dispatch(closeAllViews());
   }, []);
 
   return (

@@ -44,7 +44,7 @@ const ProfileView = ({ isVisible }) => {
   };
 
   useEffect(() => {
-    console.log("ProfileView : ", profile);
+    // console.log("ProfileView : ", profile);
   }, [profile]);
 
   useEffect(() => {

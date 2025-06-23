@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { TopBar } from "../../components";
 import { showSettingsView } from "../../features/dashboard/dashboardSlice";
 import ToggleSwitch from "../../components/SharedComponents/ToggleSwitch";
-import { updateSettings } from "../../features/user/userSlice";
+import { getUserSettings, updateSettings } from "../../features/user/userSlice";
 
 const SettingsView = ({ isVisible }) => {
   const dispatch = useDispatch();
@@ -34,6 +34,12 @@ const SettingsView = ({ isVisible }) => {
     setReceiveEmail(profile?.settings?.receive_email);
     setReceiveNotification(profile?.settings?.receive_notification);
   }, [profile]);
+
+  useEffect(() => {
+    if (isVisible) {
+      dispatch(getUserSettings());
+    }
+  }, [isVisible]);
 
   useEffect(() => {
     if (userInteraction) {
