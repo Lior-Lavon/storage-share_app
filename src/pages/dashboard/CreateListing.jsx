@@ -201,7 +201,7 @@ const CreateListing = ({ isVisible }) => {
               Availability / Calendar Blocking{" "}
               <span style={{ color: "red" }}>*</span>
             </label>
-            <div className="w-full flex items-center gap-4 mt-1">
+            <div className="w-full flex items-center mt-1">
               <DatePickerField
                 name="startDate"
                 value={listingStartDate}

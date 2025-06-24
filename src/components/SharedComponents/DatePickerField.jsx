@@ -31,9 +31,8 @@ const DatePickerField = ({
   };
 
   return (
-    <div className={`flex flex-col gap-1 ${className}`}>
-      {label && <label className="text-base font-medium">{label}</label>}
-      <div className="relative">
+    <div className={`w-full flex flex-col ${className}`}>
+      <div className="w-full relative">
         <DatePicker
           selected={selectedDate}
           onChange={handleChange}
@@ -46,7 +45,7 @@ const DatePickerField = ({
           name={name}
         />
         <FaRegCalendarAlt
-          className="absolute right-8 top-1/2 transform -translate-y-1/2 text-gray-300 pointer-events-none"
+          className="absolute right-0 top-1/2 transform -translate-y-1/2 text-gray-300 pointer-events-none"
           size={18}
         />
       </div>
