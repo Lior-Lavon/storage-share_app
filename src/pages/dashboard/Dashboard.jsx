@@ -44,8 +44,8 @@ const Dashboard = () => {
       {/* TopBar */}
       <TopBar showProfile={handleShowProfile} title={"StorageShare"} />
       {/* Main content */}
-      <div className="flex-1 overflow-y-auto pt-16 pb-16 bg-white">
-        <div className="p-4">{renderTabContent(activeTab)}</div>
+      <div className="flex-1 overflow-y-auto pt-14 pb-16">
+        <div className="">{renderTabContent(activeTab)}</div>
       </div>
       {/* Bottom TabBar */}
       <TabBar activeTab={activeTab} setActiveTab={setActiveTab} />
