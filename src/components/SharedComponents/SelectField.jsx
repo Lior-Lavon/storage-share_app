@@ -53,7 +53,7 @@ const SelectField = ({
       value={value}
       onChange={onChange}
       disabled={disabled}
-      className="px-4 py-10 rounded-lg bg-gray-100 focus:outline-none focus:ring-2 focus:ring-violet-500"
+      className="px-4 py-3 rounded-lg bg-gray-100 focus:outline-none focus:ring-2 focus:ring-violet-500"
     >
       <option value="" disabled>
         Select your option
@@ -61,13 +61,13 @@ const SelectField = ({
       {options.map((option) => {
         if (typeof option === "object" && option !== null) {
           return (
-            <option key={option.value} value={option.value}>
+            <option className="py-4" key={option.value} value={option.value}>
               {option.label}
             </option>
           );
         }
         return (
-          <option key={option} value={option}>
+          <option className="py-4" key={option} value={option}>
             {option}
           </option>
         );
