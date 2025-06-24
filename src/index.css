@@ -2,6 +2,17 @@
 
 @import "tailwindcss";
 
+@supports (-webkit-overflow-scrolling: touch) {
+  input[type="date"] {
+    background-color: transparent !important;
+    padding: 0 !important;
+  }
+}
+
+input[type="date"] {
+  -webkit-appearance: textfield; /* or 'menulist-button' depending on your case */
+  appearance: textfield;
+}
 /* * {
   padding: 0;
   margin: 0;
