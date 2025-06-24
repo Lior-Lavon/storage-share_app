@@ -11,6 +11,7 @@ import ClearCache from "./dashboard/Clear";
 import SettingsView from "./dashboard/SettingsView";
 import MyStorageList from "./dashboard/MyStorageList";
 import MyListList from "./dashboard/MyListList";
+import CreateListing from "./dashboard/CreateListing";
 
 export {
   NotFound,
@@ -26,4 +27,5 @@ export {
   SettingsView,
   MyStorageList,
   MyListList,
+  CreateListing,
 };

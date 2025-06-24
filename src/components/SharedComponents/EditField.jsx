@@ -6,7 +6,7 @@ const EditField = ({
   value,
   onChange,
   disabled = false,
-  rows = 2,
+  rows = 3,
 }) => (
   <div className="flex flex-col gap-1">
     <label className="text-base font-medium">{label}</label>

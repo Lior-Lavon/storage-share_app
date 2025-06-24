@@ -7,6 +7,7 @@ const initialState = {
   isProfile: false,
   isMyProfile: false,
   isSettings: false,
+  isCreateListing: false,
 };
 
 const dashboardSlice = createSlice({
@@ -17,6 +18,7 @@ const dashboardSlice = createSlice({
       state.isProfile = false;
       state.isMyProfile = false;
       state.isSettings = false;
+      state.isCreateListing = false;
     },
     showProfile: (state, { payload }) => {
       if (payload == "ForceClose") {
@@ -39,10 +41,22 @@ const dashboardSlice = createSlice({
         state.isSettings = !state.isSettings;
       }
     },
+    showCreateListing: (state, { payload }) => {
+      if (payload == "ForceClose") {
+        state.isCreateListing = false;
+      } else {
+        state.isCreateListing = !state.isCreateListing;
+      }
+    },
   },
   extraReducers: (builder) => {},
 });
 
-export const { closeAllViews, showProfile, showMyProfile, showSettingsView } =
-  dashboardSlice.actions;
+export const {
+  closeAllViews,
+  showProfile,
+  showMyProfile,
+  showSettingsView,
+  showCreateListing,
+} = dashboardSlice.actions;
 export default dashboardSlice.reducer;

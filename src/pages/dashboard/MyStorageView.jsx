@@ -5,6 +5,7 @@ import useViewportHeight from "../../utils/useViewportHeight";
 import { TypeSwitch } from "../../components";
 import MyStorageList from "./MyStorageList";
 import MyListList from "./MyListList";
+import CreateListing from "./CreateListing";
 
 const MyStorageView = () => {
   const dispatch = useDispatch();
@@ -15,6 +16,7 @@ const MyStorageView = () => {
   const viewHeight = useViewportHeight() - 120;
 
   const { profile } = useSelector((store) => store.user);
+  const { isCreateListing } = useSelector((store) => store.dashboard);
 
   const handleTypeChange = (newType) => {
     setViewType(newType);
@@ -33,6 +35,9 @@ const MyStorageView = () => {
       <div className="w-[95%] flex-grow overflow-y-auto max-h-[100vh]">
         {viewType == "storage" ? <MyStorageList /> : <MyListList />}
       </div>
+
+      {/* CreateListing */}
+      <CreateListing isVisible={isCreateListing} />
     </div>
   );
 };
