@@ -27,7 +27,7 @@ const MultiSelectTag = ({ label, options }) => {
             key={index}
             className={`w-fit py-1 px-4 rounded-full cursor-pointer transition ${
               isSelected(item)
-                ? "bg-blue-500 text-white"
+                ? "bg-violet-600 text-white"
                 : "bg-gray-100 hover:bg-gray-200"
             }`}
             onClick={() => handleTagClick(item)}
