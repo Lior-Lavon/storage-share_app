@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { TopBar } from "../../components";
+import { GallerySlider, TopBar } from "../../components";
 import { showCreateListing } from "../../features/dashboard/dashboardSlice";
 import PrimaryButton from "../../components/SharedComponents/PrimaryButton";
 import InputField from "../../components/SharedComponents/InputField";
@@ -65,6 +65,9 @@ const CreateListing = ({ isVisible }) => {
           onSubmit={handleCreateListing}
           className="flex flex-col gap-5 mt-4 mx-4"
         >
+          {/* gallery */}
+          <GallerySlider />
+
           {/* List title */}
           <InputField
             label={
@@ -147,6 +150,7 @@ const CreateListing = ({ isVisible }) => {
 
           <PrimaryButton type="submit">Preview my listing</PrimaryButton>
         </form>
+        <div className="w-full h-10"></div>
       </div>
     </div>
   );

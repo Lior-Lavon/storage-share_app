@@ -11,6 +11,7 @@ import UserAvatar from "./UserAvatar";
 import CircleImageCropper from "./CircleImageCropper";
 import TypeSwitch from "./TypeSwitch";
 import ShortListing from "./ShortListing";
+import GallerySlider from "./GallerySlider";
 
 export {
   LoginView,
@@ -26,4 +27,5 @@ export {
   CircleImageCropper,
   TypeSwitch,
   ShortListing,
+  GallerySlider,
 };
