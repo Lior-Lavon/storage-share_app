@@ -14,7 +14,6 @@ const DatePickerField = ({
     {label && <label className="text-base font-medium">{label}</label>}
     <input
       type="date"
-      placeholder="dd/mm/yyyy"
       name={name}
       value={value}
       onChange={onChange}
