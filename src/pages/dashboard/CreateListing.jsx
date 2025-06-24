@@ -7,6 +7,8 @@ import PrimaryButton from "../../components/SharedComponents/PrimaryButton";
 import InputField from "../../components/SharedComponents/InputField";
 import EditField from "../../components/SharedComponents/EditField";
 import MultiSelectTag from "../../components/SharedComponents/MultiSelectTag";
+import SelectField from "../../components/SharedComponents/SelectField";
+import DatePickerField from "../../components/SharedComponents/DatePickerField";
 
 const CreateListing = ({ isVisible }) => {
   const dispatch = useDispatch();
@@ -18,6 +20,9 @@ const CreateListing = ({ isVisible }) => {
   const [listDescription, setListDescription] = useState("");
   const [listAddress, setListAddress] = useState("");
   const [listSize, setListSize] = useState("");
+  const [additionalNotes, setAdditionalNotes] = useState("");
+  const [listingStartDate, setListingStartDate] = useState("");
+  const [listingEndDate, setListingEndDate] = useState("");
 
   useEffect(() => {
     const updateHeight = () => {
@@ -131,6 +136,20 @@ const CreateListing = ({ isVisible }) => {
             autoComplete="list_size"
           />
 
+          {/* Access details */}
+          <SelectField
+            label={
+              <>
+                Access details <span style={{ color: "red" }}>*</span>
+              </>
+            }
+            value={""}
+            onChange={(item) => {
+              console.log(item);
+            }}
+            options={["24/7", "weekdays only", "weekends only", "ect..."]}
+          />
+
           {/* Allowed Storage Type */}
           <MultiSelectTag
             label={
@@ -146,6 +165,70 @@ const CreateListing = ({ isVisible }) => {
               "Furniture's",
               "Others",
             ]}
+          />
+
+          {/* Price type */}
+          <SelectField
+            label={
+              <>
+                Price per <span style={{ color: "red" }}>*</span>
+              </>
+            }
+            value={""}
+            onChange={(item) => {
+              console.log(item);
+            }}
+            options={["Daily", "Weekly", "Monthly"]}
+          />
+
+          {/* Minimum storage types */}
+          <SelectField
+            label={
+              <>
+                Minimum storage types <span style={{ color: "red" }}>*</span>
+              </>
+            }
+            value={""}
+            onChange={(item) => {
+              console.log(item);
+            }}
+            options={["days", "1 week", "1 month"]}
+          />
+
+          {/* Availability */}
+          <div className="w-full flex flex-col">
+            <label className="text-base font-medium">
+              Availability / Calendar Blocking{" "}
+              <span style={{ color: "red" }}>*</span>
+            </label>
+            <div className="w-full flex items-center gap-4 mt-1">
+              <DatePickerField
+                name="startDate"
+                value={listingStartDate}
+                onChange={(e) => setListingStartDate(e.target.value)}
+                min="2023-01-01"
+                max="2025-12-31"
+                className="w-1/2"
+              />
+              <DatePickerField
+                name="endDate"
+                value={listingEndDate}
+                onChange={(e) => setListingEndDate(e.target.value)}
+                min="2023-01-01"
+                max="2025-12-31"
+                className="w-1/2"
+              />
+            </div>
+          </div>
+
+          {/* Additional notes */}
+          <EditField
+            label={"Additional notes"}
+            placeholder="Open text"
+            value={additionalNotes}
+            onChange={(e) => setAdditionalNotes(e.target.value)}
+            rows={2}
+            autoComplete="list_additional_notes"
           />
 
           <PrimaryButton type="submit">Preview my listing</PrimaryButton>
