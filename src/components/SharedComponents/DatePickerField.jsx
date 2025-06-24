@@ -1,4 +1,5 @@
 import React from "react";
+const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
 
 const DatePickerField = ({
   label,
@@ -21,12 +22,15 @@ const DatePickerField = ({
       max={max}
       disabled={disabled}
       className="bg-white px-2 py-1 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-violet-500"
-      style={{
-        // Remove extra padding & background on iOS to ensure native UI works
-        WebkitAppearance: "textfield",
-        MozAppearance: "textfield",
-        appearance: "textfield",
-      }}
+      style={
+        isIOS
+          ? {}
+          : {
+              WebkitAppearance: "textfield",
+              MozAppearance: "textfield",
+              appearance: "textfield",
+            }
+      }
     />
   </div>
 );
