@@ -208,8 +208,8 @@ const CreateListing = ({ isVisible }) => {
                 onChange={(e) => setListingStartDate(e.target.value)}
                 min="2023-01-01"
                 max="2025-12-31"
-                className="w-1/2"
               />
+
               <DatePickerField
                 name="endDate"
                 value={listingEndDate}
