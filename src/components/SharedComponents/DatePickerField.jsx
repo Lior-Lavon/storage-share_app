@@ -37,10 +37,10 @@ const DatePickerField = ({
         onChange={handleChange}
         minDate={minDate}
         maxDate={maxDate}
-        disabled={false}
+        disabled={disabled}
         placeholderText="dd/mm/yyyy"
         dateFormat="dd/MM/yyyy"
-        className="bg-white px-2 py-1 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-violet-500"
+        className="w-full bg-gray-100 px-2 py-1 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-violet-500"
         name={name}
       />
     </div>
