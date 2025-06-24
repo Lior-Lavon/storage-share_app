@@ -45,7 +45,7 @@ const DatePickerField = ({
           name={name}
         />
         <FaRegCalendarAlt
-          className="absolute right-0 top-1/2 transform -translate-y-1/2 text-gray-300 pointer-events-none"
+          className="absolute right-0 top-1/2 transform -translate-y-1/2 pr-2 text-gray-300 pointer-events-none"
           size={18}
         />
       </div>
