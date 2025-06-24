@@ -1,6 +1,12 @@
 import React, { useState } from "react";
 
-import { HomeView, MyStorageView, ActivityView, ChatView } from "../index";
+import {
+  HomeView,
+  MyStorageView,
+  ActivityView,
+  ChatView,
+  CreateListing,
+} from "../index";
 
 import { TabBar, TopBar } from "../../components";
 import ProfileView from "./ProfileView";
@@ -26,7 +32,9 @@ const Dashboard = () => {
   const dispatch = useDispatch();
   const [activeTab, setActiveTab] = useState("home");
 
-  const { isProfile } = useSelector((store) => store.dashboard);
+  const { isProfile, isCreateListing } = useSelector(
+    (store) => store.dashboard
+  );
 
   const handleShowProfile = () => {
     dispatch(showProfile());
@@ -49,9 +57,10 @@ const Dashboard = () => {
       </div>
       {/* Bottom TabBar */}
       <TabBar activeTab={activeTab} setActiveTab={setActiveTab} />
-
       {/* show profile view */}
       <ProfileView isVisible={isProfile} closeProfileView={handleShowProfile} />
+      {/* CreateListing */}
+      <CreateListing isVisible={isCreateListing} />;
     </div>
   );
 };
