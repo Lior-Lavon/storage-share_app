@@ -39,6 +39,8 @@ const CreateListing = ({ isVisible }) => {
   const [allowedStorage, setAllowedStorage] = useState(["Boxes", "Car"]);
   const [listSize, setListSize] = useState("50");
   const [accessDetails, setAccessDetails] = useState("not_set");
+  const [pricePer, setPricePer] = useState("not_set");
+  const [minStoragePeriod, setMinStoragePeriod] = useState("not_set");
   const [additionalNotes, setAdditionalNotes] = useState("additional notes");
   const [listingStartDate, setListingStartDate] = useState(
     "2025-06-01T19:46:13.92056Z"
@@ -209,7 +211,6 @@ const CreateListing = ({ isVisible }) => {
             }
             value={accessDetails}
             onChange={(selected) => {
-              console.log("user selected : ", selected.target.value);
               setAccessDetails(selected.target.value);
             }}
             options={["not_set", "24_7", "weekdays_only", "weekends_only"]}
@@ -241,25 +242,25 @@ const CreateListing = ({ isVisible }) => {
                 Price per <span style={{ color: "red" }}>*</span>
               </>
             }
-            value={""}
-            onChange={(item) => {
-              console.log(item);
+            value={pricePer}
+            onChange={(selected) => {
+              setPricePer(selected.target.value);
             }}
-            options={["Daily", "Weekly", "Monthly"]}
+            options={["not_set", "Daily", "Weekly", "Monthly"]}
           />
 
-          {/* Minimum storage types */}
+          {/* Minimum storage period */}
           <SelectField
             label={
               <>
-                Minimum storage types <span style={{ color: "red" }}>*</span>
+                Minimum storage period <span style={{ color: "red" }}>*</span>
               </>
             }
-            value={""}
-            onChange={(item) => {
-              console.log(item);
+            value={minStoragePeriod}
+            onChange={(selected) => {
+              setMinStoragePeriod(selected.target.value);
             }}
-            options={["days", "1 week", "1 month"]}
+            options={["not_set", "days", "1_week", "1_month"]}
           />
 
           {/* Availability */}
