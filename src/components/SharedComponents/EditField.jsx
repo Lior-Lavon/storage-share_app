@@ -5,6 +5,8 @@ const EditField = ({
   placeholder,
   value,
   onChange,
+  onFocus, // optional
+  onBlur, // optional
   disabled = false,
   rows = 3,
 }) => (
@@ -14,9 +16,11 @@ const EditField = ({
       placeholder={placeholder}
       value={value}
       onChange={onChange}
+      onFocus={onFocus} // handled even if undefined
+      onBlur={onBlur} // handled even if undefined
       disabled={disabled}
       rows={rows}
-      className="px-4 py-2 rounded-lg bg-gray-100 focus:outline-none focus:ring-2 focus:ring-violet-500 resize-none"
+      className="pl-4 pr-8 py-2 rounded-lg bg-gray-100 focus:outline-none focus:ring-2 focus:ring-violet-500 resize-none"
     />
   </div>
 );

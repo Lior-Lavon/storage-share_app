@@ -151,59 +151,6 @@ export const getUserSettings = createAsyncThunk(
   }
 );
 
-const createRequestBody = (user) => {
-  const { role, firstname, lastname, description, status } = user;
-
-  const retObj = {
-    id: user.id,
-  };
-
-  retObj.role = role;
-  // title: "ms",
-  if (firstname !== "not_set") {
-    retObj.firstname = firstname;
-  }
-  if (lastname !== "not_set") {
-    retObj.lastname = lastname;
-  }
-  if (gender !== "not_set") {
-    retObj.gender = gender;
-    if (gender === "male") {
-      retObj.title = "mr";
-    } else {
-      retObj.title = "ms";
-    }
-  }
-  if (dob !== "0001-01-01T00:00:00Z") {
-    retObj.dob = dob;
-  }
-  if (nationality > 1) {
-    retObj.nationality = nationality;
-  }
-  // console.log(avatar);
-  if (description !== "") {
-    retObj.description = description;
-  }
-  retObj.smoker = smoker;
-  retObj.member_of_student_association = member_of_student_association;
-  retObj.pet = pet;
-  if (education !== undefined) {
-    retObj.education = education;
-  }
-  if (country > 1) {
-    retObj.country = country;
-  }
-  if (city !== "") {
-    retObj.city = city;
-  }
-  if (status !== undefined) {
-    retObj.status = status;
-  }
-  retObj.languages = languages;
-  retObj.socials = socials;
-  return retObj;
-};
-
 const userSlice = createSlice({
   name: "user",
   initialState,

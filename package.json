@@ -28,6 +28,7 @@
     "react-image-crop": "^11.0.10",
     "react-redux": "^9.2.0",
     "react-router-dom": "^7.6.2",
+    "react-spinners": "^0.17.0",
     "react-toastify": "^11.0.5",
     "styled-components": "^6.1.19",
     "tailwindcss": "^4.1.10"

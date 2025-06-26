@@ -1,14 +1,25 @@
-import React, { useEffect, useRef, useState } from "react";
-import { useDispatch } from "react-redux";
+import React, { useEffect, useRef, useState, CSSProperties } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { GallerySlider, TopBar } from "../../components";
 import { showCreateListing } from "../../features/dashboard/dashboardSlice";
+import { GrValidate } from "react-icons/gr";
+import { HiOutlineRefresh } from "react-icons/hi";
 import PrimaryButton from "../../components/SharedComponents/PrimaryButton";
 import InputField from "../../components/SharedComponents/InputField";
 import EditField from "../../components/SharedComponents/EditField";
 import MultiSelectTag from "../../components/SharedComponents/MultiSelectTag";
 import SelectField from "../../components/SharedComponents/SelectField";
 import DatePickerField from "../../components/SharedComponents/DatePickerField";
+import { validateAddressWithGoogle } from "../../features/listing/listingSlice";
+import MoonLoader from "react-spinners/MoonLoader";
+
+const override = {
+  display: "block",
+  margin: "0 auto",
+  borderColor: "red",
+};
+const listing = {};
 
 const CreateListing = ({ isVisible }) => {
   const dispatch = useDispatch();
@@ -16,13 +27,25 @@ const CreateListing = ({ isVisible }) => {
   const topRef = useRef(null);
   const [height, setHeight] = useState(0);
   const [changePasswordError, setChangePasswordError] = useState(null);
-  const [listTitle, setListTitle] = useState("");
-  const [listDescription, setListDescription] = useState("");
-  const [listAddress, setListAddress] = useState("");
-  const [listSize, setListSize] = useState("");
-  const [additionalNotes, setAdditionalNotes] = useState("");
-  const [listingStartDate, setListingStartDate] = useState("");
-  const [listingEndDate, setListingEndDate] = useState("");
+  const { isLoading } = useSelector((store) => store.listing);
+
+  const [listTitle, setListTitle] = useState("title");
+  const [listDescription, setListDescription] = useState("description");
+  const [listAddress, setListAddress] = useState(
+    "Groenhoven 806, 1103 LZ, amsterdam, Netherlands"
+  );
+  const [validateAddress, setValidateAddress] = useState(true);
+  const [storageType, setStorageType] = useState(["Garage", "Room"]);
+  const [allowedStorage, setAllowedStorage] = useState(["Boxes", "Car"]);
+  const [listSize, setListSize] = useState("50");
+  const [accessDetails, setAccessDetails] = useState("not_set");
+  const [additionalNotes, setAdditionalNotes] = useState("additional notes");
+  const [listingStartDate, setListingStartDate] = useState(
+    "2025-06-01T19:46:13.92056Z"
+  );
+  const [listingEndDate, setListingEndDate] = useState(
+    "2025-06-10T19:46:13.92056Z"
+  );
 
   useEffect(() => {
     const updateHeight = () => {
@@ -45,9 +68,24 @@ const CreateListing = ({ isVisible }) => {
     console.log("handleCreateListing");
   };
 
+  const validateListingAddress = () => {
+    dispatch(
+      validateAddressWithGoogle({
+        address: listAddress,
+      })
+    )
+      .unwrap()
+      .then(() => {
+        setValidateAddress(true);
+      })
+      .catch((err) => {
+        console.log("validateAddress failed");
+      });
+  };
+
   return (
     <div
-      className={`w-full h-full z-900 fixed top-0 right-0 transition-transform duration-500 flex flex-col bg-white ${
+      className={`w-full h-full z-900 fixed top-0 right-0 transition-transform duration-500 flex flex-col bg-red-400 ${
         isVisible ? "translate-x-0" : "translate-x-full"
       }`}
       style={{
@@ -99,18 +137,42 @@ const CreateListing = ({ isVisible }) => {
           />
 
           {/* Address */}
-          <InputField
-            label={
-              <>
-                Address <span style={{ color: "red" }}>*</span>
-              </>
-            }
-            type="text"
-            value={listAddress}
-            placeholder="Full address"
-            onChange={(e) => setListAddress(e.target.value)}
-            autoComplete="list_address"
-          />
+
+          <div className="w-full relative">
+            <EditField
+              label={
+                <>
+                  Address <span style={{ color: "red" }}>*</span>
+                </>
+              }
+              placeholder="Full address"
+              value={listAddress}
+              onChange={(e) => setListAddress(e.target.value)}
+              onFocus={(e) => setValidateAddress(false)}
+              rows={2}
+              autoComplete="list_additional_notes"
+            />
+
+            {isLoading ? (
+              <div className="w-5 h-5 text-green-600 absolute right-3 top-15 -translate-y-1/2">
+                <MoonLoader
+                  color={"#000000"}
+                  loading={true}
+                  cssOverride={override}
+                  size={15}
+                  aria-label="Loading Spinner"
+                  data-testid="loader"
+                />
+              </div>
+            ) : validateAddress ? (
+              <GrValidate className="w-5 h-5 text-green-600 absolute right-3 top-15 -translate-y-1/2" />
+            ) : (
+              <HiOutlineRefresh
+                className="w-5 h-5 text-gray-600 absolute right-3 top-15 -translate-y-1/2 cursor-pointer"
+                onClick={validateListingAddress}
+              />
+            )}
+          </div>
 
           {/* Type of space */}
           <MultiSelectTag
@@ -119,6 +181,8 @@ const CreateListing = ({ isVisible }) => {
                 Type of space <span style={{ color: "red" }}>*</span>
               </>
             }
+            value={storageType}
+            onChange={(selected) => setStorageType(selected)}
             options={["Garage", "Attic", "Shed", "Room", "Basement", "Others"]}
           />
 
@@ -143,11 +207,12 @@ const CreateListing = ({ isVisible }) => {
                 Access details <span style={{ color: "red" }}>*</span>
               </>
             }
-            value={""}
-            onChange={(item) => {
-              console.log(item);
+            value={accessDetails}
+            onChange={(selected) => {
+              console.log("user selected : ", selected.target.value);
+              setAccessDetails(selected.target.value);
             }}
-            options={["24/7", "weekdays only", "weekends only", "ect..."]}
+            options={["not_set", "24_7", "weekdays_only", "weekends_only"]}
           />
 
           {/* Allowed Storage Type */}
@@ -157,6 +222,8 @@ const CreateListing = ({ isVisible }) => {
                 Allowed storage type <span style={{ color: "red" }}>*</span>
               </>
             }
+            value={allowedStorage}
+            onChange={(selected) => setAllowedStorage(selected)}
             options={[
               "Boxes",
               "Bicycle",
@@ -234,7 +301,7 @@ const CreateListing = ({ isVisible }) => {
 
           <PrimaryButton type="submit">Preview my listing</PrimaryButton>
         </form>
-        <div className="w-full h-10"></div>
+        <div className="w-full h-10 bg-white"></div>
       </div>
     </div>
   );

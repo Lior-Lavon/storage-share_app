@@ -1,20 +1,25 @@
 import React, { useEffect, useState } from "react";
 
-const MultiSelectTag = ({ label, options }) => {
-  const [selection, setSelection] = useState([]);
+const arraysEqual = (a, b) =>
+  a.length === b.length && a.every((v) => b.includes(v));
 
-  const handleTagClick = (item) => {
-    setSelection(
-      (prev) =>
-        prev.includes(item)
-          ? prev.filter((i) => i !== item) // remove if selected
-          : [...prev, item] // add if not selected
-    );
-  };
+const MultiSelectTag = ({ label, options, value = [], onChange }) => {
+  const [selection, setSelection] = useState(value);
 
   useEffect(() => {
-    console.log("Current selection:", selection);
-  }, [selection]);
+    if (!arraysEqual(value, selection)) {
+      setSelection(value);
+    }
+  }, [value]);
+
+  const handleTagClick = (item) => {
+    const updated = selection.includes(item)
+      ? selection.filter((i) => i !== item)
+      : [...selection, item];
+
+    setSelection(updated);
+    onChange?.(updated); // notify parent if onChange provided
+  };
 
   const isSelected = (item) => selection.includes(item);
 
