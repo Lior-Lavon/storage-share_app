@@ -8,10 +8,11 @@ import GoogleRegisterButton from "./GoogleRegisterButton";
 import TopBar from "./TopBar";
 import TabBar from "./TabBar";
 import UserAvatar from "./UserAvatar";
-import CircleImageCropper from "./CircleImageCropper";
+import ImageCropper from "./ImageCropper";
 import TypeSwitch from "./TypeSwitch";
 import ShortListing from "./ShortListing";
 import GallerySlider from "./GallerySlider";
+import ImageSlider from "./ImageSlider";
 
 export {
   LoginView,
@@ -24,8 +25,9 @@ export {
   TopBar,
   TabBar,
   UserAvatar,
-  CircleImageCropper,
+  ImageCropper,
   TypeSwitch,
   ShortListing,
   GallerySlider,
+  ImageSlider,
 };

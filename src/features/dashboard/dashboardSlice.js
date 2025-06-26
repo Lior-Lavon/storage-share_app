@@ -7,6 +7,7 @@ const initialState = {
   isProfile: false,
   isMyProfile: false,
   isSettings: false,
+  isCropView: false,
   isCreateListing: false,
 };
 
@@ -19,6 +20,7 @@ const dashboardSlice = createSlice({
       state.isMyProfile = false;
       state.isSettings = false;
       state.isCreateListing = false;
+      state.isCropView = false;
     },
     showProfile: (state, { payload }) => {
       if (payload == "ForceClose") {
@@ -48,6 +50,13 @@ const dashboardSlice = createSlice({
         state.isCreateListing = !state.isCreateListing;
       }
     },
+    showCropImageView: (state, { payload }) => {
+      if (payload == "ForceClose") {
+        state.isCropView = false;
+      } else {
+        state.isCropView = !state.isCropView;
+      }
+    },
   },
   extraReducers: (builder) => {},
 });
@@ -58,5 +67,6 @@ export const {
   showMyProfile,
   showSettingsView,
   showCreateListing,
+  showCropImageView,
 } = dashboardSlice.actions;
 export default dashboardSlice.reducer;

@@ -1,8 +1,11 @@
 import React, { useEffect, useRef, useState, CSSProperties } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { GallerySlider, TopBar } from "../../components";
-import { showCreateListing } from "../../features/dashboard/dashboardSlice";
+import { GallerySlider, ImageCropper, TopBar } from "../../components";
+import {
+  showCreateListing,
+  showCropImageView,
+} from "../../features/dashboard/dashboardSlice";
 import { GrValidate } from "react-icons/gr";
 import { HiOutlineRefresh } from "react-icons/hi";
 import PrimaryButton from "../../components/SharedComponents/PrimaryButton";
@@ -28,7 +31,9 @@ const CreateListing = ({ isVisible }) => {
   const [height, setHeight] = useState(0);
   const [changePasswordError, setChangePasswordError] = useState(null);
   const { isLoading } = useSelector((store) => store.listing);
+  const { isCropView } = useSelector((store) => store.dashboard);
 
+  const [images, setImages] = useState([]);
   const [listTitle, setListTitle] = useState("title");
   const [listDescription, setListDescription] = useState("description");
   const [listAddress, setListAddress] = useState(
@@ -85,6 +90,10 @@ const CreateListing = ({ isVisible }) => {
       });
   };
 
+  const handleCropped = (base64) => {
+    setImages((prevImages) => [...prevImages, base64]);
+  };
+
   return (
     <div
       className={`w-full h-full z-900 fixed top-0 right-0 transition-transform duration-500 flex flex-col bg-white ${
@@ -101,7 +110,6 @@ const CreateListing = ({ isVisible }) => {
         showBackIcon={hideCreateListingView}
         title={"New listing"}
       />
-
       <div
         className="w-full mt-[56px] relative overflow-y-auto bg-white"
         style={{ height: `${height}px` }}
@@ -111,7 +119,7 @@ const CreateListing = ({ isVisible }) => {
           className="flex flex-col gap-5 mt-4 mx-4"
         >
           {/* gallery */}
-          <GallerySlider />
+          <GallerySlider images={images} />
           {/* List title */}
           <InputField
             label={
@@ -292,6 +300,15 @@ const CreateListing = ({ isVisible }) => {
         </form>
         <div className="w-full h-10 bg-white"></div>
       </div>
+
+      {isCropView && (
+        <ImageCropper
+          shape={"rectangle"}
+          aspect={417 / 198}
+          closeModal={() => dispatch(showCropImageView())}
+          onCropped={handleCropped}
+        />
+      )}
     </div>
   );
 };

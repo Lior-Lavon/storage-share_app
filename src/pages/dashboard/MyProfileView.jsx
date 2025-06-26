@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 
-import { CircleImageCropper, TopBar, UserAvatar } from "../../components";
+import { ImageCropper, TopBar, UserAvatar } from "../../components";
 import { showMyProfile } from "../../features/dashboard/dashboardSlice";
 import { useDispatch, useSelector } from "react-redux";
 import InputField from "../../components/SharedComponents/InputField";
@@ -373,7 +373,7 @@ const MyProfileView = ({ isVisible }) => {
       )}
 
       {cropModel && (
-        <CircleImageCropper
+        <ImageCropper
           closeModal={() => {
             setCropModel(!cropModel);
           }}
@@ -397,12 +397,6 @@ const MyProfileView = ({ isVisible }) => {
             });
           }}
         />
-        // <ImageCrop
-        //   updateImage={updateAvatar}
-        //   showCropModel={setCropModel}
-        //   useCirculate={true}
-        //   aspectRatio={1}
-        // />
       )}
 
       {confirmationDialog && (
