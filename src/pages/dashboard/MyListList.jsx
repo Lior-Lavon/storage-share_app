@@ -10,7 +10,7 @@ const MyListList = () => {
   return (
     <div className="w-full h-full flex flex-col bg-white">
       {/* Scrollable list */}
-      <div className="flex-1 overflow-y-auto bg-blue-500 py-2 flex flex-col gap-4">
+      <div className="flex-1 overflow-y-auto bg-white py-2 flex flex-col gap-4">
         <ShortListing />
         <ShortListing />
         <ShortListing />

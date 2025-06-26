@@ -290,7 +290,7 @@ const CreateListing = ({ isVisible }) => {
 
           <PrimaryButton type="submit">Preview my listing</PrimaryButton>
         </form>
-        <div className="w-full h-10 bg-red-500"></div>
+        <div className="w-full h-10 bg-white"></div>
       </div>
     </div>
   );

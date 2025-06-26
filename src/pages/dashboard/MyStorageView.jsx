@@ -10,18 +10,16 @@ import CreateListing from "./CreateListing";
 const MyStorageView = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const topRef = useRef(null);
   const [viewType, setViewType] = useState("listing");
 
   const { profile } = useSelector((store) => store.user);
 
   const handleTypeChange = (newType) => {
     setViewType(newType);
-    console.log(newType);
   };
 
   return (
-    <div className="w-full h-[calc(100vh-120px)] flex flex-col items-center bg-red-400">
+    <div className="w-full h-[calc(100vh-120px)] flex flex-col items-center bg-white">
       <div className="w-[95%] mx-auto my-2">
         <TypeSwitch initialType="listing" onSwitch={handleTypeChange} />
       </div>
