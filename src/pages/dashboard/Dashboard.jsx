@@ -43,11 +43,11 @@ const Dashboard = () => {
   return (
     <div
       className="flex flex-col h-screen w-full bg-gray-100"
-      style={{
-        WebkitOverflowScrolling: "touch",
-        overscrollBehavior: "contain", // prevent pull-to-refresh
-        // touchAction: "none", // stop passive scroll
-      }}
+      // style={{
+      //   WebkitOverflowScrolling: "touch",
+      //   overscrollBehavior: "contain", // prevent pull-to-refresh
+      //   touchAction: "none", // stop passive scroll
+      // }}
     >
       {/* TopBar */}
       <TopBar showProfile={handleShowProfile} title={"StorageShare"} />

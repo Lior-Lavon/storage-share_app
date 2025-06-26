@@ -13,8 +13,6 @@ const MyStorageView = () => {
   const topRef = useRef(null);
   const [viewType, setViewType] = useState("listing");
 
-  const viewHeight = useViewportHeight() - 120;
-
   const { profile } = useSelector((store) => store.user);
 
   const handleTypeChange = (newType) => {
@@ -23,15 +21,13 @@ const MyStorageView = () => {
   };
 
   return (
-    <div
-      className="w-full flex flex-col items-center justify-center space-y-1 bg-red-400 "
-      style={{ height: viewHeight }}
-    >
+    <div className="w-full h-[calc(100vh-120px)] flex flex-col items-center bg-red-400">
       <div className="w-[95%] mx-auto my-2">
         <TypeSwitch initialType="listing" onSwitch={handleTypeChange} />
       </div>
-      <div className="w-[95%] flex-grow overflow-y-auto max-h-[100vh]">
-        {viewType == "storage" ? <MyStorageList /> : <MyListList />}
+
+      <div className="w-[95%] flex-1 overflow-hidden">
+        {viewType === "storage" ? <MyStorageList /> : <MyListList />}
       </div>
     </div>
   );
