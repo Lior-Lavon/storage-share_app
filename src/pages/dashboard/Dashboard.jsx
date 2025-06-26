@@ -12,6 +12,7 @@ import { TabBar, TopBar } from "../../components";
 import ProfileView from "./ProfileView";
 import { useDispatch, useSelector } from "react-redux";
 import { showProfile } from "../../features/dashboard/dashboardSlice";
+import PreviewListing from "./PreviewListing";
 
 function renderTabContent(activeTab) {
   switch (activeTab) {
@@ -32,7 +33,7 @@ const Dashboard = () => {
   const dispatch = useDispatch();
   const [activeTab, setActiveTab] = useState("home");
 
-  const { isProfile, isCreateListing } = useSelector(
+  const { isProfile, isCreateListing, isPreviewListing } = useSelector(
     (store) => store.dashboard
   );
 
@@ -60,7 +61,8 @@ const Dashboard = () => {
       {/* show profile view */}
       <ProfileView isVisible={isProfile} closeProfileView={handleShowProfile} />
       {/* CreateListing */}
-      <CreateListing isVisible={isCreateListing} />;
+      <CreateListing isVisible={isCreateListing} />;{/* CreateListing */}
+      <PreviewListing isVisible={isPreviewListing} />;
     </div>
   );
 };

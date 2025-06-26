@@ -51,11 +51,17 @@
 
 // export default ImageSlider;
 
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useEffect, useState } from "react";
 
 const ImageSlider = ({ images }) => {
   const containerRef = useRef(null);
   const scrollTimeout = useRef(null);
+  const [activeDot, setActiveDot] = useState(0);
+  const [dotCount, setDotCount] = useState(0);
+
+  useEffect(() => {
+    setDotCount(images.length);
+  }, [images]);
 
   const scroll = (direction) => {
     const container = containerRef.current;
@@ -72,7 +78,6 @@ const ImageSlider = ({ images }) => {
     if (!container) return;
 
     const scrollLeft = container.scrollLeft;
-    const containerWidth = container.offsetWidth;
     const children = Array.from(container.children);
 
     let closestIndex = 0;
@@ -93,6 +98,7 @@ const ImageSlider = ({ images }) => {
         left: target.offsetLeft,
         behavior: "smooth",
       });
+      setActiveDot(closestIndex); // ✅ Update here after scroll finishes
     }
   };
 
@@ -136,6 +142,25 @@ const ImageSlider = ({ images }) => {
             className="w-full h-full object-cover flex-shrink-0 rounded-lg"
           />
         ))}
+      </div>
+
+      {/* BottomDiv with dynamic dots */}
+      <div className="w-full mt-2 flex items-center justify-center gap-2">
+        {[...Array(dotCount)].map(
+          (
+            _,
+            index // Use dotCount for number of dots
+          ) => (
+            <div
+              key={index}
+              className={`${
+                activeDot === index ? "w-2" : "w-1"
+              } h-1 rounded-full ${
+                activeDot === index ? "bg-violet-600" : "bg-gray-200"
+              }`}
+            ></div>
+          )
+        )}
       </div>
 
       <button

@@ -5,6 +5,7 @@ import { GallerySlider, ImageCropper, TopBar } from "../../components";
 import {
   showCreateListing,
   showCropImageView,
+  showPreviewListing,
 } from "../../features/dashboard/dashboardSlice";
 import { GrValidate } from "react-icons/gr";
 import { HiOutlineRefresh } from "react-icons/hi";
@@ -14,8 +15,12 @@ import EditField from "../../components/SharedComponents/EditField";
 import MultiSelectTag from "../../components/SharedComponents/MultiSelectTag";
 import SelectField from "../../components/SharedComponents/SelectField";
 import DatePickerField from "../../components/SharedComponents/DatePickerField";
-import { validateAddressWithGoogle } from "../../features/listing/listingSlice";
+import {
+  setListing,
+  validateAddressWithGoogle,
+} from "../../features/listing/listingSlice";
 import MoonLoader from "react-spinners/MoonLoader";
+import { Description } from "@headlessui/react";
 
 const override = {
   display: "block",
@@ -34,8 +39,10 @@ const CreateListing = ({ isVisible }) => {
   const { isCropView } = useSelector((store) => store.dashboard);
 
   const [images, setImages] = useState([]);
-  const [listTitle, setListTitle] = useState("title");
-  const [listDescription, setListDescription] = useState("description");
+  const [listTitle, setListTitle] = useState("full list title");
+  const [listDescription, setListDescription] = useState(
+    "A storage place is a designated area used to keep items safe, organized, and easily accessible. It can range from small containers and closets to larger units like warehouses or self-storage facilities. These spaces are designed to protect belongings from damage, clutter, and loss, whether for personal, business, or industrial use."
+  );
   const [listAddress, setListAddress] = useState(
     "Groenhoven 806, 1103 LZ, amsterdam, Netherlands"
   );
@@ -71,10 +78,6 @@ const CreateListing = ({ isVisible }) => {
     dispatch(showCreateListing());
   };
 
-  const handleCreateListing = () => {
-    console.log("handleCreateListing");
-  };
-
   const validateListingAddress = () => {
     dispatch(
       validateAddressWithGoogle({
@@ -92,6 +95,24 @@ const CreateListing = ({ isVisible }) => {
 
   const handleCropped = (base64) => {
     setImages((prevImages) => [...prevImages, base64]);
+  };
+
+  const handlePreviewListing = () => {
+    dispatch(
+      setListing({
+        images: images,
+        title: listTitle,
+        description: listDescription,
+        storageType: storageType,
+        accessDetails: accessDetails,
+        allowedStorage: allowedStorage,
+        minStoragePeriod: minStoragePeriod,
+        startDate: listingStartDate,
+        endDate: listingEndDate,
+        additionalNotes: additionalNotes,
+      })
+    );
+    dispatch(showPreviewListing());
   };
 
   return (
@@ -114,35 +135,7 @@ const CreateListing = ({ isVisible }) => {
         className="w-full mt-[56px] relative overflow-y-auto bg-white"
         style={{ height: `${height}px` }}
       >
-        <form
-          onSubmit={handleCreateListing}
-          className="flex flex-col gap-5 mt-4 mx-4"
-        >
-          {/* gallery */}
-          <GallerySlider images={images} />
-          {/* List title */}
-          <InputField
-            label={
-              <>
-                List title <span style={{ color: "red" }}>*</span>
-              </>
-            }
-            type="text"
-            value={listTitle}
-            placeholder="e.g. House of fun :)"
-            onChange={(e) => setListTitle(e.target.value)}
-            autoComplete="list_title"
-          />
-          <EditField
-            label={
-              <>
-                Description <span style={{ color: "red" }}>*</span>
-              </>
-            }
-            placeholder="Short description"
-            value={listDescription}
-            onChange={(e) => setListDescription(e.target.value)}
-          />
+        <div className="flex flex-col gap-5 mt-4 mx-4">
           {/* Address */}
           <div className="w-full relative">
             <EditField
@@ -179,6 +172,32 @@ const CreateListing = ({ isVisible }) => {
               />
             )}
           </div>
+          {/* gallery */}
+          <GallerySlider images={images} isPreview={false} />
+          {/* List title */}
+          <InputField
+            label={
+              <>
+                List title <span style={{ color: "red" }}>*</span>
+              </>
+            }
+            type="text"
+            value={listTitle}
+            placeholder="e.g. House of fun :)"
+            onChange={(e) => setListTitle(e.target.value)}
+            autoComplete="list_title"
+          />
+          <EditField
+            label={
+              <>
+                Description <span style={{ color: "red" }}>*</span>
+              </>
+            }
+            placeholder="Short description"
+            value={listDescription}
+            onChange={(e) => setListDescription(e.target.value)}
+          />
+
           {/* Type of space */}
           <MultiSelectTag
             label={
@@ -296,8 +315,10 @@ const CreateListing = ({ isVisible }) => {
             autoComplete="list_additional_notes"
           />
 
-          <PrimaryButton type="submit">Preview my listing</PrimaryButton>
-        </form>
+          <PrimaryButton type="submit" onClick={handlePreviewListing}>
+            Preview listing
+          </PrimaryButton>
+        </div>
         <div className="w-full h-10 bg-white"></div>
       </div>
 

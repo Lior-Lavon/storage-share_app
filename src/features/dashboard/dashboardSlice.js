@@ -9,6 +9,7 @@ const initialState = {
   isSettings: false,
   isCropView: false,
   isCreateListing: false,
+  isPreviewListing: false,
 };
 
 const dashboardSlice = createSlice({
@@ -50,6 +51,13 @@ const dashboardSlice = createSlice({
         state.isCreateListing = !state.isCreateListing;
       }
     },
+    showPreviewListing: (state, { payload }) => {
+      if (payload == "ForceClose") {
+        state.isPreviewListing = false;
+      } else {
+        state.isPreviewListing = !state.isPreviewListing;
+      }
+    },
     showCropImageView: (state, { payload }) => {
       if (payload == "ForceClose") {
         state.isCropView = false;
@@ -68,5 +76,6 @@ export const {
   showSettingsView,
   showCreateListing,
   showCropImageView,
+  showPreviewListing,
 } = dashboardSlice.actions;
 export default dashboardSlice.reducer;

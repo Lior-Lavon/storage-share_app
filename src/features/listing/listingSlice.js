@@ -14,12 +14,17 @@ export const validateAddressWithGoogle = createAsyncThunk(
 
 const initialState = {
   isLoading: false,
+  listing: null,
 };
 
 const listingSlice = createSlice({
   name: "listing",
   initialState,
-  reducers: {},
+  reducers: {
+    setListing: (state, { payload }) => {
+      state.listing = payload;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(validateAddressWithGoogle.pending, (state) => {
@@ -37,5 +42,5 @@ const listingSlice = createSlice({
   },
 });
 
-export const {} = listingSlice.actions;
+export const { setListing } = listingSlice.actions;
 export default listingSlice.reducer;

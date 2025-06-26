@@ -12,6 +12,7 @@ import SettingsView from "./dashboard/SettingsView";
 import MyStorageList from "./dashboard/MyStorageList";
 import MyListList from "./dashboard/MyListList";
 import CreateListing from "./dashboard/CreateListing";
+import PreviewListing from "./dashboard/PreviewListing";
 
 export {
   NotFound,
@@ -28,4 +29,5 @@ export {
   MyStorageList,
   MyListList,
   CreateListing,
+  PreviewListing,
 };
