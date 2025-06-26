@@ -40,6 +40,11 @@
 
 import React from "react";
 
+const formatLabel = (value) => {
+  return value
+    .replace(/_/g, " ") // replace underscores with spaces
+    .replace(/\b\w/g, (char) => char.toUpperCase()); // capitalize first letter of each word
+};
 const SelectField = ({
   label,
   value,
@@ -62,13 +67,13 @@ const SelectField = ({
         if (typeof option === "object" && option !== null) {
           return (
             <option className="" key={option.value} value={option.value}>
-              {option.label}
+              {option.label || formatLabel(option.value)}
             </option>
           );
         }
         return (
           <option className="" key={option} value={option}>
-            {option}
+            {formatLabel(option)}
           </option>
         );
       })}

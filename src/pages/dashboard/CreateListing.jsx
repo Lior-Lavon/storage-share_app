@@ -35,8 +35,8 @@ const CreateListing = ({ isVisible }) => {
     "Groenhoven 806, 1103 LZ, amsterdam, Netherlands"
   );
   const [validateAddress, setValidateAddress] = useState(true);
-  const [storageType, setStorageType] = useState(["Garage", "Room"]);
-  const [allowedStorage, setAllowedStorage] = useState(["Boxes", "Car"]);
+  const [storageType, setStorageType] = useState(["garage", "room"]);
+  const [allowedStorage, setAllowedStorage] = useState(["boxes", "car"]);
   const [listSize, setListSize] = useState("50");
   const [accessDetails, setAccessDetails] = useState("not_set");
   const [pricePer, setPricePer] = useState("not_set");
@@ -87,13 +87,13 @@ const CreateListing = ({ isVisible }) => {
 
   return (
     <div
-      className={`w-full h-full z-900 fixed top-0 right-0 transition-transform duration-500 flex flex-col bg-red-400 ${
+      className={`w-full h-full z-900 fixed top-0 right-0 transition-transform duration-500 flex flex-col bg-white ${
         isVisible ? "translate-x-0" : "translate-x-full"
       }`}
       style={{
         WebkitOverflowScrolling: "touch",
         overscrollBehavior: "contain", // prevent pull-to-refresh
-        touchAction: "none", // stop passive scroll
+        // touchAction: "none", // stop passive scroll
       }}
     >
       <TopBar
@@ -103,7 +103,7 @@ const CreateListing = ({ isVisible }) => {
       />
 
       <div
-        className="w-full mt-[56px] relative bg-white overflow-y-auto "
+        className="w-full mt-[56px] relative overflow-y-auto bg-white"
         style={{ height: `${height}px` }}
       >
         <form
@@ -112,7 +112,6 @@ const CreateListing = ({ isVisible }) => {
         >
           {/* gallery */}
           <GallerySlider />
-
           {/* List title */}
           <InputField
             label={
@@ -126,7 +125,6 @@ const CreateListing = ({ isVisible }) => {
             onChange={(e) => setListTitle(e.target.value)}
             autoComplete="list_title"
           />
-
           <EditField
             label={
               <>
@@ -137,9 +135,7 @@ const CreateListing = ({ isVisible }) => {
             value={listDescription}
             onChange={(e) => setListDescription(e.target.value)}
           />
-
           {/* Address */}
-
           <div className="w-full relative">
             <EditField
               label={
@@ -175,7 +171,6 @@ const CreateListing = ({ isVisible }) => {
               />
             )}
           </div>
-
           {/* Type of space */}
           <MultiSelectTag
             label={
@@ -187,7 +182,6 @@ const CreateListing = ({ isVisible }) => {
             onChange={(selected) => setStorageType(selected)}
             options={["Garage", "Attic", "Shed", "Room", "Basement", "Others"]}
           />
-
           {/* Size */}
           <InputField
             label={
@@ -201,7 +195,6 @@ const CreateListing = ({ isVisible }) => {
             onChange={(e) => setListSize(e.target.value)}
             autoComplete="list_size"
           />
-
           {/* Access details */}
           <SelectField
             label={
@@ -215,7 +208,6 @@ const CreateListing = ({ isVisible }) => {
             }}
             options={["not_set", "24_7", "weekdays_only", "weekends_only"]}
           />
-
           {/* Allowed Storage Type */}
           <MultiSelectTag
             label={
@@ -226,15 +218,14 @@ const CreateListing = ({ isVisible }) => {
             value={allowedStorage}
             onChange={(selected) => setAllowedStorage(selected)}
             options={[
-              "Boxes",
-              "Bicycle",
-              "Car",
-              "Motorcycle",
-              "Furniture's",
-              "Others",
+              "boxes",
+              "bicycle",
+              "car",
+              "motorcycle",
+              "furniture's",
+              "others",
             ]}
           />
-
           {/* Price type */}
           <SelectField
             label={
@@ -246,9 +237,8 @@ const CreateListing = ({ isVisible }) => {
             onChange={(selected) => {
               setPricePer(selected.target.value);
             }}
-            options={["not_set", "Daily", "Weekly", "Monthly"]}
+            options={["not_set", "daily", "weekly", "monthly"]}
           />
-
           {/* Minimum storage period */}
           <SelectField
             label={
@@ -262,7 +252,6 @@ const CreateListing = ({ isVisible }) => {
             }}
             options={["not_set", "days", "1_week", "1_month"]}
           />
-
           {/* Availability */}
           <div className="w-full flex flex-col">
             <label className="text-base font-medium">
@@ -289,7 +278,6 @@ const CreateListing = ({ isVisible }) => {
               />
             </div>
           </div>
-
           {/* Additional notes */}
           <EditField
             label={"Additional notes"}
@@ -302,7 +290,7 @@ const CreateListing = ({ isVisible }) => {
 
           <PrimaryButton type="submit">Preview my listing</PrimaryButton>
         </form>
-        <div className="w-full h-10 bg-white"></div>
+        <div className="w-full h-10 bg-red-500"></div>
       </div>
     </div>
   );

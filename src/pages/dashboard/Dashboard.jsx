@@ -46,7 +46,7 @@ const Dashboard = () => {
       style={{
         WebkitOverflowScrolling: "touch",
         overscrollBehavior: "contain", // prevent pull-to-refresh
-        touchAction: "none", // stop passive scroll
+        // touchAction: "none", // stop passive scroll
       }}
     >
       {/* TopBar */}

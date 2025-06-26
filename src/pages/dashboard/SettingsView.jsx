@@ -83,7 +83,7 @@ const SettingsView = ({ isVisible }) => {
       style={{
         WebkitOverflowScrolling: "touch",
         overscrollBehavior: "contain", // prevent pull-to-refresh
-        touchAction: "none", // stop passive scroll
+        // touchAction: "none", // stop passive scroll
       }}
     >
       <TopBar ref={topRef} showBackIcon={hideSettingsView} title={"Settings"} />
