@@ -20,12 +20,12 @@ const MyStorageView = () => {
 
   return (
     // <div className="w-full h-[calc(100vh-120px)] flex flex-col items-center overflow-y-hidden bg-red-500">
-    <div className="w-full pt-14 flex flex-col flex-1 items-center overflow-hidden bg-red-500">
+    <div className="w-full pt-14 flex flex-col flex-1 items-center overflow-hidden bg-white">
       <div className="w-[95%] mx-auto my-2">
         <TypeSwitch initialType="listing" onSwitch={handleTypeChange} />
       </div>
 
-      <div className="w-[95%] flex-1 overflow-hidden bg-gray-100">
+      <div className="w-[95%] flex-1 overflow-hidden bg-red-500">
         {viewType === "storage" ? <MyStorageList /> : <MyListList />}
       </div>
     </div>

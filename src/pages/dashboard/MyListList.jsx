@@ -10,14 +10,9 @@ const MyListList = () => {
   return (
     <div className="w-full h-full flex flex-col bg-gray-100 relative">
       {/* Scrollable list */}
-      {/* <div className="h-[645px] overflow-y-auto bg-white py-2 flex flex-col gap-4">
+      <div className="h-[645px] overflow-y-auto bg-white py-2 flex flex-col gap-4">
         <ShortListing />
-        <ShortListing />
-        <ShortListing />
-        <ShortListing />
-        <ShortListing />
-        <ShortListing />
-      </div> */}
+      </div>
 
       {/* Fixed button */}
       <div className="absolute bottom-0 w-full bg-white flex items-center justify-center py-1">
