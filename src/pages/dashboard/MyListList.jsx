@@ -13,8 +13,6 @@ const MyListList = () => {
 
   useEffect(() => {
     const updateTabBarTop = () => {
-      console.log("updateTabBarTop");
-
       const tabBar = document.querySelector(".tab-bar");
       const button = buttonRef.current;
       const wrapper = wrapperRef.current;
@@ -24,15 +22,7 @@ const MyListList = () => {
         const buttonHeight = button.offsetHeight;
 
         const wrapperTop = wrapper.getBoundingClientRect().top; // 👈 This is what you want
-
-        console.log("Wrapper top:", wrapperTop);
-        console.log("tabBarTop : ", tabBarTop);
-        console.log("buttonHeight : ", buttonHeight);
-
         const availableHeight = tabBarTop - buttonHeight - wrapperTop;
-
-        console.log("buttonHeight:", buttonHeight);
-        console.log("availableHeight:", availableHeight);
 
         setContentHeight(availableHeight);
         setTabBarTop(tabBarTop);
@@ -47,18 +37,14 @@ const MyListList = () => {
     return () => window.removeEventListener("resize", updateTabBarTop);
   }, []);
 
-  useEffect(() => {
-    console.log("contentHeight : ", contentHeight);
-  }, [setContentHeight]);
-
   return (
     <div
       ref={wrapperRef}
-      className="w-full h-screen flex flex-col bg-blue-500 relative"
+      className="w-full h-screen flex flex-col bg-white relative"
     >
       {/* Scrollable list */}
       <div
-        className="content-area overflow-y-auto bg-red-500 py-2 flex flex-col gap-4"
+        className="content-area overflow-y-auto bg-white py-2 flex flex-col gap-4"
         style={{
           height: contentHeight ? `${contentHeight}px` : "auto",
         }}
