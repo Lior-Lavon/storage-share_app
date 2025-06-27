@@ -1,56 +1,3 @@
-// import React, { useRef } from "react";
-
-// const ImageSlider = ({ images }) => {
-//   const containerRef = useRef(null);
-
-//   const scroll = (direction) => {
-//     // if (e && e.stopPropagation) e.stopPropagation();
-//     const container = containerRef.current;
-//     if (!container) return;
-//     const scrollAmount = container.offsetWidth;
-//     container.scrollBy({
-//       left: direction === "left" ? -scrollAmount : scrollAmount,
-//       behavior: "smooth",
-//     });
-//   };
-
-//   return (
-//     <div className="relative w-full h-full rounded-2xl bg-red-500">
-//       <button
-//         onClick={() => scroll("left")}
-//         type="button"
-//         className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-transparent shadow px-2 py-1"
-//       >
-//         ◀
-//       </button>
-
-//       <div
-//         ref={containerRef}
-//         className="w-full h-full flex overflow-x-auto scrollbar-hide scroll-smooth"
-//       >
-//         {images.map((src, index) => (
-//           <img
-//             key={index}
-//             src={src}
-//             alt={`Slide ${index}`}
-//             className="w-full h-full object-cover flex-shrink-0 rounded-lg"
-//           />
-//         ))}
-//       </div>
-
-//       <button
-//         onClick={() => scroll("right")}
-//         type="button"
-//         className="absolute right-0 top-1/2 transform -translate-y-1/2 z-10 bg-transparent shadow px-2 py-1"
-//       >
-//         ▶
-//       </button>
-//     </div>
-//   );
-// };
-
-// export default ImageSlider;
-
 import React, { useRef, useEffect, useState } from "react";
 
 const ImageSlider = ({ images }) => {
@@ -121,7 +68,7 @@ const ImageSlider = ({ images }) => {
   }, []);
 
   return (
-    <div className="relative w-full h-full rounded-2xl bg-red-500">
+    <div className="relative w-full h-full rounded-2xl bg-gray-100">
       <button
         onClick={() => scroll("left")}
         type="button"
