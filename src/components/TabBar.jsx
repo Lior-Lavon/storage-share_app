@@ -1,9 +1,10 @@
 import React from "react";
 import { tabs } from "../data/tabs";
 
-const TabBar = ({ activeTab, setActiveTab }) => {
+const TabBar = React.forwardRef(({ activeTab, setActiveTab }, ref) => {
   return (
     <div
+      ref={ref}
       className="fixed bottom-0 left-0 right-0 z-10 bg-gray-100 flex justify-around items-center h-16"
       style={{
         boxShadow:
@@ -24,6 +25,6 @@ const TabBar = ({ activeTab, setActiveTab }) => {
       ))}
     </div>
   );
-};
+});
 
 export default TabBar;
