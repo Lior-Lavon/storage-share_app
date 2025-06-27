@@ -5,7 +5,7 @@ const TabBar = React.forwardRef(({ activeTab, setActiveTab }, ref) => {
   return (
     <div
       ref={ref}
-      className="fixed bottom-0 left-0 right-0 z-10 bg-gray-100 flex justify-around items-center h-16"
+      className="tab-bar fixed bottom-0 left-0 right-0 z-10 bg-gray-100 flex justify-around items-center h-16"
       style={{
         boxShadow:
           "0 -4px 6px -1px rgba(0,0,0,0.05), 0 -2px 4px -2px rgba(0,0,0,0.05)",

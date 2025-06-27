@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { ShortListing } from "../../components";
 import PrimaryButton from "../../components/SharedComponents/PrimaryButton";
 import { useDispatch } from "react-redux";
@@ -6,7 +6,21 @@ import { showCreateListing } from "../../features/dashboard/dashboardSlice";
 
 const MyListList = () => {
   const dispatch = useDispatch();
-  console.log("MyListList");
+  const [tabBarTop, setTabBarTop] = useState(null);
+
+  useEffect(() => {
+    const updateTabBarTop = () => {
+      const tabBar = document.querySelector(".tab-bar");
+      if (tabBar) {
+        const top = tabBar.getBoundingClientRect().top;
+        setTabBarTop(top);
+      }
+    };
+
+    updateTabBarTop();
+    window.addEventListener("resize", updateTabBarTop);
+    return () => window.removeEventListener("resize", updateTabBarTop);
+  }, []);
 
   return (
     <div className="w-full h-screen flex flex-col bg-blue-500 relative">
@@ -17,12 +31,19 @@ const MyListList = () => {
         <ShortListing />
       </div> */}
 
-      {/* Fixed button */}
-      <div className="absolute bottom-44 w-full bg-red-500 flex items-center justify-center py-1">
-        <PrimaryButton onClick={() => dispatch(showCreateListing())}>
-          Create new listing
-        </PrimaryButton>
-      </div>
+      {/* Fixed button — positioned just above the tab bar */}
+      {tabBarTop !== null && (
+        <div
+          className="absolute w-full flex items-center justify-center py-1 px-2"
+          style={{
+            top: tabBarTop - 160, // adjust the offset to sit above tab bar
+          }}
+        >
+          <PrimaryButton onClick={() => dispatch(showCreateListing())}>
+            Create new listing
+          </PrimaryButton>
+        </div>
+      )}
     </div>
   );
 };
