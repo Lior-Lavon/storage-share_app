@@ -67,9 +67,8 @@ const Dashboard = () => {
       <div
         className="flex flex-col h-screen w-full bg-white overflow-y-hidden"
         style={{
-          WebkitOverflowScrolling: "touch",
-          overscrollBehavior: "contain", // prevent pull-to-refresh
-          touchAction: "none", // stop passive scroll
+          overscrollBehaviorY: "contain", // block pull-to-refresh
+          WebkitOverflowScrolling: "touch", // allow momentum scroll on iOS
         }}
       >
         {/* TopBar */}
