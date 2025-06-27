@@ -12,6 +12,8 @@ const MyListList = () => {
       {/* Scrollable list */}
       <div className="h-[645px] overflow-y-auto bg-white py-2 flex flex-col gap-4">
         <ShortListing />
+        <ShortListing />
+        <ShortListing />
       </div>
 
       {/* Fixed button */}
