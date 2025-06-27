@@ -85,8 +85,7 @@ const Dashboard = () => {
           <div className="">{renderTabContent(activeTab)}</div>
         </div> */}
 
-        <div className="flex-1 min-h-0 bg-white">
-          <div className="w-full h-14 bg-purple-500"></div>
+        <div className="flex-1 min-h-0 mt-14 bg-white">
           {renderTabContent(activeTab)}
         </div>
 
