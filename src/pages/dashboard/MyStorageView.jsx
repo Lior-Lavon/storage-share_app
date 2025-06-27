@@ -19,7 +19,7 @@ const MyStorageView = () => {
   };
 
   return (
-    <div className="w-full h-[calc(100vh-120px)] flex flex-col items-center overflow-y-hidden bg-gray-100">
+    <div className="w-full h-[calc(100vh-120px)] flex flex-col items-center overflow-y-hidden bg-red-500">
       <div className="w-[95%] mx-auto my-2">
         <TypeSwitch initialType="listing" onSwitch={handleTypeChange} />
       </div>

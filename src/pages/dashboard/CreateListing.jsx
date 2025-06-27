@@ -117,7 +117,7 @@ const CreateListing = ({ isVisible }) => {
 
   return (
     <div
-      className={`w-full h-full z-90 fixed top-0 right-0 transition-transform duration-500 flex flex-col bg-gray-100 ${
+      className={`w-full h-full z-100 fixed top-0 right-0 transition-transform duration-500 flex flex-col bg-gray-100 ${
         isVisible ? "translate-x-0" : "translate-x-full"
       }`}
       style={{
@@ -132,8 +132,8 @@ const CreateListing = ({ isVisible }) => {
         title={"New listing"}
       />
       <div
-        className="w-full mt-[56px] relative overflow-y-auto bg-yellow-500"
-        style={{ height: `${height - 64}px` }}
+        className="w-full mt-[56px] relative overflow-y-auto bg-white"
+        style={{ height: `${height}px` }}
       >
         <div className="flex flex-col gap-5 mt-4 mx-4">
           {/* Address */}
