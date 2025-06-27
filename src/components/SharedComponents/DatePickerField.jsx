@@ -13,6 +13,7 @@ const DatePickerField = ({
   max,
   disabled = false,
   className = "",
+  error = false,
 }) => {
   // Convert string dates to Date objects for react-datepicker
   const selectedDate = value ? parseISO(value) : null;
@@ -31,8 +32,12 @@ const DatePickerField = ({
   };
 
   return (
-    <div className={`w-full flex flex-col ${className}`}>
-      <div className="w-full relative">
+    <div className={`w-full flex flex-col`}>
+      <div
+        className={`w-full relative rounded-lg ${
+          error ? "border border-red-500" : ""
+        }`}
+      >
         <DatePicker
           selected={selectedDate}
           onChange={handleChange}
@@ -41,7 +46,7 @@ const DatePickerField = ({
           disabled={disabled}
           placeholderText="dd/mm/yyyy"
           dateFormat="dd/MM/yyyy"
-          className="w-full bg-gray-100 px-2 py-1 rounded border border-gray-100 focus:outline-none focus:ring-2 focus:ring-violet-500"
+          className="w-full bg-gray-100 px-2 py-1 rounded-lg border border-gray-100 focus:outline-none focus:ring-2 focus:ring-violet-500"
           name={name}
         />
         <FaRegCalendarAlt

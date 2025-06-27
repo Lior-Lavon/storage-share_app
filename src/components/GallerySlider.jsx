@@ -6,7 +6,12 @@ import { useDispatch } from "react-redux";
 import { showCropImageView } from "../features/dashboard/dashboardSlice";
 import ImageSlider from "./ImageSlider.jsx";
 
-const GallerySlider = ({ images, isPreview, rounded = true }) => {
+const GallerySlider = ({
+  images,
+  isPreview,
+  rounded = true,
+  disabled = false,
+}) => {
   const dispatch = useDispatch();
   // const [showCropper, setShowCropper] = useState(false);
   const [croppedImage, setCroppedImage] = useState(null);
@@ -35,7 +40,10 @@ const GallerySlider = ({ images, isPreview, rounded = true }) => {
               {!isPreview && (
                 <div
                   className="w-[90%] text-sm text-center text-violet-600 py-2 px-8 border-1 border-gray-300 rounded-xl"
-                  onClick={() => dispatch(showCropImageView())}
+                  onClick={() => {
+                    if (disabled) return;
+                    dispatch(showCropImageView());
+                  }}
                 >
                   Upload Image
                 </div>

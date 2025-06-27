@@ -3,7 +3,13 @@ import React, { useEffect, useState } from "react";
 const arraysEqual = (a, b) =>
   a.length === b.length && a.every((v) => b.includes(v));
 
-const MultiSelectTag = ({ label, options, value = [], onChange }) => {
+const MultiSelectTag = ({
+  label,
+  options,
+  value = [],
+  onChange,
+  error = false,
+}) => {
   const [selection, setSelection] = useState(value);
 
   useEffect(() => {
@@ -26,7 +32,11 @@ const MultiSelectTag = ({ label, options, value = [], onChange }) => {
   return (
     <div className="flex flex-col gap-1">
       <label className="text-base font-medium">{label}</label>
-      <div className="px-4 py-2 flex flex-wrap gap-2">
+      <div
+        className={`px-4 py-2 flex flex-wrap gap-2 ${
+          error ? "border border-red-500" : ""
+        }`}
+      >
         {options?.map((item, index) => (
           <div
             key={index}

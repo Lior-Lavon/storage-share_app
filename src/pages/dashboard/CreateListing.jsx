@@ -20,7 +20,6 @@ import {
   validateAddressWithGoogle,
 } from "../../features/listing/listingSlice";
 import MoonLoader from "react-spinners/MoonLoader";
-import { Description } from "@headlessui/react";
 
 const override = {
   display: "block",
@@ -32,6 +31,7 @@ const listing = {};
 const CreateListing = ({ isVisible }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const apiKey = import.meta.env.VITE_GOOGLE_API_KEY;
   const topRef = useRef(null);
   const [height, setHeight] = useState(0);
   const [changePasswordError, setChangePasswordError] = useState(null);
@@ -39,27 +39,37 @@ const CreateListing = ({ isVisible }) => {
   const { isCropView } = useSelector((store) => store.dashboard);
 
   const [images, setImages] = useState([]);
-  const [listTitle, setListTitle] = useState("full list title");
-  const [listDescription, setListDescription] = useState(
-    "A storage place is a designated area used to keep items safe, organized, and easily accessible. It can range from small containers and closets to larger units like warehouses or self-storage facilities. These spaces are designed to protect belongings from damage, clutter, and loss, whether for personal, business, or industrial use."
-  );
+  const [listTitle, setListTitle] = useState("");
+  const [listDescription, setListDescription] = useState("");
   const [listAddress, setListAddress] = useState(
     "Groenhoven 806, 1103 LZ, amsterdam, Netherlands"
   );
-  const [validateAddress, setValidateAddress] = useState(true);
-  const [storageType, setStorageType] = useState(["garage", "room"]);
-  const [allowedStorage, setAllowedStorage] = useState(["boxes", "car"]);
-  const [listSize, setListSize] = useState("50");
+  //
+  const [validateAddress, setValidateAddress] = useState(false);
+  const [storageType, setStorageType] = useState([]);
+  const [allowedStorage, setAllowedStorage] = useState([]);
+  const [listSize, setListSize] = useState("");
   const [accessDetails, setAccessDetails] = useState("not_set");
   const [pricePer, setPricePer] = useState("not_set");
   const [minStoragePeriod, setMinStoragePeriod] = useState("not_set");
-  const [additionalNotes, setAdditionalNotes] = useState("additional notes");
-  const [listingStartDate, setListingStartDate] = useState(
-    "2025-06-01T19:46:13.92056Z"
-  );
-  const [listingEndDate, setListingEndDate] = useState(
-    "2025-06-10T19:46:13.92056Z"
-  );
+  const [additionalNotes, setAdditionalNotes] = useState("");
+  const [listingStartDate, setListingStartDate] = useState("");
+  // "2025-06-01T19:46:13.92056Z"
+  const [listingEndDate, setListingEndDate] = useState("");
+  // "2025-06-10T19:46:13.92056Z"
+
+  const [formValidation, setFormValidation] = useState({
+    address: false,
+    title: false,
+    description: false,
+    storageType: false,
+    size: false,
+    accessDetails: false,
+    allowedStorageType: false,
+    pricePer: false,
+    minimumStoragePeriod: false,
+    availability: false,
+  });
 
   useEffect(() => {
     const updateHeight = () => {
@@ -79,6 +89,14 @@ const CreateListing = ({ isVisible }) => {
   };
 
   const validateListingAddress = () => {
+    console.log("1");
+
+    if (listAddress == "") {
+      const obj = { ...formValidation };
+      obj.address = true;
+      setFormValidation(obj);
+      return;
+    }
     dispatch(
       validateAddressWithGoogle({
         address: listAddress,
@@ -97,7 +115,48 @@ const CreateListing = ({ isVisible }) => {
     setImages((prevImages) => [...prevImages, base64]);
   };
 
+  const validation = () => {
+    const obj = { ...formValidation };
+    if (listTitle == "") {
+      obj.title = true;
+    }
+    if (listDescription == "") {
+      obj.description = true;
+    }
+    if (storageType.length == 0) {
+      obj.storageType = true;
+    }
+    if (listSize == "") {
+      obj.size = true;
+    }
+    if (accessDetails == "not_set") {
+      obj.accessDetails = true;
+    }
+    if (allowedStorage.length == 0) {
+      obj.allowedStorageType = true;
+    }
+    if (pricePer == "not_set") {
+      obj.pricePer = true;
+    }
+    if (minStoragePeriod == "not_set") {
+      obj.minimumStoragePeriod = true;
+    }
+    if (listingStartDate == "" || listingEndDate == "") {
+      obj.availability = true;
+    }
+
+    setFormValidation(obj);
+
+    const hasAnyError = Object.values(obj).some((value) => value === true);
+    if (hasAnyError) {
+      return false;
+    }
+    return true;
+  };
+
   const handlePreviewListing = () => {
+    if (!validation()) return;
+
     dispatch(
       setListing({
         images: images,
@@ -150,6 +209,7 @@ const CreateListing = ({ isVisible }) => {
               onFocus={(e) => setValidateAddress(false)}
               rows={2}
               autoComplete="list_additional_notes"
+              error={formValidation.address}
             />
 
             {isLoading ? (
@@ -173,7 +233,11 @@ const CreateListing = ({ isVisible }) => {
             )}
           </div>
           {/* gallery */}
-          <GallerySlider images={images} isPreview={false} />
+          <GallerySlider
+            images={images}
+            isPreview={false}
+            disabled={!validateAddress}
+          />
           {/* List title */}
           <InputField
             label={
@@ -186,6 +250,8 @@ const CreateListing = ({ isVisible }) => {
             placeholder="e.g. House of fun :)"
             onChange={(e) => setListTitle(e.target.value)}
             autoComplete="list_title"
+            error={formValidation.title}
+            disabled={!validateAddress}
           />
           <EditField
             label={
@@ -196,8 +262,9 @@ const CreateListing = ({ isVisible }) => {
             placeholder="Short description"
             value={listDescription}
             onChange={(e) => setListDescription(e.target.value)}
+            error={formValidation.description}
+            disabled={!validateAddress}
           />
-
           {/* Type of space */}
           <MultiSelectTag
             label={
@@ -208,6 +275,7 @@ const CreateListing = ({ isVisible }) => {
             value={storageType}
             onChange={(selected) => setStorageType(selected)}
             options={["Garage", "Attic", "Shed", "Room", "Basement", "Others"]}
+            error={formValidation.storageType}
           />
           {/* Size */}
           <InputField
@@ -221,6 +289,8 @@ const CreateListing = ({ isVisible }) => {
             placeholder="Size"
             onChange={(e) => setListSize(e.target.value)}
             autoComplete="list_size"
+            error={formValidation.size}
+            disabled={!validateAddress}
           />
           {/* Access details */}
           <SelectField
@@ -234,6 +304,8 @@ const CreateListing = ({ isVisible }) => {
               setAccessDetails(selected.target.value);
             }}
             options={["not_set", "24_7", "weekdays_only", "weekends_only"]}
+            error={formValidation.accessDetails}
+            disabled={!validateAddress}
           />
           {/* Allowed Storage Type */}
           <MultiSelectTag
@@ -252,6 +324,7 @@ const CreateListing = ({ isVisible }) => {
               "furniture's",
               "others",
             ]}
+            error={formValidation.allowedStorageType}
           />
           {/* Price type */}
           <SelectField
@@ -265,6 +338,8 @@ const CreateListing = ({ isVisible }) => {
               setPricePer(selected.target.value);
             }}
             options={["not_set", "daily", "weekly", "monthly"]}
+            error={formValidation.pricePer}
+            disabled={!validateAddress}
           />
           {/* Minimum storage period */}
           <SelectField
@@ -278,6 +353,8 @@ const CreateListing = ({ isVisible }) => {
               setMinStoragePeriod(selected.target.value);
             }}
             options={["not_set", "days", "1_week", "1_month"]}
+            error={formValidation.minimumStoragePeriod}
+            disabled={!validateAddress}
           />
           {/* Availability */}
           <div className="w-full flex flex-col">
@@ -293,6 +370,8 @@ const CreateListing = ({ isVisible }) => {
                 min="2023-01-01"
                 max="2025-12-31"
                 className="w-1/2"
+                error={formValidation.availability}
+                disabled={!validateAddress}
               />
 
               <DatePickerField
@@ -302,6 +381,8 @@ const CreateListing = ({ isVisible }) => {
                 min="2023-01-01"
                 max="2025-12-31"
                 className="w-1/2"
+                error={formValidation.availability}
+                disabled={!validateAddress}
               />
             </div>
           </div>
@@ -313,8 +394,9 @@ const CreateListing = ({ isVisible }) => {
             onChange={(e) => setAdditionalNotes(e.target.value)}
             rows={2}
             autoComplete="list_additional_notes"
+            error={formValidation.additionalNotes}
+            disabled={!validateAddress}
           />
-
           <PrimaryButton type="submit" onClick={handlePreviewListing}>
             Preview listing
           </PrimaryButton>

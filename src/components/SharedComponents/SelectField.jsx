@@ -51,6 +51,7 @@ const SelectField = ({
   onChange,
   options = [],
   disabled = false,
+  error = false,
 }) => (
   <div className="flex flex-col gap-1">
     <label className="text-base font-medium">{label}</label>
@@ -58,7 +59,9 @@ const SelectField = ({
       value={value}
       onChange={onChange}
       disabled={disabled}
-      className="px-4 h-11 rounded-lg bg-gray-100 focus:outline-none focus:ring-2 focus:ring-violet-500"
+      className={`px-4 h-11 rounded-lg bg-gray-100 focus:outline-none focus:ring-2 focus:ring-violet-500 ${
+        error ? "border border-red-500" : ""
+      }`}
     >
       <option value="" disabled>
         Select your option
