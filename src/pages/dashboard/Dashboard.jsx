@@ -41,10 +41,7 @@ const Dashboard = () => {
       if (topRef.current && bottomRef.current) {
         const topBottom = topRef.current.getBoundingClientRect().bottom;
         const bottomTop = bottomRef.current.getBoundingClientRect().top;
-
         const availableHeight = bottomTop - topBottom;
-        console.log("availableHeight : ", availableHeight);
-
         setViewHeight(availableHeight);
       }
     };
@@ -68,7 +65,7 @@ const Dashboard = () => {
   return (
     <div className="w-full items-center">
       <div
-        className="flex flex-col h-screen w-full bg-red-500 overflow-y-hidden"
+        className="flex flex-col h-screen w-full bg-white overflow-y-hidden"
         style={{
           WebkitOverflowScrolling: "touch",
           overscrollBehavior: "contain", // prevent pull-to-refresh
@@ -82,12 +79,17 @@ const Dashboard = () => {
           title="StorageShare"
         />
         {/* Main content */}
-        <div
-          className="scroll-content mt-14 bg-amber-300"
+        {/* <div
+          className="scroll-content mt-14 bg-white"
           style={{ height: viewHeight }}
         >
           <div className="">{renderTabContent(activeTab)}</div>
+        </div> */}
+
+        <div className="flex-1 min-h-0 mt-14 overflow-y-auto bg-white">
+          {renderTabContent(activeTab)}
         </div>
+
         {/* Bottom TabBar */}
         <TabBar
           ref={bottomRef}
