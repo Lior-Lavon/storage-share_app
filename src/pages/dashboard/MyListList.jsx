@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { ShortListing } from "../../components";
 import PrimaryButton from "../../components/SharedComponents/PrimaryButton";
 import { useDispatch } from "react-redux";
@@ -6,44 +6,82 @@ import { showCreateListing } from "../../features/dashboard/dashboardSlice";
 
 const MyListList = () => {
   const dispatch = useDispatch();
+  const [contentHeight, setContentHeight] = useState(null);
   const [tabBarTop, setTabBarTop] = useState(null);
+  const buttonRef = useRef(null);
+  const wrapperRef = useRef(null);
 
   useEffect(() => {
     const updateTabBarTop = () => {
+      console.log("updateTabBarTop");
+
       const tabBar = document.querySelector(".tab-bar");
-      if (tabBar) {
-        const top = tabBar.getBoundingClientRect().top;
-        setTabBarTop(top);
+      const button = buttonRef.current;
+      const wrapper = wrapperRef.current;
+
+      if (tabBar && button && wrapper) {
+        const tabBarTop = tabBar.getBoundingClientRect().top;
+        const buttonHeight = button.offsetHeight;
+
+        const wrapperTop = wrapper.getBoundingClientRect().top; // 👈 This is what you want
+
+        console.log("Wrapper top:", wrapperTop);
+        console.log("tabBarTop : ", tabBarTop);
+        console.log("buttonHeight : ", buttonHeight);
+
+        const availableHeight = tabBarTop - buttonHeight - wrapperTop;
+
+        console.log("buttonHeight:", buttonHeight);
+        console.log("availableHeight:", availableHeight);
+
+        setContentHeight(availableHeight);
+        setTabBarTop(tabBarTop);
       }
     };
 
-    updateTabBarTop();
+    setTimeout(() => {
+      updateTabBarTop();
+    }, 1);
+
     window.addEventListener("resize", updateTabBarTop);
     return () => window.removeEventListener("resize", updateTabBarTop);
   }, []);
 
+  useEffect(() => {
+    console.log("contentHeight : ", contentHeight);
+  }, [setContentHeight]);
+
   return (
-    <div className="w-full h-screen flex flex-col bg-blue-500 relative">
+    <div
+      ref={wrapperRef}
+      className="w-full h-screen flex flex-col bg-blue-500 relative"
+    >
       {/* Scrollable list */}
-      <div className="flex-1 overflow-y-auto bg-white py-2 flex flex-col gap-4">
+      <div
+        className="content-area overflow-y-auto bg-red-500 py-2 flex flex-col gap-4"
+        style={{
+          height: contentHeight ? `${contentHeight}px` : "auto",
+        }}
+      >
         <ShortListing />
         <ShortListing />
         <ShortListing />
       </div>
 
       {/* Fixed button — positioned just above the tab bar */}
-      {tabBarTop !== null && (
-        <div
-          className="absolute w-full flex items-center justify-center py-1 px-2"
-          style={{
-            top: tabBarTop - 160, // adjust the offset to sit above tab bar
-          }}
-        >
-          <PrimaryButton onClick={() => dispatch(showCreateListing())}>
-            Create new listing
-          </PrimaryButton>
-        </div>
-      )}
+      {/* {tabBarTop !== null && ( */}
+      <div
+        ref={buttonRef}
+        className="absolute w-full flex items-center justify-center py-1 px-2"
+        style={{
+          top: tabBarTop - 160, // adjust the offset to sit above tab bar
+        }}
+      >
+        <PrimaryButton onClick={() => dispatch(showCreateListing())}>
+          Create new listing
+        </PrimaryButton>
+      </div>
+      {/* )} */}
     </div>
   );
 };
