@@ -39,10 +39,6 @@ const ProfileView = ({ isVisible }) => {
   const { isMyProfile, isSettings } = useSelector((store) => store.dashboard);
   const { profile } = useSelector((store) => store.user);
 
-  const handleHideProfileView = () => {
-    dispatch(showProfile());
-  };
-
   useEffect(() => {
     // console.log("ProfileView : ", profile);
   }, [profile]);
@@ -80,18 +76,18 @@ const ProfileView = ({ isVisible }) => {
 
   return (
     <div
-      className={`w-full h-full z-90 fixed top-0 right-0 transition-transform duration-500 flex flex-col bg-white ${
+      className={`w-full h-full z-90 fixed top-0 right-0 transition-transform duration-500 flex flex-col bg-gray-100 ${
         isVisible ? "translate-x-0" : "translate-x-full"
       }`}
-      // style={{
-      //   WebkitOverflowScrolling: "touch",
-      //   overscrollBehavior: "contain", // prevent pull-to-refresh
-      //   touchAction: "none", // stop passive scroll
-      // }}
+      style={{
+        WebkitOverflowScrolling: "touch",
+        overscrollBehavior: "contain", // prevent pull-to-refresh
+        touchAction: "none", // stop passive scroll
+      }}
     >
       <TopBar
         ref={topRef}
-        showBackIcon={handleHideProfileView}
+        showBackIcon={() => dispatch(showProfile())}
         title={"Profile"}
       />
       <div

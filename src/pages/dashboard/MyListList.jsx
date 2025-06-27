@@ -8,7 +8,7 @@ const MyListList = () => {
   const dispatch = useDispatch();
 
   return (
-    <div className="w-full h-full flex flex-col bg-white relative">
+    <div className="w-full h-full flex flex-col bg-gray-100 relative">
       {/* Scrollable list */}
       {/* <div className="h-[645px] overflow-y-auto bg-red-500 py-2 flex flex-col gap-4">
         <ShortListing />
