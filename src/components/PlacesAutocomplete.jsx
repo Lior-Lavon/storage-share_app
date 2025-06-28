@@ -11,6 +11,7 @@ const PlacesAutocomplete = ({
   setCoordinate,
   panTo,
   onFocus,
+  error = false,
 }) => {
   const inputRef = useRef(null);
   const {
@@ -44,7 +45,9 @@ const PlacesAutocomplete = ({
         <div className="relative mt-1">
           <Combobox.Input
             ref={inputRef}
-            className="w-full pl-4 pr-8 py-2 bg-gray-100 border border-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-violet-500 resize-none"
+            className={`w-full pl-4 pr-8 py-2 bg-gray-100  rounded-lg focus:outline-none focus:ring-2 focus:ring-violet-500 resize-none ${
+              !error ? "border border-gray-100" : "border border-red-500"
+            }`}
             onChange={(e) => setValue(e.target.value)}
             onFocus={onFocus}
             disabled={!ready}

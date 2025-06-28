@@ -77,11 +77,6 @@ const CreateListing = ({ isVisible }) => {
   });
 
   useEffect(() => {
-    console.log("formattedAddress : ", formattedAddress);
-    console.log("mapCoordinate : ", mapCoordinate);
-  }, [formattedAddress, mapCoordinate]);
-
-  useEffect(() => {
     const updateHeight = () => {
       if (topRef.current) {
         const topBottom = topRef.current.getBoundingClientRect().bottom;
@@ -125,6 +120,9 @@ const CreateListing = ({ isVisible }) => {
 
   const validation = () => {
     const obj = { ...formValidation };
+    if (formattedAddress == "" || mapCoordinate == null) {
+      obj.address = true;
+    }
     if (listTitle == "") {
       obj.title = true;
     }
@@ -218,6 +216,7 @@ const CreateListing = ({ isVisible }) => {
                 setFormattedAddress("");
                 setMapCoordinate(null);
               }}
+              error={formValidation.address}
             />
             {mapCoordinate != null && (
               <GrValidate className="w-5 h-5 text-green-600 absolute right-3 top-[45px] -translate-y-1/2" />
@@ -393,7 +392,11 @@ const CreateListing = ({ isVisible }) => {
             error={formValidation.additionalNotes}
             disabled={!validateAddress}
           />
-          <PrimaryButton type="submit" onClick={handlePreviewListing}>
+          <PrimaryButton
+            type="submit"
+            onClick={handlePreviewListing}
+            disabled={formattedAddress == "" || mapCoordinate == null}
+          >
             Preview listing
           </PrimaryButton>
         </div>
