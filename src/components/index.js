@@ -14,6 +14,7 @@ import ShortListing from "./ShortListing";
 import GallerySlider from "./GallerySlider";
 import ImageSlider from "./ImageSlider";
 import PlacesAutocomplete from "./PlacesAutocomplete";
+import MapView from "./MapView";
 
 export {
   LoginView,
@@ -32,4 +33,5 @@ export {
   GallerySlider,
   ImageSlider,
   PlacesAutocomplete,
+  MapView,
 };

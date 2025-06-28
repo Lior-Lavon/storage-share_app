@@ -29,6 +29,10 @@ const MultiSelectTag = ({
 
   const isSelected = (item) => selection.includes(item);
 
+  const capitalizeFirst = (text) => {
+    return text?.charAt(0).toUpperCase() + text?.slice(1);
+  };
+
   return (
     <div className="flex flex-col gap-1">
       <label className="text-base font-medium">{label}</label>
@@ -47,7 +51,7 @@ const MultiSelectTag = ({
             }`}
             onClick={() => handleTagClick(item)}
           >
-            {item}
+            {capitalizeFirst(item)}
           </div>
         ))}
       </div>

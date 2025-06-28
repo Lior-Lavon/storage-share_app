@@ -3,7 +3,7 @@ import { TiArrowLeft } from "react-icons/ti";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { showPreviewListing } from "../../features/dashboard/dashboardSlice";
-import { GallerySlider } from "../../components";
+import { GallerySlider, MapView } from "../../components";
 import PrimaryButton from "../../components/SharedComponents/PrimaryButton";
 
 const PreviewListing = ({ isVisible }) => {
@@ -88,7 +88,9 @@ const PreviewListing = ({ isVisible }) => {
           <p className="font-bold text-xl tracking-wide">
             {capitalizeFirst(listing?.title)}
           </p>
-
+          <p className="text-sm tracking-wide">
+            {capitalizeFirst(listing?.address)}
+          </p>
           <div className="w-full flex items-center justify-between text-lg">
             {/* price */}
             <p className="font-bold">
@@ -105,12 +107,11 @@ const PreviewListing = ({ isVisible }) => {
               </p>
             </div>
           </div>
-
           {/* description */}
           <p className="text-sm text-gray-600">{listing?.description}</p>
 
           {/* map */}
-          <div className="w-full h-40 bg-gray-300 rounded-2xl"></div>
+          <MapView className="w-full h-40 bg-gray-300 rounded-2xl" />
 
           {/* type of space */}
           <div className="w-full">
@@ -125,7 +126,6 @@ const PreviewListing = ({ isVisible }) => {
               })}
             </div>
           </div>
-
           {/* access details */}
           <div className="w-full">
             <p className="text-sm text-gray-400">Access details</p>
@@ -133,7 +133,6 @@ const PreviewListing = ({ isVisible }) => {
               {formatLabel(listing?.accessDetails)}
             </p>
           </div>
-
           {/* allowed storage type */}
           <div className="w-full">
             <p className="text-sm text-gray-400">Allowed Storage Types</p>
@@ -147,7 +146,6 @@ const PreviewListing = ({ isVisible }) => {
               })}
             </div>
           </div>
-
           {/* access details */}
           <div className="w-full">
             <p className="text-sm text-gray-400">Minimum Booking Duration</p>
@@ -155,7 +153,6 @@ const PreviewListing = ({ isVisible }) => {
               {formatLabel(listing?.minStoragePeriod)}
             </p>
           </div>
-
           {/* availability / calendar blocking */}
           <div className="w-full">
             <p className="text-sm text-gray-400">
@@ -168,7 +165,6 @@ const PreviewListing = ({ isVisible }) => {
               )}`}
             </p>
           </div>
-
           {/* Additional notes / Restrictions */}
           <div className="w-full">
             <p className="text-sm text-gray-400">
@@ -178,15 +174,12 @@ const PreviewListing = ({ isVisible }) => {
               {formatLabel(listing?.additionalNotes)}
             </p>
           </div>
-
           <div className="w-full h-[1px] bg-gray-300"></div>
-
           <div className="w-full mt-5">
             <PrimaryButton type="submit" onClick={publish}>
               Publish this listing
             </PrimaryButton>
           </div>
-
           <div className="w-full mt-5">
             <PrimaryButton
               type="submit"
@@ -200,7 +193,6 @@ const PreviewListing = ({ isVisible }) => {
               Back to edit this listing
             </PrimaryButton>
           </div>
-
           <div className="w-full h-10 bg-white"></div>
         </div>
       </div>

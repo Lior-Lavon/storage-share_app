@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, useEffect } from "react";
 import { Combobox } from "@headlessui/react";
 import usePlacesAutocomplete, {
   getGeocode,
@@ -12,6 +12,7 @@ const PlacesAutocomplete = ({
   panTo,
   onFocus,
   error = false,
+  initialAddress = "",
 }) => {
   const inputRef = useRef(null);
   const {
@@ -21,6 +22,13 @@ const PlacesAutocomplete = ({
     suggestions: { status, data },
     clearSuggestions,
   } = usePlacesAutocomplete();
+
+  // Set initial value on mount or when initialAddress changes
+  useEffect(() => {
+    if (initialAddress) {
+      setValue(initialAddress, false); // false to avoid fetching suggestions immediately
+    }
+  }, [initialAddress, setValue]);
 
   const handleSelect = async (address) => {
     setValue(address);

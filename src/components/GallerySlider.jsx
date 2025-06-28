@@ -37,7 +37,9 @@ const GallerySlider = ({
             <>
               <div className="relative">
                 <CiImageOn className="text-gray-400 w-14 h-14" />
-                <FiPlus className="bg-white text-gray-400 absolute top-0 right-0" />
+                {!isPreview && (
+                  <FiPlus className="bg-white text-gray-400 absolute top-0 right-0" />
+                )}
               </div>
               {!isPreview && (
                 <div

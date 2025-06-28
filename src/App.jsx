@@ -13,7 +13,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useDispatch } from "react-redux";
 import { pingUser } from "./features/user/userSlice";
 //
-import { GoogleMap, Marker, useLoadScript } from "@react-google-maps/api";
+import { useLoadScript } from "@react-google-maps/api";
 import { useRef } from "react";
 
 import {
@@ -71,7 +71,6 @@ export default App;
 
 const Map = () => {
   // the address user has selected from the dropdown
-  const center = useMemo(() => ({ lat: 52.2770243, lng: 4.8558283 }));
   const [selected, setSelected] = useState({ lat: 52.2770243, lng: 4.8558283 });
   const [mapLoaded, setMapLoaded] = useState(false);
   const mapRef = useRef(null);

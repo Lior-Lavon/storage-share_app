@@ -44,24 +44,24 @@ const CreateListing = ({ isVisible }) => {
   const { isCropView } = useSelector((store) => store.dashboard);
 
   const [images, setImages] = useState([]);
-  const [listTitle, setListTitle] = useState("");
-  const [listDescription, setListDescription] = useState("");
+  const [listTitle, setListTitle] = useState("title");
+  const [listDescription, setListDescription] = useState("description");
   const [formattedAddress, setFormattedAddress] = useState("");
   const [mapCoordinate, setMapCoordinate] = useState(null);
-  // "Groenhoven 806, 1103 LZ, amsterdam, Netherlands"
 
-  const [validateAddress, setValidateAddress] = useState(false);
-  const [storageType, setStorageType] = useState([]);
-  const [allowedStorage, setAllowedStorage] = useState([]);
-  const [listSize, setListSize] = useState("");
+  const [storageType, setStorageType] = useState(["Garage", "Attic"]);
+  const [allowedStorage, setAllowedStorage] = useState(["boxes", "bicycle"]);
+  const [listSize, setListSize] = useState("50");
   const [accessDetails, setAccessDetails] = useState("not_set");
   const [pricePer, setPricePer] = useState("not_set");
   const [minStoragePeriod, setMinStoragePeriod] = useState("not_set");
-  const [additionalNotes, setAdditionalNotes] = useState("");
-  const [listingStartDate, setListingStartDate] = useState("");
-  // "2025-06-01T19:46:13.92056Z"
-  const [listingEndDate, setListingEndDate] = useState("");
-  // "2025-06-10T19:46:13.92056Z"
+  const [additionalNotes, setAdditionalNotes] = useState("additionalNotes");
+  const [listingStartDate, setListingStartDate] = useState(
+    "2025-06-01T19:46:13.92056Z"
+  );
+  const [listingEndDate, setListingEndDate] = useState(
+    "2025-06-10T19:46:13.92056Z"
+  );
 
   const [formValidation, setFormValidation] = useState({
     address: false,
@@ -91,27 +91,6 @@ const CreateListing = ({ isVisible }) => {
   const hideCreateListingView = () => {
     setChangePasswordError(null);
     dispatch(showCreateListing());
-  };
-
-  const validateListingAddress = () => {
-    if (listAddress == "") {
-      const obj = { ...formValidation };
-      obj.address = true;
-      setFormValidation(obj);
-      return;
-    }
-    dispatch(
-      validateAddressWithGoogle({
-        address: listAddress,
-      })
-    )
-      .unwrap()
-      .then(() => {
-        setValidateAddress(true);
-      })
-      .catch((err) => {
-        console.log("validateAddress failed");
-      });
   };
 
   const handleCropped = (base64) => {
@@ -165,6 +144,8 @@ const CreateListing = ({ isVisible }) => {
 
     dispatch(
       setListing({
+        address: formattedAddress,
+        coordinate: mapCoordinate,
         images: images,
         title: listTitle,
         description: listDescription,
@@ -217,9 +198,10 @@ const CreateListing = ({ isVisible }) => {
                 setMapCoordinate(null);
               }}
               error={formValidation.address}
+              initialAddress={formattedAddress}
             />
             {mapCoordinate != null && (
-              <GrValidate className="w-5 h-5 text-green-600 absolute right-3 top-[45px] -translate-y-1/2" />
+              <GrValidate className="w-5 h-5 text-green-600 absolute right-2 top-[48px] -translate-y-1/2" />
             )}
           </div>
           {/* gallery */}
@@ -231,7 +213,7 @@ const CreateListing = ({ isVisible }) => {
             }
             images={images}
             isPreview={false}
-            disabled={!validateAddress}
+            disabled={formattedAddress == ""}
           />
           {/* List title */}
           <InputField
@@ -246,7 +228,7 @@ const CreateListing = ({ isVisible }) => {
             onChange={(e) => setListTitle(e.target.value)}
             autoComplete="list_title"
             error={formValidation.title}
-            disabled={!validateAddress}
+            disabled={formattedAddress == ""}
           />
           <EditField
             label={
@@ -258,7 +240,7 @@ const CreateListing = ({ isVisible }) => {
             value={listDescription}
             onChange={(e) => setListDescription(e.target.value)}
             error={formValidation.description}
-            disabled={!validateAddress}
+            disabled={formattedAddress == ""}
           />
           {/* Type of space */}
           <MultiSelectTag
@@ -285,7 +267,7 @@ const CreateListing = ({ isVisible }) => {
             onChange={(e) => setListSize(e.target.value)}
             autoComplete="list_size"
             error={formValidation.size}
-            disabled={!validateAddress}
+            disabled={formattedAddress == ""}
           />
           {/* Access details */}
           <SelectField
@@ -300,7 +282,7 @@ const CreateListing = ({ isVisible }) => {
             }}
             options={["not_set", "24_7", "weekdays_only", "weekends_only"]}
             error={formValidation.accessDetails}
-            disabled={!validateAddress}
+            disabled={formattedAddress == ""}
           />
           {/* Allowed Storage Type */}
           <MultiSelectTag
@@ -334,7 +316,7 @@ const CreateListing = ({ isVisible }) => {
             }}
             options={["not_set", "daily", "weekly", "monthly"]}
             error={formValidation.pricePer}
-            disabled={!validateAddress}
+            disabled={formattedAddress == ""}
           />
           {/* Minimum storage period */}
           <SelectField
@@ -349,7 +331,7 @@ const CreateListing = ({ isVisible }) => {
             }}
             options={["not_set", "days", "1_week", "1_month"]}
             error={formValidation.minimumStoragePeriod}
-            disabled={!validateAddress}
+            disabled={formattedAddress == ""}
           />
           {/* Availability */}
           <div className="w-full flex flex-col">
@@ -366,7 +348,7 @@ const CreateListing = ({ isVisible }) => {
                 max="2025-12-31"
                 className="w-1/2"
                 error={formValidation.availability}
-                disabled={!validateAddress}
+                disabled={formattedAddress == ""}
               />
 
               <DatePickerField
@@ -377,7 +359,7 @@ const CreateListing = ({ isVisible }) => {
                 max="2025-12-31"
                 className="w-1/2"
                 error={formValidation.availability}
-                disabled={!validateAddress}
+                disabled={formattedAddress == ""}
               />
             </div>
           </div>
@@ -390,7 +372,7 @@ const CreateListing = ({ isVisible }) => {
             rows={2}
             autoComplete="list_additional_notes"
             error={formValidation.additionalNotes}
-            disabled={!validateAddress}
+            disabled={formattedAddress == ""}
           />
           <PrimaryButton
             type="submit"
