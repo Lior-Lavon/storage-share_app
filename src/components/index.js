@@ -13,6 +13,7 @@ import TypeSwitch from "./TypeSwitch";
 import ShortListing from "./ShortListing";
 import GallerySlider from "./GallerySlider";
 import ImageSlider from "./ImageSlider";
+import PlacesAutocomplete from "./PlacesAutocomplete";
 
 export {
   LoginView,
@@ -30,4 +31,5 @@ export {
   ShortListing,
   GallerySlider,
   ImageSlider,
+  PlacesAutocomplete,
 };

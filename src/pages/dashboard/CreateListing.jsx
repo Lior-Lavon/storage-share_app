@@ -1,7 +1,12 @@
 import React, { useEffect, useRef, useState, CSSProperties } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { GallerySlider, ImageCropper, TopBar } from "../../components";
+import {
+  GallerySlider,
+  ImageCropper,
+  PlacesAutocomplete,
+  TopBar,
+} from "../../components";
 import {
   showCreateListing,
   showCropImageView,
@@ -31,7 +36,7 @@ const listing = {};
 const CreateListing = ({ isVisible }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const apiKey = import.meta.env.VITE_GOOGLE_API_KEY;
+
   const topRef = useRef(null);
   const [height, setHeight] = useState(0);
   const [changePasswordError, setChangePasswordError] = useState(null);
@@ -41,10 +46,10 @@ const CreateListing = ({ isVisible }) => {
   const [images, setImages] = useState([]);
   const [listTitle, setListTitle] = useState("");
   const [listDescription, setListDescription] = useState("");
-  const [listAddress, setListAddress] = useState(
-    "Groenhoven 806, 1103 LZ, amsterdam, Netherlands"
-  );
-  //
+  const [formattedAddress, setFormattedAddress] = useState("");
+  const [mapCoordinate, setMapCoordinate] = useState(null);
+  // "Groenhoven 806, 1103 LZ, amsterdam, Netherlands"
+
   const [validateAddress, setValidateAddress] = useState(false);
   const [storageType, setStorageType] = useState([]);
   const [allowedStorage, setAllowedStorage] = useState([]);
@@ -72,6 +77,11 @@ const CreateListing = ({ isVisible }) => {
   });
 
   useEffect(() => {
+    console.log("formattedAddress : ", formattedAddress);
+    console.log("mapCoordinate : ", mapCoordinate);
+  }, [formattedAddress, mapCoordinate]);
+
+  useEffect(() => {
     const updateHeight = () => {
       if (topRef.current) {
         const topBottom = topRef.current.getBoundingClientRect().bottom;
@@ -89,8 +99,6 @@ const CreateListing = ({ isVisible }) => {
   };
 
   const validateListingAddress = () => {
-    console.log("1");
-
     if (listAddress == "") {
       const obj = { ...formValidation };
       obj.address = true;
@@ -195,45 +203,33 @@ const CreateListing = ({ isVisible }) => {
         style={{ height: `${height}px` }}
       >
         <div className="flex flex-col gap-5 mt-4 mx-4">
-          {/* Address */}
           <div className="w-full relative">
-            <EditField
+            {/* auto complete address */}
+            <PlacesAutocomplete
               label={
                 <>
                   Address <span style={{ color: "red" }}>*</span>
                 </>
               }
-              placeholder="Full address"
-              value={listAddress}
-              onChange={(e) => setListAddress(e.target.value)}
-              onFocus={(e) => setValidateAddress(false)}
-              rows={2}
-              autoComplete="list_additional_notes"
-              error={formValidation.address}
+              setFormattedAddress={setFormattedAddress}
+              setCoordinate={setMapCoordinate}
+              onFocus={() => {
+                console.log("onFocus");
+                setFormattedAddress("");
+                setMapCoordinate(null);
+              }}
             />
-
-            {isLoading ? (
-              <div className="w-5 h-5 text-green-600 absolute right-3 top-15 -translate-y-1/2">
-                <MoonLoader
-                  color={"#000000"}
-                  loading={true}
-                  cssOverride={override}
-                  size={15}
-                  aria-label="Loading Spinner"
-                  data-testid="loader"
-                />
-              </div>
-            ) : validateAddress ? (
-              <GrValidate className="w-5 h-5 text-green-600 absolute right-3 top-15 -translate-y-1/2" />
-            ) : (
-              <HiOutlineRefresh
-                className="w-5 h-5 text-gray-600 absolute right-3 top-15 -translate-y-1/2 cursor-pointer"
-                onClick={validateListingAddress}
-              />
+            {mapCoordinate != null && (
+              <GrValidate className="w-5 h-5 text-green-600 absolute right-3 top-[45px] -translate-y-1/2" />
             )}
           </div>
           {/* gallery */}
           <GallerySlider
+            label={
+              <>
+                Images <span style={{ color: "red" }}>*</span>
+              </>
+            }
             images={images}
             isPreview={false}
             disabled={!validateAddress}

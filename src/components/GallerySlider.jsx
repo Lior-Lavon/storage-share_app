@@ -7,6 +7,7 @@ import { showCropImageView } from "../features/dashboard/dashboardSlice";
 import ImageSlider from "./ImageSlider.jsx";
 
 const GallerySlider = ({
+  label,
   images,
   isPreview,
   rounded = true,
@@ -24,9 +25,10 @@ const GallerySlider = ({
   }, [images]);
 
   return (
-    <>
+    <div>
+      <label className="text-base font-medium">{label}</label>
       <div
-        className={`w-full h-[200px] border border-dotted border-gray-400 ${
+        className={`w-full h-[200px] border border-dotted border-gray-400 mt-1 ${
           rounded ? "rounded-2xl" : ""
         } flex items-center justify-center bg-gray-100`}
       >
@@ -67,7 +69,7 @@ const GallerySlider = ({
           Upload another image
         </div>
       )}
-    </>
+    </div>
   );
 };
 
