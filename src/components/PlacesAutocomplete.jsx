@@ -1,12 +1,5 @@
 import React, { useRef } from "react";
-import {
-  Combobox,
-  ComboboxInput,
-  ComboboxList,
-  ComboboxOption,
-  ComboboxPopover,
-} from "@reach/combobox";
-import "@reach/combobox/styles.css";
+import { Combobox } from "@headlessui/react";
 import usePlacesAutocomplete, {
   getGeocode,
   getLatLng,
@@ -29,7 +22,7 @@ const PlacesAutocomplete = ({
   } = usePlacesAutocomplete();
 
   const handleSelect = async (address) => {
-    setValue(address, false);
+    setValue(address);
     clearSuggestions();
 
     const results = await getGeocode({ address });
@@ -47,31 +40,35 @@ const PlacesAutocomplete = ({
   return (
     <div className="relative w-full">
       <label className="text-base font-medium">{label}</label>
-      <Combobox onSelect={handleSelect} className="mt-1">
-        <ComboboxInput
-          ref={inputRef}
-          value={value}
-          onChange={(e) => setValue(e.target.value)}
-          onFocus={onFocus}
-          disabled={!ready}
-          className="w-full pl-4 pr-8 py-2 bg-gray-100 border border-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-violet-500 resize-none"
-          placeholder="Search address"
-        />
-        <ComboboxPopover
-          portal={false}
-          className="absolute z-50 w-full bg-white border border-gray-300 rounded-md shadow-lg mt-1"
-        >
-          <ComboboxList>
-            {status === "OK" &&
-              data.map(({ place_id, description }) => (
-                <ComboboxOption
+      <Combobox value={value} onChange={handleSelect} nullable>
+        <div className="relative mt-1">
+          <Combobox.Input
+            ref={inputRef}
+            className="w-full pl-4 pr-8 py-2 bg-gray-100 border border-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-violet-500 resize-none"
+            onChange={(e) => setValue(e.target.value)}
+            onFocus={onFocus}
+            disabled={!ready}
+            displayValue={(address) => address}
+            placeholder="Search address"
+          />
+          {status === "OK" && (
+            <Combobox.Options className="absolute z-50 w-full bg-white border border-gray-300 rounded-md shadow-lg mt-1 max-h-60 overflow-auto">
+              {data.map(({ place_id, description }) => (
+                <Combobox.Option
                   key={place_id}
                   value={description}
-                  className="px-4 py-2 hover:bg-violet-100 cursor-pointer"
-                />
+                  className={({ active }) =>
+                    `cursor-pointer select-none px-4 py-2 ${
+                      active ? "bg-violet-100 text-violet-900" : "text-gray-900"
+                    }`
+                  }
+                >
+                  {description}
+                </Combobox.Option>
               ))}
-          </ComboboxList>
-        </ComboboxPopover>
+            </Combobox.Options>
+          )}
+        </div>
       </Combobox>
     </div>
   );
