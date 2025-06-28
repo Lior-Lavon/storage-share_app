@@ -208,7 +208,7 @@ const CreateListing = ({ isVisible }) => {
             <PlacesAutocomplete
               label={
                 <>
-                  Address <span style={{ color: "red" }}>*</span>
+                  Address. <span style={{ color: "red" }}>*</span>
                 </>
               }
               setFormattedAddress={setFormattedAddress}
