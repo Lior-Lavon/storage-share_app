@@ -18,7 +18,6 @@ const PreviewListing = ({ isVisible }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { listing } = useSelector((store) => store.listing);
-  console.log("listing : ", listing);
 
   const [height, setHeight] = useState(0);
   const topRef = useRef(null);

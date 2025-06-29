@@ -3,11 +3,8 @@ import { Switch } from "@headlessui/react";
 
 const ShortListing = ({ listing }) => {
   const [enabled, setEnabled] = useState(false);
-  console.log("listing : ", listing);
 
   const { title, images, formatted_address } = listing;
-
-  console.log("listing : ", listing);
 
   const getImageUrl = (imageUrl) => {
     const baseUrl = import.meta.env.VITE_AWS_S3_LISTING_BUCKET;

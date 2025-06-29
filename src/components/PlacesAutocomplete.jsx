@@ -9,6 +9,7 @@ import usePlacesAutocomplete, {
   getGeocode,
   getLatLng,
 } from "use-places-autocomplete";
+import { IoClose } from "react-icons/io5";
 
 const PlacesAutocomplete = forwardRef(
   (
@@ -33,13 +34,15 @@ const PlacesAutocomplete = forwardRef(
     } = usePlacesAutocomplete();
 
     useImperativeHandle(ref, () => ({
-      clear: () => {
-        setValue("");
-        setFormattedAddress("");
-        setCoordinate(null);
-        clearSuggestions();
-      },
+      clear,
     }));
+
+    const clear = () => {
+      setValue("");
+      setFormattedAddress("");
+      setCoordinate(null);
+      clearSuggestions();
+    };
 
     // Set initial value on mount or when initialAddress changes
     useEffect(() => {
@@ -69,17 +72,23 @@ const PlacesAutocomplete = forwardRef(
         <label className="text-base font-medium">{label}</label>
         <Combobox value={value} onChange={handleSelect} nullable>
           <div className="relative mt-1">
-            <Combobox.Input
-              ref={inputRef}
-              className={`w-full pl-4 pr-8 py-2 bg-gray-100  rounded-lg focus:outline-none focus:ring-2 focus:ring-violet-500 resize-none ${
-                !error ? "border border-gray-100" : "border border-red-500"
-              }`}
-              onChange={(e) => setValue(e.target.value)}
-              onFocus={onFocus}
-              disabled={!ready}
-              displayValue={(address) => address}
-              placeholder="Search address"
-            />
+            <div className="w-full relative">
+              <Combobox.Input
+                ref={inputRef}
+                className={`w-full pl-4 pr-8 py-2 bg-gray-100  rounded-lg focus:outline-none focus:ring-2 focus:ring-violet-500 resize-none ${
+                  !error ? "border border-gray-100" : "border border-red-500"
+                }`}
+                onChange={(e) => setValue(e.target.value)}
+                onFocus={onFocus}
+                disabled={!ready}
+                displayValue={(address) => address}
+                placeholder="Search address"
+              />
+              <IoClose
+                className="w-5 h-5 text-black absolute right-2 top-1/2 -translate-y-1/2"
+                onClick={clear}
+              />
+            </div>
             {status === "OK" && (
               <Combobox.Options className="absolute z-50 w-full bg-white border border-gray-300 rounded-md shadow-lg mt-1 max-h-60 overflow-auto">
                 {data.map(({ place_id, description }) => (
