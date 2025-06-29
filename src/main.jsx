@@ -21,7 +21,7 @@ const queryClient = new QueryClient({
 createRoot(document.getElementById("root")).render(
   <QueryClientProvider client={queryClient}>
     <Provider store={store}>
-      <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_API_KEY}>
+      <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_OAUTH_KEY}>
         <App />
       </GoogleOAuthProvider>
     </Provider>

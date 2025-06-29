@@ -10,7 +10,7 @@ const TopBar = React.forwardRef(
 
     useEffect(() => {
       if (profile?.avatar) {
-        const baseUrl = import.meta.env.VITE_AWS_S3_BUCKET;
+        const baseUrl = import.meta.env.VITE_AWS_S3_AVATAR_BUCKET;
         const url = `${baseUrl}/${profile.avatar}`;
         setImageUrl(url);
       }

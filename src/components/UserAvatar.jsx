@@ -29,7 +29,7 @@ const UserAvatar = ({ showModal, imageUrl, allowEditing = false }) => {
   }, [menuVisible]);
 
   const getImageUrl = () => {
-    const baseUrl = import.meta.env.VITE_AWS_S3_BUCKET;
+    const baseUrl = import.meta.env.VITE_AWS_S3_AVATAR_BUCKET;
     return `${baseUrl}/${imageUrl}`;
   };
 

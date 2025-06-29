@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { TopBar, UserAvatar } from "../../components";
 import {
+  closeAllViews,
   showMyProfile,
   showProfile,
   showSettingsView,
@@ -76,7 +77,7 @@ const ProfileView = ({ isVisible }) => {
 
   return (
     <div
-      className={`w-full h-full z-90 fixed top-0 right-0 transition-transform duration-500 flex flex-col bg-gray-100 ${
+      className={`w-full h-full z-90 fixed top-0 right-0 transition-transform duration-500 flex flex-col bg-white ${
         isVisible ? "translate-x-0" : "translate-x-full"
       }`}
       style={{
@@ -140,7 +141,7 @@ const ProfileView = ({ isVisible }) => {
           dispatch(logoutUser())
             .unwrap()
             .then(() => {
-              handleHideProfileView();
+              dispatch(closeAllViews());
             })
             .catch((err) => {
               console.error("Logout failed:", err);

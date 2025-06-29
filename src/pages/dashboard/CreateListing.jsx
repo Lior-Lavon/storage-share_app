@@ -20,10 +20,7 @@ import EditField from "../../components/SharedComponents/EditField";
 import MultiSelectTag from "../../components/SharedComponents/MultiSelectTag";
 import SelectField from "../../components/SharedComponents/SelectField";
 import DatePickerField from "../../components/SharedComponents/DatePickerField";
-import {
-  setListing,
-  validateAddressWithGoogle,
-} from "../../features/listing/listingSlice";
+import { setListing } from "../../features/listing/listingSlice";
 import MoonLoader from "react-spinners/MoonLoader";
 
 const override = {
@@ -38,30 +35,32 @@ const CreateListing = ({ isVisible }) => {
   const navigate = useNavigate();
 
   const topRef = useRef(null);
+  const placeRef = useRef();
+  const galleryRef = useRef();
   const [height, setHeight] = useState(0);
   const [changePasswordError, setChangePasswordError] = useState(null);
   const { isLoading } = useSelector((store) => store.listing);
   const { isCropView } = useSelector((store) => store.dashboard);
+  const { profile } = useSelector((store) => store.user);
 
   const [images, setImages] = useState([]);
-  const [listTitle, setListTitle] = useState("title");
-  const [listDescription, setListDescription] = useState("description");
+  const [listTitle, setListTitle] = useState("");
+  const [listDescription, setListDescription] = useState("");
   const [formattedAddress, setFormattedAddress] = useState("");
   const [mapCoordinate, setMapCoordinate] = useState(null);
 
-  const [storageType, setStorageType] = useState(["Garage", "Attic"]);
-  const [allowedStorage, setAllowedStorage] = useState(["boxes", "bicycle"]);
-  const [listSize, setListSize] = useState("50");
+  const [storageType, setStorageType] = useState([]);
+  const [allowedStorage, setAllowedStorage] = useState([]);
+  const [listSize, setListSize] = useState("");
   const [accessDetails, setAccessDetails] = useState("not_set");
   const [pricePer, setPricePer] = useState("not_set");
   const [minStoragePeriod, setMinStoragePeriod] = useState("not_set");
-  const [additionalNotes, setAdditionalNotes] = useState("additionalNotes");
-  const [listingStartDate, setListingStartDate] = useState(
-    "2025-06-01T19:46:13.92056Z"
-  );
-  const [listingEndDate, setListingEndDate] = useState(
-    "2025-06-10T19:46:13.92056Z"
-  );
+  const [additionalNotes, setAdditionalNotes] = useState("");
+  const [listingStartDate, setListingStartDate] = useState("");
+  const [listingEndDate, setListingEndDate] = useState("");
+  const [, forceUpdate] = useState(0);
+
+  const refresh = () => forceUpdate((n) => n + 1);
 
   const [formValidation, setFormValidation] = useState({
     address: false,
@@ -88,13 +87,47 @@ const CreateListing = ({ isVisible }) => {
     updateHeight(); // Call once on mount
   }, []);
 
+  useEffect(() => {
+    if (isVisible) {
+      setImages([]);
+      handleGalleryReset();
+      setListTitle("");
+      setListDescription("");
+      setFormattedAddress("");
+      setMapCoordinate(null);
+      handleAutocompleteClear();
+
+      setStorageType([]);
+      setAllowedStorage([]);
+      setListSize("");
+      setAccessDetails("not_set");
+      setPricePer("not_set");
+      setMinStoragePeriod("not_set");
+      setAdditionalNotes("");
+      setListingStartDate("");
+      setListingEndDate("");
+
+      refresh();
+
+      console.log("CreateListing is now visible");
+    } else {
+      console.log("CreateListing is now hidden");
+    }
+  }, [isVisible]);
+
   const hideCreateListingView = () => {
     setChangePasswordError(null);
     dispatch(showCreateListing());
   };
 
   const handleCropped = (base64) => {
-    setImages((prevImages) => [...prevImages, base64]);
+    setImages((prevImages) => [
+      ...prevImages,
+      {
+        filename: "image.jpg",
+        image: base64,
+      },
+    ]);
   };
 
   const validation = () => {
@@ -139,19 +172,38 @@ const CreateListing = ({ isVisible }) => {
     return true;
   };
 
+  const clearError = (key) => {
+    const obj = { ...formValidation };
+    obj[key] = false;
+    setFormValidation(obj);
+  };
+
+  const handleAutocompleteClear = () => {
+    placeRef.current?.clear();
+  };
+
+  const handleGalleryReset = () => {
+    if (galleryRef.current) {
+      galleryRef.current.reset(); // Clear the image
+    }
+  };
+
   const handlePreviewListing = () => {
     if (!validation()) return;
 
     dispatch(
       setListing({
+        userId: profile.id,
         address: formattedAddress,
         coordinate: mapCoordinate,
         images: images,
         title: listTitle,
         description: listDescription,
         storageType: storageType,
+        size: listSize,
         accessDetails: accessDetails,
         allowedStorage: allowedStorage,
+        pricePer: pricePer,
         minStoragePeriod: minStoragePeriod,
         startDate: listingStartDate,
         endDate: listingEndDate,
@@ -182,18 +234,23 @@ const CreateListing = ({ isVisible }) => {
         style={{ height: `${height}px` }}
       >
         <div className="flex flex-col gap-5 mt-4 mx-4">
-          <div className="w-full relative">
+          <div className="w-full relative flex flex-col gap-2">
             {/* auto complete address */}
+            <p className="font-bold text-lg">Create New Listing</p>
+            {mapCoordinate == null && (
+              <p className="text-sm">fill in your listing address</p>
+            )}
+
             <PlacesAutocomplete
               label={
                 <>
                   Address. <span style={{ color: "red" }}>*</span>
                 </>
               }
+              ref={placeRef}
               setFormattedAddress={setFormattedAddress}
               setCoordinate={setMapCoordinate}
               onFocus={() => {
-                console.log("onFocus");
                 setFormattedAddress("");
                 setMapCoordinate(null);
               }}
@@ -204,183 +261,225 @@ const CreateListing = ({ isVisible }) => {
               <GrValidate className="w-5 h-5 text-green-600 absolute right-2 top-[48px] -translate-y-1/2" />
             )}
           </div>
-          {/* gallery */}
-          <GallerySlider
-            label={
-              <>
-                Images <span style={{ color: "red" }}>*</span>
-              </>
-            }
-            images={images}
-            isPreview={false}
-            disabled={formattedAddress == ""}
-          />
-          {/* List title */}
-          <InputField
-            label={
-              <>
-                List title <span style={{ color: "red" }}>*</span>
-              </>
-            }
-            type="text"
-            value={listTitle}
-            placeholder="e.g. House of fun :)"
-            onChange={(e) => setListTitle(e.target.value)}
-            autoComplete="list_title"
-            error={formValidation.title}
-            disabled={formattedAddress == ""}
-          />
-          <EditField
-            label={
-              <>
-                Description <span style={{ color: "red" }}>*</span>
-              </>
-            }
-            placeholder="Short description"
-            value={listDescription}
-            onChange={(e) => setListDescription(e.target.value)}
-            error={formValidation.description}
-            disabled={formattedAddress == ""}
-          />
-          {/* Type of space */}
-          <MultiSelectTag
-            label={
-              <>
-                Type of space <span style={{ color: "red" }}>*</span>
-              </>
-            }
-            value={storageType}
-            onChange={(selected) => setStorageType(selected)}
-            options={["Garage", "Attic", "Shed", "Room", "Basement", "Others"]}
-            error={formValidation.storageType}
-          />
-          {/* Size */}
-          <InputField
-            label={
-              <>
-                Size <span style={{ color: "red" }}>*</span>
-              </>
-            }
-            type="text"
-            value={listSize}
-            placeholder="Size"
-            onChange={(e) => setListSize(e.target.value)}
-            autoComplete="list_size"
-            error={formValidation.size}
-            disabled={formattedAddress == ""}
-          />
-          {/* Access details */}
-          <SelectField
-            label={
-              <>
-                Access details <span style={{ color: "red" }}>*</span>
-              </>
-            }
-            value={accessDetails}
-            onChange={(selected) => {
-              setAccessDetails(selected.target.value);
-            }}
-            options={["not_set", "24_7", "weekdays_only", "weekends_only"]}
-            error={formValidation.accessDetails}
-            disabled={formattedAddress == ""}
-          />
-          {/* Allowed Storage Type */}
-          <MultiSelectTag
-            label={
-              <>
-                Allowed storage type <span style={{ color: "red" }}>*</span>
-              </>
-            }
-            value={allowedStorage}
-            onChange={(selected) => setAllowedStorage(selected)}
-            options={[
-              "boxes",
-              "bicycle",
-              "car",
-              "motorcycle",
-              "furniture's",
-              "others",
-            ]}
-            error={formValidation.allowedStorageType}
-          />
-          {/* Price type */}
-          <SelectField
-            label={
-              <>
-                Price per <span style={{ color: "red" }}>*</span>
-              </>
-            }
-            value={pricePer}
-            onChange={(selected) => {
-              setPricePer(selected.target.value);
-            }}
-            options={["not_set", "daily", "weekly", "monthly"]}
-            error={formValidation.pricePer}
-            disabled={formattedAddress == ""}
-          />
-          {/* Minimum storage period */}
-          <SelectField
-            label={
-              <>
-                Minimum storage period <span style={{ color: "red" }}>*</span>
-              </>
-            }
-            value={minStoragePeriod}
-            onChange={(selected) => {
-              setMinStoragePeriod(selected.target.value);
-            }}
-            options={["not_set", "days", "1_week", "1_month"]}
-            error={formValidation.minimumStoragePeriod}
-            disabled={formattedAddress == ""}
-          />
-          {/* Availability */}
-          <div className="w-full flex flex-col">
-            <label className="text-base font-medium">
-              Availability / Calendar Blocking{" "}
-              <span style={{ color: "red" }}>*</span>
-            </label>
-            <div className="w-full flex items-center gap-2 mt-1">
-              <DatePickerField
-                name="startDate"
-                value={listingStartDate}
-                onChange={(e) => setListingStartDate(e.target.value)}
-                min="2023-01-01"
-                max="2025-12-31"
-                className="w-1/2"
-                error={formValidation.availability}
-                disabled={formattedAddress == ""}
-              />
 
-              <DatePickerField
-                name="endDate"
-                value={listingEndDate}
-                onChange={(e) => setListingEndDate(e.target.value)}
-                min="2023-01-01"
-                max="2025-12-31"
-                className="w-1/2"
-                error={formValidation.availability}
-                disabled={formattedAddress == ""}
-              />
-            </div>
-          </div>
-          {/* Additional notes */}
-          <EditField
-            label={"Additional notes"}
-            placeholder="Open text"
-            value={additionalNotes}
-            onChange={(e) => setAdditionalNotes(e.target.value)}
-            rows={2}
-            autoComplete="list_additional_notes"
-            error={formValidation.additionalNotes}
-            disabled={formattedAddress == ""}
-          />
-          <PrimaryButton
-            type="submit"
-            onClick={handlePreviewListing}
-            disabled={formattedAddress == "" || mapCoordinate == null}
+          <div
+            className={`${
+              mapCoordinate != null ? "flex flex-col gap-5" : "hidden"
+            }`}
           >
-            Preview listing
-          </PrimaryButton>
+            {/* gallery */}
+            <GallerySlider
+              label={
+                <>
+                  Images <span style={{ color: "red" }}>*</span>
+                </>
+              }
+              ref={galleryRef}
+              images={images}
+              isPreview={false}
+              disabled={formattedAddress == ""}
+            />
+            {/* List title */}
+            <InputField
+              label={
+                <>
+                  List title <span style={{ color: "red" }}>*</span>
+                </>
+              }
+              type="text"
+              value={listTitle}
+              placeholder="e.g. House of fun :)"
+              onChange={(e) => setListTitle(e.target.value)}
+              autoComplete="list_title"
+              error={formValidation.title}
+              disabled={formattedAddress == ""}
+              onFocus={() => clearError("title")}
+            />
+            {/* description */}
+            <EditField
+              label={
+                <>
+                  Description <span style={{ color: "red" }}>*</span>
+                </>
+              }
+              placeholder="Short description"
+              value={listDescription}
+              onChange={(e) => setListDescription(e.target.value)}
+              error={formValidation.description}
+              disabled={formattedAddress == ""}
+              onFocus={() => clearError("description")}
+            />
+            {/* Type of space */}
+            <MultiSelectTag
+              label={
+                <>
+                  Type of space <span style={{ color: "red" }}>*</span>
+                </>
+              }
+              value={storageType}
+              onChange={(selected) => {
+                clearError("storageType");
+                setStorageType(selected);
+              }}
+              options={[
+                "garage",
+                "attic",
+                "shed",
+                "room",
+                "basement",
+                "others",
+              ]}
+              error={formValidation.storageType}
+            />
+            {/* Size */}
+            <InputField
+              label={
+                <>
+                  Size <span style={{ color: "red" }}>*</span>
+                </>
+              }
+              type="text"
+              value={listSize}
+              placeholder="Size"
+              onChange={(e) => setListSize(e.target.value)}
+              autoComplete="list_size"
+              error={formValidation.size}
+              disabled={formattedAddress == ""}
+              onFocus={() => clearError("size")}
+            />
+            {/* Access details */}
+            <SelectField
+              label={
+                <>
+                  Access details <span style={{ color: "red" }}>*</span>
+                </>
+              }
+              value={accessDetails}
+              onChange={(selected) => {
+                clearError("accessDetails");
+                setAccessDetails(selected.target.value);
+              }}
+              options={["not_set", "24_7", "weekdays_only", "weekends_only"]}
+              error={formValidation.accessDetails}
+              disabled={formattedAddress == ""}
+            />
+            {/* Allowed Storage Type */}
+            <MultiSelectTag
+              label={
+                <>
+                  Allowed storage type <span style={{ color: "red" }}>*</span>
+                </>
+              }
+              value={allowedStorage}
+              onChange={(selected) => {
+                clearError("allowedStorageType");
+                setAllowedStorage(selected);
+              }}
+              options={[
+                "boxes",
+                "bicycle",
+                "car",
+                "motorcycle",
+                "furniture",
+                "others",
+              ]}
+              error={formValidation.allowedStorageType}
+            />
+            {/* Price type */}
+            <SelectField
+              label={
+                <>
+                  Price per <span style={{ color: "red" }}>*</span>
+                </>
+              }
+              value={pricePer}
+              onChange={(selected) => {
+                clearError("pricePer");
+                setPricePer(selected.target.value);
+              }}
+              options={["not_set", "daily", "weekly", "monthly"]}
+              error={formValidation.pricePer}
+              disabled={formattedAddress == ""}
+            />
+            {/* Minimum storage period */}
+            <SelectField
+              label={
+                <>
+                  Minimum storage period <span style={{ color: "red" }}>*</span>
+                </>
+              }
+              value={minStoragePeriod}
+              onChange={(selected) => {
+                clearError("minimumStoragePeriod");
+                setMinStoragePeriod(selected.target.value);
+              }}
+              options={[
+                "not_set",
+                "days",
+                "1_week",
+                "2_weeks",
+                "4_weeks",
+                "8_weeks",
+              ]}
+              error={formValidation.minimumStoragePeriod}
+              disabled={formattedAddress == ""}
+            />
+            {/* Availability */}
+            <div className="w-full flex flex-col">
+              <label className="text-base font-medium">
+                Availability / Calendar Blocking{" "}
+                <span style={{ color: "red" }}>*</span>
+              </label>
+              <div className="w-full flex items-center gap-2 mt-1">
+                <DatePickerField
+                  name="startDate"
+                  value={listingStartDate}
+                  onChange={(e) => {
+                    clearError("availability");
+                    setListingStartDate(e.target.value);
+                  }}
+                  min="2023-01-01"
+                  max="2025-12-31"
+                  className="w-1/2"
+                  error={formValidation.availability}
+                  disabled={formattedAddress == ""}
+                />
+
+                <DatePickerField
+                  name="endDate"
+                  value={listingEndDate}
+                  onChange={(e) => {
+                    clearError("availability");
+                    setListingEndDate(e.target.value);
+                  }}
+                  min="2023-01-01"
+                  max="2025-12-31"
+                  className="w-1/2"
+                  error={formValidation.availability}
+                  disabled={formattedAddress == ""}
+                />
+              </div>
+            </div>
+            {/* Additional notes */}
+            <EditField
+              label={"Additional notes"}
+              placeholder="Open text"
+              value={additionalNotes}
+              onChange={(e) => setAdditionalNotes(e.target.value)}
+              rows={2}
+              autoComplete="list_additional_notes"
+              error={formValidation.additionalNotes}
+              disabled={formattedAddress == ""}
+            />
+            <PrimaryButton
+              type="submit"
+              onClick={handlePreviewListing}
+              disabled={formattedAddress == "" || mapCoordinate == null}
+            >
+              Preview listing
+            </PrimaryButton>
+            {/*  */}
+          </div>
         </div>
         <div className="w-full h-10 bg-white"></div>
       </div>

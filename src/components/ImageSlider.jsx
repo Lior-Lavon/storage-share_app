@@ -81,10 +81,10 @@ const ImageSlider = ({ images }) => {
         ref={containerRef}
         className="w-full h-full flex overflow-x-auto scrollbar-hide scroll-smooth"
       >
-        {images.map((src, index) => (
+        {images.map((image, index) => (
           <img
             key={index}
-            src={src}
+            src={image.image}
             alt={`Slide ${index}`}
             className="w-full h-full object-cover flex-shrink-0 rounded-lg"
           />

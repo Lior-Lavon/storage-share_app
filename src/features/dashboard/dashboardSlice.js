@@ -21,6 +21,7 @@ const dashboardSlice = createSlice({
       state.isMyProfile = false;
       state.isSettings = false;
       state.isCreateListing = false;
+      state.isPreviewListing = false;
       state.isCropView = false;
     },
     showProfile: (state, { payload }) => {

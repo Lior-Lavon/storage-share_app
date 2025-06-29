@@ -2,19 +2,26 @@ import { useEffect, useRef, useState } from "react";
 import { TiArrowLeft } from "react-icons/ti";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { showPreviewListing } from "../../features/dashboard/dashboardSlice";
+import {
+  closeAllViews,
+  showCreateListing,
+  showPreviewListing,
+} from "../../features/dashboard/dashboardSlice";
 import { GallerySlider, MapView } from "../../components";
 import PrimaryButton from "../../components/SharedComponents/PrimaryButton";
+import {
+  createListing,
+  getMyListings,
+} from "../../features/listing/listingSlice";
 
 const PreviewListing = ({ isVisible }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { listing } = useSelector((store) => store.listing);
+  console.log("listing : ", listing);
 
   const [height, setHeight] = useState(0);
   const topRef = useRef(null);
-
-  console.log("listing : ", listing);
 
   useEffect(() => {
     const updateHeight = () => {
@@ -49,8 +56,47 @@ const PreviewListing = ({ isVisible }) => {
     // return `${day}/${month}`;
   }
 
-  const publish = () => {
-    console.log("publish");
+  const prepareImagesForUpload = (imageList) => {
+    return imageList.map(({ filename, image }) => {
+      const imageTmp = image.replace(/^data:image\/\w+;base64,/, "");
+      return { filename, image: imageTmp };
+    });
+  };
+
+  const publishListing = () => {
+    console.log("publishListing");
+
+    dispatch(
+      createListing({
+        user_id: listing.userId,
+        images: prepareImagesForUpload(listing.images),
+        title: listing.title,
+        description: listing.description,
+        formatted_address: listing.address,
+        coordinate: listing.coordinate,
+        storage_type: listing.storageType,
+        storage_size: listing.size,
+        storage_access: listing.accessDetails,
+        price_per: listing.pricePer,
+        min_period: listing.minStoragePeriod,
+        availability_from: listing.startDate,
+        availability_to: listing.endDate,
+        additional_note: listing.additionalNotes,
+        allowed_storage: listing.allowedStorage,
+      })
+    )
+      .unwrap()
+      .then(() => {
+        dispatch(closeAllViews());
+        dispatch(
+          getMyListings({
+            user_id: listing?.userId,
+          })
+        );
+      })
+      .catch((err) => {
+        console.error("createListing failed:", err);
+      });
   };
 
   return (
@@ -176,7 +222,7 @@ const PreviewListing = ({ isVisible }) => {
           </div>
           <div className="w-full h-[1px] bg-gray-300"></div>
           <div className="w-full mt-5">
-            <PrimaryButton type="submit" onClick={publish}>
+            <PrimaryButton type="submit" onClick={publishListing}>
               Publish this listing
             </PrimaryButton>
           </div>

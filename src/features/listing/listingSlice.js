@@ -1,11 +1,18 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { validateAddressWithGoogleThunk } from "./listingThunk";
+import { createListingThunk, getMyListingsThunk } from "./listingThunk";
 
-export const validateAddressWithGoogle = createAsyncThunk(
-  "listing/validateAddressWithGoogle",
+export const createListing = createAsyncThunk(
+  "user/createListing",
   async (body, thunkAPI) => {
-    return validateAddressWithGoogleThunk(
-      "/listings/validate_address",
+    return createListingThunk("/listings", body, thunkAPI);
+  }
+);
+
+export const getMyListings = createAsyncThunk(
+  "user/getMyListings",
+  async (body, thunkAPI) => {
+    return getMyListingsThunk(
+      "/listings/?page_size=10&page_id=0",
       body,
       thunkAPI
     );
@@ -15,6 +22,7 @@ export const validateAddressWithGoogle = createAsyncThunk(
 const initialState = {
   isLoading: false,
   listing: null,
+  myListings: null,
 };
 
 const listingSlice = createSlice({
@@ -27,17 +35,31 @@ const listingSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(validateAddressWithGoogle.pending, (state) => {
+      .addCase(createListing.pending, (state) => {
         state.isLoading = true;
-        console.log("validateAddressWithGoogle - pending");
+        console.log("validatecreateListingAddressWithGoogle - pending");
       })
-      .addCase(validateAddressWithGoogle.fulfilled, (state, { payload }) => {
+      .addCase(createListing.fulfilled, (state, { payload }) => {
         state.isLoading = false;
-        console.log("validateAddressWithGoogle - fulfilled : ", payload);
+        console.log("createListing - fulfilled : ", payload);
       })
-      .addCase(validateAddressWithGoogle.rejected, (state, { payload }) => {
+      .addCase(createListing.rejected, (state, { payload }) => {
         state.isLoading = false;
-        console.log("validateAddressWithGoogle - rejected : ", payload);
+        console.log("createListing - rejected : ", payload);
+      })
+
+      .addCase(getMyListings.pending, (state) => {
+        state.isLoading = true;
+        console.log("getMyListings - pending");
+      })
+      .addCase(getMyListings.fulfilled, (state, { payload }) => {
+        state.isLoading = false;
+        state.myListings = payload.listings;
+        console.log("getMyListings - fulfilled : ", payload);
+      })
+      .addCase(getMyListings.rejected, (state, { payload }) => {
+        state.isLoading = false;
+        console.log("getMyListings - rejected : ", payload);
       });
   },
 });

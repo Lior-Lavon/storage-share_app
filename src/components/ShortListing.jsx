@@ -1,20 +1,33 @@
 import React, { useState } from "react";
 import { Switch } from "@headlessui/react";
 
-const ShortListing = () => {
+const ShortListing = ({ listing }) => {
   const [enabled, setEnabled] = useState(false);
+  console.log("listing : ", listing);
+
+  const { title, images, formatted_address } = listing;
+
+  console.log("listing : ", listing);
+
+  const getImageUrl = (imageUrl) => {
+    const baseUrl = import.meta.env.VITE_AWS_S3_LISTING_BUCKET;
+    return `${baseUrl}/${imageUrl}`;
+  };
 
   return (
     <div className="w-full border-1 border-gray-300 rounded-2xl">
       {/* image */}
-      <div className="w-full h-[220px] bg-gray-200 rounded-t-2xl flex justify-center items-center">
-        <p>Image</p>
+      <div className="w-full h-[200px] bg-gray-200 rounded-t-2xl flex justify-center items-center">
+        <img
+          src={getImageUrl(images[0])}
+          className="w-full h-full object-cover rounded-t-2xl"
+        />
       </div>
       {/* description */}
       <div className="w-full h-[190px] flex flex-col justify-center items-center gap-2 px-2">
         {/* title / address */}
-        <p className="w-full text-2xl text-left">Full list title</p>
-        <p className="w-full text-base">Boogschutter 12, Amstelveen</p>
+        <p className="w-full text-2xl text-left">{title}</p>
+        <p className="w-full text-base">{formatted_address}</p>
         {/* price / period */}
         <div className="w-full flex items-center justify-between text-lg">
           {/* price */}

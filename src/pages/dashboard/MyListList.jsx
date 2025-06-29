@@ -1,13 +1,14 @@
 import React, { useEffect, useRef, useState } from "react";
 import { ShortListing } from "../../components";
 import PrimaryButton from "../../components/SharedComponents/PrimaryButton";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { showCreateListing } from "../../features/dashboard/dashboardSlice";
 
 const MyListList = () => {
   const dispatch = useDispatch();
   const [contentHeight, setContentHeight] = useState(null);
   const [tabBarTop, setTabBarTop] = useState(null);
+  const { myListings } = useSelector((store) => store.listing);
   const buttonRef = useRef(null);
   const wrapperRef = useRef(null);
 
@@ -49,9 +50,16 @@ const MyListList = () => {
           height: contentHeight ? `${contentHeight}px` : "auto",
         }}
       >
-        <ShortListing />
-        <ShortListing />
-        <ShortListing />
+        {myListings?.length > 0 ? (
+          myListings?.map((listing, index) => {
+            return <ShortListing key={index} listing={listing} />;
+          })
+        ) : (
+          <div className="w-full h-full flex flex-col items-center justify-center gap-2">
+            <p className="font-bold text-2xl">No listing</p>
+            <p className="text-sm">You have no listing at the moment</p>
+          </div>
+        )}
       </div>
 
       {/* Fixed button — positioned just above the tab bar */}
