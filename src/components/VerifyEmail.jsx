@@ -32,7 +32,7 @@ const VerifyEmail = () => {
         }
       })
       .catch((err) => {
-        console.error("reset password failed:", err);
+        console.error("reset password failed.:", err);
         setVerifyEmail(2);
         setError(err);
 
