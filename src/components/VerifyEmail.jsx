@@ -49,7 +49,7 @@ const VerifyEmail = () => {
     >
       <div>
         {verifyEmail == 0 && (
-          <p className="text-base text-black">verifying ...</p>
+          <p className="text-base text-black">verifying ..</p>
         )}
 
         {verifyEmail == 1 && (
