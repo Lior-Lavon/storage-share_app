@@ -10,9 +10,11 @@ import PrimaryButton from "./SharedComponents/PrimaryButton";
 import { useDispatch } from "react-redux";
 import { showCropImageView } from "../features/dashboard/dashboardSlice";
 import ImageSlider from "./ImageSlider.jsx";
+import { FaRegTrashCan } from "react-icons/fa6";
 
 const GallerySlider = forwardRef(
   ({ label, images, isPreview, rounded = true, disabled = false }, ref) => {
+    const [currentIndex, setCurrentIndex] = useState(0);
     const dispatch = useDispatch();
     // const [showCropper, setShowCropper] = useState(false);
     const [croppedImage, setCroppedImage] = useState(null);
@@ -30,13 +32,22 @@ const GallerySlider = forwardRef(
       }
     }, [images]);
 
+    // useEffect(() => {
+    //   console.log("croppedImage : ", croppedImage);
+    // }, [croppedImage]);
+
+    const handleDeleteImage = () => {
+      const imageToDelete = images[currentIndex];
+      console.log("Deleting image:", imageToDelete?.image); // URL or object
+    };
+
     return (
-      <div>
+      <div className="">
         <label className="text-base font-medium">{label}</label>
         <div
           className={`w-full h-[200px] border border-dotted border-gray-400 mt-1 ${
             rounded ? "rounded-2xl" : ""
-          } flex items-center justify-center bg-gray-100`}
+          } flex items-center justify-center bg-gray-100 relative`}
         >
           <div className="w-full h-full flex flex-col justify-center items-center gap-5 cursor-pointer">
             {croppedImage == null ? (
@@ -60,8 +71,15 @@ const GallerySlider = forwardRef(
                 )}
               </>
             ) : (
-              <ImageSlider images={images} />
+              <ImageSlider images={images} onChange={setCurrentIndex} />
             )}
+          </div>
+
+          <div className="absolute top-2 right-2">
+            <FaRegTrashCan
+              className="w-8 h-8 p-1.5 text-red-500 bg-white rounded-lg cursor-pointer"
+              onClick={handleDeleteImage}
+            />
           </div>
         </div>
         {croppedImage != null && !isPreview && (

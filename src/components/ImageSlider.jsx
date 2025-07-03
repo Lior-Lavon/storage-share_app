@@ -1,13 +1,13 @@
 import React, { useRef, useEffect, useState } from "react";
 
-const ImageSlider = ({ images }) => {
+const ImageSlider = ({ images, onChange }) => {
   const containerRef = useRef(null);
   const scrollTimeout = useRef(null);
   const [activeDot, setActiveDot] = useState(0);
   const [dotCount, setDotCount] = useState(0);
 
   useEffect(() => {
-    setDotCount(images.length);
+    setDotCount(images?.length);
   }, [images]);
 
   const scroll = (direction) => {
@@ -46,6 +46,7 @@ const ImageSlider = ({ images }) => {
         behavior: "smooth",
       });
       setActiveDot(closestIndex); // ✅ Update here after scroll finishes
+      onChange?.(closestIndex);
     }
   };
 
@@ -81,7 +82,7 @@ const ImageSlider = ({ images }) => {
         ref={containerRef}
         className="w-full h-full flex overflow-x-auto scrollbar-hide scroll-smooth"
       >
-        {images.map((image, index) => (
+        {images?.map((image, index) => (
           <img
             key={index}
             src={image.image}

@@ -46,7 +46,7 @@ const PlacesAutocomplete = forwardRef(
 
     // Set initial value on mount or when initialAddress changes
     useEffect(() => {
-      if (initialAddress) {
+      if (initialAddress && ready) {
         setValue(initialAddress, false); // false to avoid fetching suggestions immediately
       }
     }, [initialAddress, setValue]);

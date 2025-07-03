@@ -19,6 +19,21 @@ const PreviewListing = ({ isVisible }) => {
   const navigate = useNavigate();
   const { listing } = useSelector((store) => store.listing);
 
+  const [images, setImages] = useState([]);
+
+  useEffect(() => {
+    if (listing?.id !== undefined) {
+      const baseUrl = import.meta.env.VITE_AWS_S3_LISTING_BUCKET;
+      setImages(
+        listing?.images.map((img) => ({
+          image: `${baseUrl}/${img}`,
+        }))
+      );
+    } else {
+      setImages(listing?.images);
+    }
+  }, [listing]);
+
   const [height, setHeight] = useState(0);
   const topRef = useRef(null);
 
@@ -63,27 +78,10 @@ const PreviewListing = ({ isVisible }) => {
   };
 
   const publishListing = () => {
-    console.log("publishListing");
+    const copyListing = { ...listing };
+    copyListing.images = prepareImagesForUpload(copyListing.images);
 
-    dispatch(
-      createListing({
-        user_id: listing.userId,
-        images: prepareImagesForUpload(listing.images),
-        title: listing.title,
-        description: listing.description,
-        formatted_address: listing.address,
-        coordinate: listing.coordinate,
-        storage_type: listing.storageType,
-        storage_size: listing.size,
-        storage_access: listing.accessDetails,
-        price_per: listing.pricePer,
-        min_period: listing.minStoragePeriod,
-        availability_from: listing.startDate,
-        availability_to: listing.endDate,
-        additional_note: listing.additionalNotes,
-        allowed_storage: listing.allowedStorage,
-      })
-    )
+    dispatch(createListing(copyListing))
       .unwrap()
       .then(() => {
         dispatch(closeAllViews());
@@ -109,20 +107,16 @@ const PreviewListing = ({ isVisible }) => {
       //   touchAction: "none", // stop passive scroll
       // }}
     >
-      <div className="w-full h-screen relative  bg-white">
+      <div className="w-full h-screen relative bg-white">
         {/* back button */}
         <TiArrowLeft
           onClick={() => {
             dispatch(showPreviewListing());
           }}
-          className="absolute top-3 left-4 w-8 h-8 cursor-pointer hover:scale-105 active:scale-95 text-black transition-transform duration-150 z-999"
+          className="absolute top-3 left-4 w-8 h-8 cursor-pointer hover:scale-105 active:scale-95 text-black transition-transform duration-150 z-999 bg-white rounded-full"
         />
 
-        <GallerySlider
-          images={listing?.images}
-          isPreview={true}
-          rounded={false}
-        />
+        <GallerySlider images={images} isPreview={true} rounded={false} />
 
         {/* full list title */}
         <div
@@ -134,7 +128,7 @@ const PreviewListing = ({ isVisible }) => {
             {capitalizeFirst(listing?.title)}
           </p>
           <p className="text-sm tracking-wide">
-            {capitalizeFirst(listing?.address)}
+            {capitalizeFirst(listing?.formatted_address)}
           </p>
           <div className="w-full flex items-center justify-between text-lg">
             {/* price */}
@@ -162,40 +156,38 @@ const PreviewListing = ({ isVisible }) => {
           <div className="w-full">
             <p className="text-sm text-gray-400">Type of Space</p>
             <div className="flex items-center gap-2">
-              {listing?.storageType?.map((item, index) => {
-                return (
-                  <p key={index} className="text-black text-sm">
-                    {capitalizeFirst(item)}
-                  </p>
-                );
-              })}
+              {listing?.storage_type?.map((item, index) => (
+                <span key={index} className="text-black text-sm">
+                  {capitalizeFirst(item)}
+                  {index < listing.storage_type.length - 1 && ", "}
+                </span>
+              ))}
             </div>
           </div>
           {/* access details */}
           <div className="w-full">
             <p className="text-sm text-gray-400">Access details</p>
             <p className="text-black text-sm">
-              {formatLabel(listing?.accessDetails)}
+              {formatLabel(listing?.storage_access)}
             </p>
           </div>
           {/* allowed storage type */}
           <div className="w-full">
             <p className="text-sm text-gray-400">Allowed Storage Types</p>
             <div className="flex items-center gap-2">
-              {listing?.allowedStorage?.map((item, index) => {
-                return (
-                  <p key={index} className="text-black text-sm">
-                    {capitalizeFirst(item)}
-                  </p>
-                );
-              })}
+              {listing?.allowed_storage?.map((item, index) => (
+                <span key={index} className="text-black text-sm">
+                  {capitalizeFirst(item)}
+                  {index < listing.allowed_storage.length - 1 && ", "}
+                </span>
+              ))}
             </div>
           </div>
           {/* access details */}
           <div className="w-full">
             <p className="text-sm text-gray-400">Minimum Booking Duration</p>
             <p className="text-black text-sm">
-              {formatLabel(listing?.minStoragePeriod)}
+              {formatLabel(listing?.min_period)}
             </p>
           </div>
           {/* availability / calendar blocking */}
@@ -205,9 +197,9 @@ const PreviewListing = ({ isVisible }) => {
             </p>
             <p className="text-black text-sm">
               {/* {formatLabel(listing?.minStoragePeriod)} */}
-              {`From: ${formatDate(listing?.startDate)} - To: ${formatDate(
-                listing?.endDate
-              )}`}
+              {`From: ${formatDate(
+                listing?.availability_from
+              )} - To: ${formatDate(listing?.availability_to)}`}
             </p>
           </div>
           {/* Additional notes / Restrictions */}
@@ -216,15 +208,19 @@ const PreviewListing = ({ isVisible }) => {
               Additional notes / Restrictions
             </p>
             <p className="text-black text-sm">
-              {formatLabel(listing?.additionalNotes)}
+              {formatLabel(listing?.additional_note)}
             </p>
           </div>
           <div className="w-full h-[1px] bg-gray-300"></div>
+
           <div className="w-full mt-5">
-            <PrimaryButton type="submit" onClick={publishListing}>
-              Publish this listing
-            </PrimaryButton>
+            {listing?.id == undefined && (
+              <PrimaryButton type="submit" onClick={publishListing}>
+                Publish this listing
+              </PrimaryButton>
+            )}
           </div>
+
           <div className="w-full mt-5">
             <PrimaryButton
               type="submit"

@@ -1,15 +1,43 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Switch } from "@headlessui/react";
+import { FaRegEdit, FaEye } from "react-icons/fa";
+import { useDispatch } from "react-redux";
+import { setListing } from "../features/listing/listingSlice";
+import {
+  showCreateListing,
+  showPreviewListing,
+} from "../features/dashboard/dashboardSlice";
 
 const ShortListing = ({ listing }) => {
+  const dispatch = useDispatch();
   const [enabled, setEnabled] = useState(false);
+  const [editActive, setEditActive] = useState(false);
+  const [viewActive, setViewActive] = useState(false);
 
-  const { title, images, formatted_address } = listing;
+  const { id, title, images, formatted_address } = listing;
 
   const getImageUrl = (imageUrl) => {
     const baseUrl = import.meta.env.VITE_AWS_S3_LISTING_BUCKET;
     return `${baseUrl}/${imageUrl}`;
   };
+
+  useEffect(() => {
+    if (editActive) {
+      setTimeout(() => {
+        setEditActive(false);
+        dispatch(showCreateListing());
+      }, 400);
+    }
+  }, [editActive]);
+
+  useEffect(() => {
+    if (viewActive) {
+      setTimeout(() => {
+        setViewActive(false);
+        dispatch(showPreviewListing());
+      }, 400);
+    }
+  }, [viewActive]);
 
   return (
     <div className="w-full border-1 border-gray-300 rounded-2xl">
@@ -23,7 +51,30 @@ const ShortListing = ({ listing }) => {
       {/* description */}
       <div className="w-full h-[190px] flex flex-col justify-center items-center gap-2 px-2">
         {/* title / address */}
-        <p className="w-full text-2xl text-left">{title}</p>
+        <div className="w-full flex items-center justify-between">
+          <p className="w-full text-2xl text-left">{title}</p>
+          <div className="flex items-center gap-2">
+            <FaRegEdit
+              className={`w-5 h-5 cursor-pointer transition-colors duration-200 ${
+                editActive ? "text-violet-600" : "text-gray-600"
+              }`}
+              onClick={() => {
+                setEditActive(!editActive);
+                dispatch(setListing(listing));
+              }}
+            />
+            <FaEye
+              className={`w-5 h-5 cursor-pointer transition-colors duration-200 ${
+                viewActive ? "text-violet-600" : "text-gray-600"
+              }`}
+              onClick={() => {
+                setViewActive(!viewActive);
+                dispatch(setListing(listing));
+              }}
+            />
+          </div>
+        </div>
+
         <p className="w-full text-base">{formatted_address}</p>
         {/* price / period */}
         <div className="w-full flex items-center justify-between text-lg">

@@ -3,6 +3,7 @@ import { ShortListing } from "../../components";
 import PrimaryButton from "../../components/SharedComponents/PrimaryButton";
 import { useDispatch, useSelector } from "react-redux";
 import { showCreateListing } from "../../features/dashboard/dashboardSlice";
+import { clearListing } from "../../features/listing/listingSlice";
 
 const MyListList = () => {
   const dispatch = useDispatch();
@@ -11,6 +12,10 @@ const MyListList = () => {
   const { myListings } = useSelector((store) => store.listing);
   const buttonRef = useRef(null);
   const wrapperRef = useRef(null);
+
+  useEffect(() => {
+    console.log("MyListList : myListings : ", myListings);
+  }, [myListings]);
 
   useEffect(() => {
     const updateTabBarTop = () => {
@@ -71,7 +76,12 @@ const MyListList = () => {
           top: tabBarTop - 160, // adjust the offset to sit above tab bar
         }}
       >
-        <PrimaryButton onClick={() => dispatch(showCreateListing())}>
+        <PrimaryButton
+          onClick={() => {
+            dispatch(clearListing());
+            dispatch(showCreateListing());
+          }}
+        >
           Create new listing
         </PrimaryButton>
       </div>

@@ -20,7 +20,11 @@ import EditField from "../../components/SharedComponents/EditField";
 import MultiSelectTag from "../../components/SharedComponents/MultiSelectTag";
 import SelectField from "../../components/SharedComponents/SelectField";
 import DatePickerField from "../../components/SharedComponents/DatePickerField";
-import { setListing } from "../../features/listing/listingSlice";
+import {
+  clearListing,
+  setListing,
+  updateListing,
+} from "../../features/listing/listingSlice";
 import MoonLoader from "react-spinners/MoonLoader";
 
 const override = {
@@ -39,7 +43,7 @@ const CreateListing = ({ isVisible }) => {
   const galleryRef = useRef();
   const [height, setHeight] = useState(0);
   const [changePasswordError, setChangePasswordError] = useState(null);
-  const { isLoading } = useSelector((store) => store.listing);
+  const { isLoading, listing } = useSelector((store) => store.listing);
   const { isCropView } = useSelector((store) => store.dashboard);
   const { profile } = useSelector((store) => store.user);
 
@@ -75,6 +79,41 @@ const CreateListing = ({ isVisible }) => {
     availability: false,
   });
 
+  const setDefaultValues = () => {
+    console.log("listing : ", listing);
+
+    setFormattedAddress(listing?.formatted_address || "");
+    if (listing?.formatted_address == undefined) placeRef.current?.clear();
+
+    setMapCoordinate(listing?.coordinate || null);
+
+    // append the S3 bucket
+    if (listing?.formatted_address == undefined) {
+      if (galleryRef.current) {
+        galleryRef.current.reset(); // Clear the image
+      }
+    } else {
+      const baseUrl = import.meta.env.VITE_AWS_S3_LISTING_BUCKET;
+      setImages(
+        listing?.images.map((img) => ({
+          image: `${baseUrl}/${img}`,
+        }))
+      );
+    }
+
+    setListTitle(listing?.title || "");
+    setListDescription(listing?.description || "");
+    setStorageType(listing?.storage_type || []);
+    setAllowedStorage(listing?.allowed_storage || []);
+    setListSize(listing?.storage_size || "");
+    setAccessDetails(listing?.storage_access || "not_set");
+    setPricePer(listing?.price_per || "not_set");
+    setMinStoragePeriod(listing?.min_period || "not_set");
+    setListingStartDate(listing?.availability_from || "");
+    setListingEndDate(listing?.availability_to || "");
+    setAdditionalNotes(listing?.additional_note || "");
+  };
+
   useEffect(() => {
     const updateHeight = () => {
       if (topRef.current) {
@@ -89,29 +128,11 @@ const CreateListing = ({ isVisible }) => {
 
   useEffect(() => {
     if (isVisible) {
-      setImages([]);
-      handleGalleryReset();
-      setListTitle("");
-      setListDescription("");
-      setFormattedAddress("");
-      setMapCoordinate(null);
-      handleAutocompleteClear();
-
-      setStorageType([]);
-      setAllowedStorage([]);
-      setListSize("");
-      setAccessDetails("not_set");
-      setPricePer("not_set");
-      setMinStoragePeriod("not_set");
-      setAdditionalNotes("");
-      setListingStartDate("");
-      setListingEndDate("");
-
-      refresh();
-
       console.log("CreateListing is now visible");
+      setDefaultValues();
     } else {
       console.log("CreateListing is now hidden");
+      dispatch(clearListing());
     }
   }, [isVisible]);
 
@@ -178,39 +199,64 @@ const CreateListing = ({ isVisible }) => {
     setFormValidation(obj);
   };
 
-  const handleAutocompleteClear = () => {
-    placeRef.current?.clear();
-  };
-
-  const handleGalleryReset = () => {
-    if (galleryRef.current) {
-      galleryRef.current.reset(); // Clear the image
-    }
-  };
-
   const handlePreviewListing = () => {
     if (!validation()) return;
 
+    console.log("handlePreviewListing mapCoordinate : ", mapCoordinate);
     dispatch(
       setListing({
-        userId: profile.id,
-        address: formattedAddress,
+        user_id: profile.id,
+        formatted_address: formattedAddress,
         coordinate: mapCoordinate,
         images: images,
         title: listTitle,
         description: listDescription,
-        storageType: storageType,
-        size: listSize,
-        accessDetails: accessDetails,
-        allowedStorage: allowedStorage,
-        pricePer: pricePer,
-        minStoragePeriod: minStoragePeriod,
-        startDate: listingStartDate,
-        endDate: listingEndDate,
-        additionalNotes: additionalNotes,
+        storage_type: storageType,
+        storage_size: listSize,
+        storage_access: accessDetails,
+        allowed_storage: allowedStorage,
+        price_per: pricePer,
+        min_period: minStoragePeriod,
+        availability_from: listingStartDate,
+        availability_to: listingEndDate,
+        additional_note: additionalNotes,
       })
     );
     dispatch(showPreviewListing());
+  };
+
+  const handleUpdateListing = () => {
+    if (!validation()) return;
+
+    dispatch(
+      updateListing({
+        id: listing.id,
+        title: listTitle,
+        description: listDescription,
+        formatted_address: formattedAddress,
+        coordinate: mapCoordinate,
+        storage_type: storageType,
+        storage_size: listSize,
+        storage_access: accessDetails,
+        // price: "bb",
+        price_per: pricePer,
+        // currency: "USD",
+        min_period: minStoragePeriod,
+        availability_from: listingStartDate,
+        availability_to: listingEndDate,
+        additional_note: additionalNotes,
+        allowed_storage: allowedStorage,
+        status: "in_review",
+        images: images,
+      })
+    );
+    // .unwrap()
+    // .then(() => {
+    //   console.log("updateListing - succesfully");
+    // })
+    // .catch((err) => {
+    //   console.log("updateListing - failed");
+    // });
   };
 
   return (
@@ -227,7 +273,7 @@ const CreateListing = ({ isVisible }) => {
       <TopBar
         ref={topRef}
         showBackIcon={hideCreateListingView}
-        title={"New listing"}
+        title={listing?.id == undefined ? "New listing" : "Edit listing"}
       />
       <div
         className="w-full mt-[56px] relative overflow-y-auto bg-white"
@@ -471,13 +517,24 @@ const CreateListing = ({ isVisible }) => {
               error={formValidation.additionalNotes}
               disabled={formattedAddress == ""}
             />
-            <PrimaryButton
-              type="submit"
-              onClick={handlePreviewListing}
-              disabled={formattedAddress == "" || mapCoordinate == null}
-            >
-              Preview listing
-            </PrimaryButton>
+            {listing?.id == undefined ? (
+              <PrimaryButton
+                type="submit"
+                onClick={handlePreviewListing}
+                disabled={formattedAddress == "" || mapCoordinate == null}
+              >
+                Preview listing
+              </PrimaryButton>
+            ) : (
+              <PrimaryButton
+                type="submit"
+                onClick={handleUpdateListing}
+                disabled={formattedAddress == "" || mapCoordinate == null}
+              >
+                Update listing
+              </PrimaryButton>
+            )}
+
             {/*  */}
           </div>
         </div>
