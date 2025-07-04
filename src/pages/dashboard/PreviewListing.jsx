@@ -107,7 +107,7 @@ const PreviewListing = ({ isVisible }) => {
       //   touchAction: "none", // stop passive scroll
       // }}
     >
-      <div className="flex flex-col h-screen bg-white">
+      <div className="flex flex-col h-screen bg-white relative">
         {/* Back button */}
         <TiArrowLeft
           onClick={() => {
@@ -122,7 +122,7 @@ const PreviewListing = ({ isVisible }) => {
         {/* Filler div between slider and button */}
         <div
           ref={topRef}
-          className="mt-4 mb-1 px-4 bg-blue-400 space-y-2 overflow-y-auto"
+          className="mt-4 mb-1 px-4 bg-blue-400 space-y-2 overflow-y-auto hidden"
           style={{ flex: 1 }}
         >
           <p className="font-bold text-xl tracking-wide">
@@ -215,7 +215,7 @@ const PreviewListing = ({ isVisible }) => {
         </div>
 
         {/* Publish button at the bottom */}
-        <div className="w-full px-4 py-2 bg-red-500 shadow-md">
+        <div className="absolute bottom-0 w-full px-4 py-2 bg-red-500 shadow-md">
           <PrimaryButton type="submit" onClick={publishListing}>
             Publish this listing
           </PrimaryButton>
