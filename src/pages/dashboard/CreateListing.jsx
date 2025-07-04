@@ -318,11 +318,10 @@ const CreateListing = ({ isVisible }) => {
       <div className="flex-1 mt-[56px] overflow-y-auto bg-white">
         <div className="flex flex-col gap-5 mt-4 mx-4">
           <div className="w-full relative flex flex-col gap-2">
-            {/* auto complete address */}
-            <p className="font-bold text-lg">Create New Listing</p>
             {mapCoordinate == null && (
               <p className="text-sm">fill in your listing address</p>
             )}
+            {/* auto complete address */}
 
             <PlacesAutocomplete
               label={
