@@ -74,7 +74,7 @@ const ImageSlider = ({ images, onChange }) => {
     <div className="relative w-full h-full rounded-2xl bg-gray-100">
       {images?.length > 1 && (
         <FaCaretLeft
-          className="w-6 h-6 absolute left-[6px] top-1/2 transform -translate-y-1/2 bg-white rounded-lg"
+          className="w-6 h-6 z-100 absolute left-[6px] top-1/2 transform -translate-y-1/2 bg-white rounded-lg"
           onClick={() => scroll("left")}
         />
       )}
@@ -114,7 +114,7 @@ const ImageSlider = ({ images, onChange }) => {
 
       {images?.length > 1 && (
         <FaCaretRight
-          className="w-6 h-6 absolute right-[6px] top-1/2 transform -translate-y-1/2 bg-white rounded-lg"
+          className="w-6 h-6 z-100 absolute right-[6px] top-1/2 transform -translate-y-1/2 bg-white rounded-lg"
           onClick={() => scroll("right")}
         />
       )}
