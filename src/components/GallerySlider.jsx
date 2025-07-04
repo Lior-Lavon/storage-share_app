@@ -16,8 +16,6 @@ const GallerySlider = forwardRef(
     { label, images, isPreview, rounded = true, disabled = false, deleteImage },
     ref
   ) => {
-    console.log("images : ", images);
-
     const [currentIndex, setCurrentIndex] = useState(0);
     const dispatch = useDispatch();
     // const [showCropper, setShowCropper] = useState(false);
@@ -51,7 +49,7 @@ const GallerySlider = forwardRef(
       <div className="">
         <label className="text-base font-medium">{label}</label>
         <div
-          className={`w-full h-[200px] border border-dotted border-gray-400 mt-1 ${
+          className={`w-full h-[200px] border border-dotted border-gray-400 ${
             rounded ? "rounded-2xl" : ""
           } flex items-center justify-center bg-gray-100 relative`}
         >

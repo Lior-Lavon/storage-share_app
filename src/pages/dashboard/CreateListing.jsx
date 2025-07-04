@@ -307,15 +307,15 @@ const CreateListing = ({ isVisible }) => {
         touchAction: "none", // stop passive scroll
       }}
     >
+      {/* Top Bar (static height) */}
       <TopBar
         ref={topRef}
         showBackIcon={hideCreateListingView}
         title={listing?.id == undefined ? "New listing" : "Edit listing"}
       />
-      <div
-        className="w-full mt-[56px] relative overflow-y-auto bg-white"
-        style={{ height: `${height}px` }}
-      >
+
+      {/* Scrollable content that fills the space */}
+      <div className="flex-1 mt-[56px] overflow-y-auto bg-white">
         <div className="flex flex-col gap-5 mt-4 mx-4">
           <div className="w-full relative flex flex-col gap-2">
             {/* auto complete address */}
@@ -555,28 +555,31 @@ const CreateListing = ({ isVisible }) => {
               error={formValidation.additionalNotes}
               disabled={formattedAddress == ""}
             />
-            {listing?.id == undefined ? (
-              <PrimaryButton
-                type="submit"
-                onClick={handlePreviewListing}
-                disabled={formattedAddress == "" || mapCoordinate == null}
-              >
-                Preview listing
-              </PrimaryButton>
-            ) : (
-              <PrimaryButton
-                type="submit"
-                onClick={handleUpdateListing}
-                disabled={formattedAddress == "" || mapCoordinate == null}
-              >
-                Update listing
-              </PrimaryButton>
-            )}
-
-            {/*  */}
           </div>
         </div>
+
         <div className="w-full h-10 bg-white"></div>
+      </div>
+
+      {/* Bottom button */}
+      <div className="w-full px-4 py-2 bg-white">
+        {listing?.id == undefined ? (
+          <PrimaryButton
+            type="submit"
+            onClick={handlePreviewListing}
+            disabled={formattedAddress == "" || mapCoordinate == null}
+          >
+            Preview listing
+          </PrimaryButton>
+        ) : (
+          <PrimaryButton
+            type="submit"
+            onClick={handleUpdateListing}
+            disabled={formattedAddress == "" || mapCoordinate == null}
+          >
+            Update listing
+          </PrimaryButton>
+        )}
       </div>
 
       {isCropView && (

@@ -107,8 +107,8 @@ const PreviewListing = ({ isVisible }) => {
       //   touchAction: "none", // stop passive scroll
       // }}
     >
-      <div className="w-full h-screen relative bg-white">
-        {/* back button */}
+      <div className="flex flex-col h-screen bg-white">
+        {/* Back button */}
         <TiArrowLeft
           onClick={() => {
             dispatch(showPreviewListing());
@@ -116,13 +116,14 @@ const PreviewListing = ({ isVisible }) => {
           className="absolute top-3 left-4 w-8 h-8 cursor-pointer hover:scale-105 active:scale-95 text-black transition-transform duration-150 z-999 bg-white rounded-full"
         />
 
+        {/* Gallery slider */}
         <GallerySlider images={images} isPreview={true} rounded={false} />
 
-        {/* full list title */}
+        {/* Filler div between slider and button */}
         <div
           ref={topRef}
-          className="my-4 px-4 bg-white space-y-2 overflow-y-auto"
-          style={{ height: `${height}px` }}
+          className="mt-4 mb-1 px-4 bg-white space-y-2 overflow-y-auto"
+          style={{ flex: 1 }}
         >
           <p className="font-bold text-xl tracking-wide">
             {capitalizeFirst(listing?.title)}
@@ -211,17 +212,24 @@ const PreviewListing = ({ isVisible }) => {
               {formatLabel(listing?.additional_note)}
             </p>
           </div>
-          <div className="w-full h-[1px] bg-gray-300"></div>
+        </div>
 
-          <div className="w-full mt-5">
-            {listing?.id == undefined && (
-              <PrimaryButton type="submit" onClick={publishListing}>
-                Publish this listing
-              </PrimaryButton>
-            )}
-          </div>
+        {/* Publish button at the bottom */}
+        <div className="mb-1 w-full max-w-[95%] mx-auto bg-white">
+          <div className="w-full h-[1px] mb-2 bg-gray-300"></div>
+          <PrimaryButton type="submit" onClick={publishListing}>
+            Publish this listing
+          </PrimaryButton>
+        </div>
+      </div>
+    </div>
+  );
+};
 
-          <div className="w-full mt-5">
+export default PreviewListing;
+
+{
+  /* <div className="w-full mt-5">
             <PrimaryButton
               type="submit"
               bgColor={"bg-white"}
@@ -233,12 +241,5 @@ const PreviewListing = ({ isVisible }) => {
             >
               Back to edit this listing
             </PrimaryButton>
-          </div>
-          <div className="w-full h-10 bg-white"></div>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-export default PreviewListing;
+          </div> */
+}
