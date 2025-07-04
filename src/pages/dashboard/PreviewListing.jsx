@@ -140,7 +140,7 @@ const PreviewListing = ({ isVisible }) => {
         {/* Filler div between slider and button */}
         <div
           ref={contentRef}
-          className="mt-4 mb-1 px-4 bg-blue-400 space-y-2 overflow-y-auto"
+          className="mt-4 mb-1 px-4 bg-white space-y-2 overflow-y-auto"
           // style={{ flex: 1 }}
           style={{ height: viewHeight }}
         >
@@ -238,7 +238,7 @@ const PreviewListing = ({ isVisible }) => {
         {/* Publish button at the bottom */}
         <div
           ref={bottomRef}
-          className="absolute bottom-0 w-full px-4 py-2 bg-red-500 shadow-md"
+          className="absolute bottom-0 w-full px-4 py-2 bg-white shadow-md"
         >
           <PrimaryButton type="submit" onClick={publishListing}>
             Publish this listing
