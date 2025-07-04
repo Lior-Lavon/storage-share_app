@@ -25,6 +25,7 @@ const ShortListing = ({ listing }) => {
     if (editActive) {
       setTimeout(() => {
         setEditActive(false);
+        dispatch(setListing(listing));
         dispatch(showCreateListing());
       }, 400);
     }
@@ -60,7 +61,6 @@ const ShortListing = ({ listing }) => {
               }`}
               onClick={() => {
                 setEditActive(!editActive);
-                dispatch(setListing(listing));
               }}
             />
             <FaEye

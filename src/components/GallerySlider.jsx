@@ -6,14 +6,18 @@ import React, {
 } from "react";
 import { CiImageOn } from "react-icons/ci";
 import { FiPlus } from "react-icons/fi";
-import PrimaryButton from "./SharedComponents/PrimaryButton";
 import { useDispatch } from "react-redux";
 import { showCropImageView } from "../features/dashboard/dashboardSlice";
 import ImageSlider from "./ImageSlider.jsx";
 import { FaRegTrashCan } from "react-icons/fa6";
 
 const GallerySlider = forwardRef(
-  ({ label, images, isPreview, rounded = true, disabled = false }, ref) => {
+  (
+    { label, images, isPreview, rounded = true, disabled = false, deleteImage },
+    ref
+  ) => {
+    console.log("images : ", images);
+
     const [currentIndex, setCurrentIndex] = useState(0);
     const dispatch = useDispatch();
     // const [showCropper, setShowCropper] = useState(false);
@@ -38,7 +42,9 @@ const GallerySlider = forwardRef(
 
     const handleDeleteImage = () => {
       const imageToDelete = images[currentIndex];
-      console.log("Deleting image:", imageToDelete?.image); // URL or object
+      if (deleteImage != undefined) {
+        deleteImage(imageToDelete?.image);
+      }
     };
 
     return (
@@ -76,10 +82,12 @@ const GallerySlider = forwardRef(
           </div>
 
           <div className="absolute top-2 right-2">
-            <FaRegTrashCan
-              className="w-8 h-8 p-1.5 text-red-500 bg-white rounded-lg cursor-pointer"
-              onClick={handleDeleteImage}
-            />
+            {images?.length > 0 && (
+              <FaRegTrashCan
+                className="w-8 h-8 p-1.5 text-red-500 bg-white rounded-lg cursor-pointer"
+                onClick={handleDeleteImage}
+              />
+            )}
           </div>
         </div>
         {croppedImage != null && !isPreview && (

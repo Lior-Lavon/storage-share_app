@@ -22,8 +22,10 @@ import SelectField from "../../components/SharedComponents/SelectField";
 import DatePickerField from "../../components/SharedComponents/DatePickerField";
 import {
   clearListing,
+  deleteListingImage,
   setListing,
   updateListing,
+  updateListingImage,
 } from "../../features/listing/listingSlice";
 import MoonLoader from "react-spinners/MoonLoader";
 
@@ -79,8 +81,16 @@ const CreateListing = ({ isVisible }) => {
     availability: false,
   });
 
+  useEffect(() => {
+    console.log("CreateListing : ", listing);
+
+    setDefaultValues();
+  }, [listing]);
+
   const setDefaultValues = () => {
     console.log("listing : ", listing);
+    galleryRef?.current?.reset(); // Clear the image
+    setImages([]);
 
     setFormattedAddress(listing?.formatted_address || "");
     if (listing?.formatted_address == undefined) placeRef.current?.clear();
@@ -90,7 +100,7 @@ const CreateListing = ({ isVisible }) => {
     // append the S3 bucket
     if (listing?.formatted_address == undefined) {
       if (galleryRef.current) {
-        galleryRef.current.reset(); // Clear the image
+        galleryRef?.current?.reset(); // Clear the image
       }
     } else {
       const baseUrl = import.meta.env.VITE_AWS_S3_LISTING_BUCKET;
@@ -132,6 +142,7 @@ const CreateListing = ({ isVisible }) => {
       setDefaultValues();
     } else {
       console.log("CreateListing is now hidden");
+      galleryRef?.current?.reset(); // Clear the image
       dispatch(clearListing());
     }
   }, [isVisible]);
@@ -142,13 +153,27 @@ const CreateListing = ({ isVisible }) => {
   };
 
   const handleCropped = (base64) => {
-    setImages((prevImages) => [
-      ...prevImages,
-      {
-        filename: "image.jpg",
-        image: base64,
-      },
-    ]);
+    if (listing?.id == undefined) {
+      // on create
+      setImages((prevImages) => [
+        ...prevImages,
+        {
+          filename: "image.jpg",
+          image: base64,
+        },
+      ]);
+    } else {
+      // on edit
+      dispatch(
+        updateListingImage({
+          listing_id: listing?.id,
+          image: {
+            filename: "image.jpg",
+            image: base64.substring("data:image/jpeg;base64,".length),
+          },
+        })
+      );
+    }
   };
 
   const validation = () => {
@@ -259,6 +284,18 @@ const CreateListing = ({ isVisible }) => {
     // });
   };
 
+  const handleDeleteImage = (imageUrl) => {
+    if (listing?.id != undefined) {
+      const baseUrl = import.meta.env.VITE_AWS_S3_LISTING_BUCKET;
+      dispatch(
+        deleteListingImage({
+          listing_id: listing?.id,
+          image_url: imageUrl?.replace(baseUrl + "/", ""),
+        })
+      );
+    }
+  };
+
   return (
     <div
       className={`w-full h-full z-100 fixed top-0 right-0 transition-transform duration-500 flex flex-col bg-gray-100 ${
@@ -323,6 +360,7 @@ const CreateListing = ({ isVisible }) => {
               ref={galleryRef}
               images={images}
               isPreview={false}
+              deleteImage={handleDeleteImage}
               disabled={formattedAddress == ""}
             />
             {/* List title */}

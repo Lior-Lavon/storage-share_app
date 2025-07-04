@@ -1,4 +1,6 @@
 import React, { useRef, useEffect, useState } from "react";
+import { FaCaretRight } from "react-icons/fa";
+import { FaCaretLeft } from "react-icons/fa6";
 
 const ImageSlider = ({ images, onChange }) => {
   const containerRef = useRef(null);
@@ -70,13 +72,12 @@ const ImageSlider = ({ images, onChange }) => {
 
   return (
     <div className="relative w-full h-full rounded-2xl bg-gray-100">
-      <button
-        onClick={() => scroll("left")}
-        type="button"
-        className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-transparent shadow px-2 py-1 z-10"
-      >
-        ◀
-      </button>
+      {images?.length > 1 && (
+        <FaCaretLeft
+          className="w-6 h-6 absolute left-[6px] top-1/2 transform -translate-y-1/2 bg-white rounded-lg"
+          onClick={() => scroll("left")}
+        />
+      )}
 
       <div
         ref={containerRef}
@@ -111,13 +112,12 @@ const ImageSlider = ({ images, onChange }) => {
         )}
       </div>
 
-      <button
-        onClick={() => scroll("right")}
-        type="button"
-        className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-transparent shadow px-2 py-1 z-10"
-      >
-        ▶
-      </button>
+      {images?.length > 1 && (
+        <FaCaretRight
+          className="w-6 h-6 absolute right-[6px] top-1/2 transform -translate-y-1/2 bg-white rounded-lg"
+          onClick={() => scroll("right")}
+        />
+      )}
     </div>
   );
 };

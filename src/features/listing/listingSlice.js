@@ -3,6 +3,7 @@ import {
   createListingThunk,
   deleteListingsImageThunk,
   getMyListingsThunk,
+  updateListingsImageThunk,
   updateListingThunk,
 } from "./listingThunk";
 
@@ -22,10 +23,19 @@ export const updateListing = createAsyncThunk(
   }
 );
 
+export const updateListingImage = createAsyncThunk(
+  "user/updateListingImage",
+  async (body, thunkAPI) => {
+    console.log("body : ", body);
+
+    return updateListingsImageThunk("/listings/image", body, thunkAPI);
+  }
+);
+
 export const deleteListingImage = createAsyncThunk(
   "user/deleteListingImage",
   async (body, thunkAPI) => {
-    return deleteListingsImageThunk("/listings/delete_image", body, thunkAPI);
+    return deleteListingsImageThunk("/listings/image", body, thunkAPI);
   }
 );
 
@@ -71,7 +81,9 @@ const listingSlice = createSlice({
         state.isLoading = false;
         console.log("createListing - rejected : ", payload);
       })
+
       // ------------------------------------------------------------------
+
       .addCase(updateListing.pending, (state) => {
         state.isLoading = true;
         console.log("updateListing - pending");
@@ -93,6 +105,30 @@ const listingSlice = createSlice({
       })
 
       // ------------------------------------------------------------------
+      .addCase(updateListingImage.pending, (state) => {
+        state.isLoading = true;
+        console.log("updateListingImage - pending");
+      })
+      .addCase(updateListingImage.fulfilled, (state, { payload }) => {
+        console.log("updateListingImage - fulfilled : ", payload);
+
+        return {
+          ...state,
+          isLoading: false,
+          listing: { ...state.listing, images: payload.images },
+          myListings: state.myListings?.map((item) =>
+            item.id === payload?.listing_id
+              ? { ...item, images: payload.images }
+              : item
+          ),
+        };
+      })
+      .addCase(updateListingImage.rejected, (state, { payload }) => {
+        state.isLoading = false;
+        console.log("updateListingImage - rejected : ", payload);
+      })
+
+      // ------------------------------------------------------------------
       .addCase(deleteListingImage.pending, (state) => {
         state.isLoading = true;
         console.log("deleteListingImage - pending");
@@ -103,9 +139,10 @@ const listingSlice = createSlice({
         return {
           ...state,
           isLoading: false,
-          myListings: state.myListings.map((item) =>
-            item.objId === payload.listing_id
-              ? { ...item, images: payload }
+          listing: { ...state.listing, images: payload.images },
+          myListings: state.myListings?.map((item) =>
+            item.id === payload?.listing_id
+              ? { ...item, images: payload.images }
               : item
           ),
         };
@@ -118,13 +155,13 @@ const listingSlice = createSlice({
       // ------------------------------------------------------------------
       .addCase(getMyListings.pending, (state) => {
         state.isLoading = true;
-        console.log("getMyListings - pending");
+        // console.log("getMyListings - pending");
       })
       .addCase(getMyListings.fulfilled, (state, { payload }) => {
         state.isLoading = false;
         state.myListings = payload.listings;
 
-        console.log("getMyListings - fulfilled : ", payload);
+        // console.log("getMyListings - fulfilled : ", payload);
       })
       .addCase(getMyListings.rejected, (state, { payload }) => {
         state.isLoading = false;
