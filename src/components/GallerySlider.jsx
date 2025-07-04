@@ -2,6 +2,7 @@ import React, {
   forwardRef,
   useEffect,
   useImperativeHandle,
+  useRef,
   useState,
 } from "react";
 import { CiImageOn } from "react-icons/ci";
@@ -21,10 +22,11 @@ const GallerySlider = forwardRef(
     // const [showCropper, setShowCropper] = useState(false);
     const [croppedImage, setCroppedImage] = useState(null);
 
+    const rootRef = useRef(null);
+
     useImperativeHandle(ref, () => ({
-      reset: () => {
-        setCroppedImage(null);
-      },
+      reset: () => setCroppedImage(null),
+      getBoundingClientRect: () => rootRef.current?.getBoundingClientRect(),
     }));
 
     useEffect(() => {
@@ -46,7 +48,7 @@ const GallerySlider = forwardRef(
     };
 
     return (
-      <div className="">
+      <div ref={rootRef} className="">
         <label className="text-base font-medium">{label}</label>
         <div
           className={`w-full h-[200px] border border-dotted border-gray-400 ${

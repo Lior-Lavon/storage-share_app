@@ -15,6 +15,9 @@ import {
 } from "../../features/listing/listingSlice";
 
 const PreviewListing = ({ isVisible }) => {
+  const galleryRef = useRef(null);
+  const bottomRef = useRef(null);
+  const contentRef = useRef(null);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { listing } = useSelector((store) => store.listing);
@@ -34,19 +37,29 @@ const PreviewListing = ({ isVisible }) => {
     }
   }, [listing]);
 
-  const [height, setHeight] = useState(0);
-  const topRef = useRef(null);
+  const [viewHeight, setViewHeight] = useState(0);
 
   useEffect(() => {
     const updateHeight = () => {
-      if (topRef.current) {
-        const topBottom = topRef.current.getBoundingClientRect().bottom;
-        let bottomTop = window.innerHeight;
-        setHeight(bottomTop - topBottom);
+      if (contentRef.current && galleryRef.current && bottomRef.current) {
+        const topBottom = galleryRef.current.getBoundingClientRect().bottom;
+        console.log("topBottom : ", topBottom);
+
+        const bottomTop = bottomRef.current.getBoundingClientRect().top;
+        console.log("bottomTop : ", bottomTop);
+
+        const availableHeight = bottomTop - topBottom - 17;
+        console.log("availableHeight : ", availableHeight);
+
+        setViewHeight(availableHeight);
       }
     };
 
-    updateHeight(); // Call once on mount
+    updateHeight(); // Initial call
+
+    // Recalculate on window resize
+    window.addEventListener("resize", updateHeight);
+    return () => window.removeEventListener("resize", updateHeight);
   }, []);
 
   function capitalizeFirst(text) {
@@ -117,13 +130,19 @@ const PreviewListing = ({ isVisible }) => {
         />
 
         {/* Gallery slider */}
-        <GallerySlider images={images} isPreview={true} rounded={false} />
+        <GallerySlider
+          ref={galleryRef}
+          images={images}
+          isPreview={true}
+          rounded={false}
+        />
 
         {/* Filler div between slider and button */}
         <div
-          ref={topRef}
-          className="mt-4 mb-1 px-4 bg-blue-400 space-y-2 overflow-y-auto hidden"
-          style={{ flex: 1 }}
+          ref={contentRef}
+          className="mt-4 mb-1 px-4 bg-blue-400 space-y-2 overflow-y-auto"
+          // style={{ flex: 1 }}
+          style={{ height: viewHeight }}
         >
           <p className="font-bold text-xl tracking-wide">
             {capitalizeFirst(listing?.title)}
@@ -212,10 +231,15 @@ const PreviewListing = ({ isVisible }) => {
               {formatLabel(listing?.additional_note)}
             </p>
           </div>
+
+          <div className="w-full h-10 bg-white"></div>
         </div>
 
         {/* Publish button at the bottom */}
-        <div className="absolute bottom-0 w-full px-4 py-2 bg-red-500 shadow-md">
+        <div
+          ref={bottomRef}
+          className="absolute bottom-0 w-full px-4 py-2 bg-red-500 shadow-md"
+        >
           <PrimaryButton type="submit" onClick={publishListing}>
             Publish this listing
           </PrimaryButton>
