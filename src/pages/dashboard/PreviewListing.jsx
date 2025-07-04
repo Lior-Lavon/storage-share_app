@@ -13,6 +13,7 @@ import {
   createListing,
   getMyListings,
 } from "../../features/listing/listingSlice";
+import useViewportHeight from "../../utils/useViewportHeight";
 
 const PreviewListing = ({ isVisible }) => {
   const galleryRef = useRef(null);
@@ -39,28 +40,52 @@ const PreviewListing = ({ isVisible }) => {
 
   const [viewHeight, setViewHeight] = useState(0);
 
-  useEffect(() => {
-    const updateHeight = () => {
-      if (contentRef.current && galleryRef.current && bottomRef.current) {
-        const topBottom = galleryRef.current.getBoundingClientRect().bottom;
-        console.log("topBottom : ", topBottom);
+  // useEffect(() => {
+  const updateHeight = () => {
+    console.log("updateHeight");
+    console.log("contentRef.current : ", contentRef.current);
+    console.log("galleryRef.current : ", galleryRef.current);
+    console.log("bottomRef.current : ", bottomRef.current);
 
-        const bottomTop = bottomRef.current.getBoundingClientRect().top;
-        console.log("bottomTop : ", bottomTop);
+    if (contentRef.current && galleryRef.current) {
+      const topBottom = galleryRef.current.getBoundingClientRect().bottom;
+      console.log("topBottom : ", topBottom);
 
-        const availableHeight = bottomTop - topBottom - 17;
-        console.log("availableHeight : ", availableHeight);
-
-        setViewHeight(availableHeight);
+      let bottomTop = 0;
+      if (bottomRef.current != null) {
+        bottomTop = bottomRef.current.getBoundingClientRect().top;
+      } else {
+        bottomTop = window.innerHeight;
       }
-    };
 
-    updateHeight(); // Initial call
+      console.log("bottomTop : ", bottomTop);
 
-    // Recalculate on window resize
-    window.addEventListener("resize", updateHeight);
-    return () => window.removeEventListener("resize", updateHeight);
-  }, []);
+      const availableHeight = bottomTop - topBottom - 17;
+      console.log("availableHeight : ", availableHeight);
+
+      setViewHeight(availableHeight);
+    }
+  };
+
+  //   updateHeight(); // Initial call
+
+  //   // Recalculate on window resize
+  //   window.addEventListener("resize", updateHeight);
+  //   return () => window.removeEventListener("resize", updateHeight);
+  // }, []);
+
+  useEffect(() => {
+    console.log("isVisible : ", isVisible);
+
+    if (isVisible) {
+      console.log("PreviewListing is now visible");
+      updateHeight();
+    } else {
+      console.log("PreviewListing is now hidden");
+      // galleryRef?.current?.reset(); // Clear the image
+      // dispatch(clearListing());
+    }
+  }, [isVisible]);
 
   function capitalizeFirst(text) {
     return text?.charAt(0).toUpperCase() + text?.slice(1);
@@ -141,7 +166,6 @@ const PreviewListing = ({ isVisible }) => {
         <div
           ref={contentRef}
           className="mt-4 mb-1 px-4 bg-white space-y-2 overflow-y-auto"
-          // style={{ flex: 1 }}
           style={{ height: viewHeight }}
         >
           <p className="font-bold text-xl tracking-wide">
@@ -236,14 +260,16 @@ const PreviewListing = ({ isVisible }) => {
         </div>
 
         {/* Publish button at the bottom */}
-        <div
-          ref={bottomRef}
-          className="absolute bottom-0 w-full px-4 py-2 bg-white shadow-md"
-        >
-          <PrimaryButton type="submit" onClick={publishListing}>
-            Publish this listing
-          </PrimaryButton>
-        </div>
+        {listing?.id == undefined && (
+          <div
+            ref={bottomRef}
+            className="absolute bottom-0 w-full px-4 py-2 bg-white shadow-md"
+          >
+            <PrimaryButton type="submit" onClick={publishListing}>
+              Publish this listing
+            </PrimaryButton>
+          </div>
+        )}
       </div>
     </div>
   );
