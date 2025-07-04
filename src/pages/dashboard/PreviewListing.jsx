@@ -122,7 +122,7 @@ const PreviewListing = ({ isVisible }) => {
         {/* Filler div between slider and button */}
         <div
           ref={topRef}
-          className="mt-4 mb-1 px-4 bg-white space-y-2 overflow-y-auto"
+          className="mt-4 mb-1 px-4 bg-white space-y-2 overflow-y-auto hidden"
           style={{ flex: 1 }}
         >
           <p className="font-bold text-xl tracking-wide">
