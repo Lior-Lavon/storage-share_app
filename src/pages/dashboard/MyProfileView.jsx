@@ -18,9 +18,6 @@ import {
 } from "../../features/user/userSlice";
 import { useNavigate } from "react-router-dom";
 
-import womanAvatar from "../../assets/womanAvatar.png";
-import ImageCrop from "../../components/ImageCrop";
-
 const titleOptions = [
   { value: "not_set", label: "not set" },
   { value: "mr", label: "mr" },

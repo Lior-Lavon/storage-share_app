@@ -92,23 +92,40 @@ const ImageCropper = ({
           className="hidden"
           onChange={handleFileChange}
         />
-        <input
+        {/* <input
           ref={inputCameraRef}
           type="file"
           accept="image/*"
           capture="environment"
           className="hidden"
           onChange={handleFileChange}
+        /> */}
+        {/* Camera Input (Android-friendly) */}
+        <input
+          ref={inputCameraRef}
+          type="file"
+          accept="image/*"
+          capture
+          className="hidden"
+          onChange={handleFileChange}
         />
 
         {!imageSrc && (
-          <div className="w-full flex flex-col items-center gap-5">
-            <p className="font-bold text-left">Upload or Take Photo</p>
-            <div className="flex flex-col gap-5 w-[250px]">
-              <PrimaryButton onClick={() => inputRef.current.click()}>
-                Select
-              </PrimaryButton>
-            </div>
+          // <div className="w-full flex flex-col items-center gap-5">
+          //   <p className="font-bold text-left">Upload or Take Photo</p>
+          //   <div className="flex flex-col gap-5 w-[250px]">
+          //     <PrimaryButton onClick={() => inputRef.current.click()}>
+          //       Select
+          //     </PrimaryButton>
+          //   </div>
+          // </div>
+          <div className="flex flex-col gap-5 w-[250px]">
+            <PrimaryButton onClick={() => inputRef.current.click()}>
+              Select from Gallery
+            </PrimaryButton>
+            <PrimaryButton onClick={() => inputCameraRef.current.click()}>
+              Take Photo
+            </PrimaryButton>
           </div>
         )}
 
