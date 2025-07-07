@@ -2,6 +2,7 @@ import React, { useState, useCallback, useRef } from "react";
 import Cropper from "react-easy-crop";
 import getCroppedImg from "../utils/cropImage";
 import PrimaryButton from "./SharedComponents/PrimaryButton";
+import { getMobileOS } from "../utils/getMobileOS";
 
 const ImageCropper = ({
   closeModal,
@@ -13,6 +14,7 @@ const ImageCropper = ({
   const [crop, setCrop] = useState({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
   const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
+  const os = getMobileOS();
 
   const IMAGE_WIDTH = 800;
   const IMAGE_HEIGHT = 800;
@@ -112,16 +114,19 @@ const ImageCropper = ({
           onChange={handleFileChange}
         />
 
-        {!imageSrc && (
-          // <div className="w-full flex flex-col items-center gap-5">
-          //   <p className="font-bold text-left">Upload or Take Photo</p>
-          //   <div className="flex flex-col gap-5 w-[250px]">
-          //     <PrimaryButton onClick={() => inputRef.current.click()}>
-          //       Select
-          //     </PrimaryButton>
-          //   </div>
-          // </div>
-          <div className="flex flex-col gap-5 w-full">
+        {/* {!imageSrc && (
+          if (os === "iOS") {
+                <div className="w-full flex flex-col items-center gap-5">
+            <p className="font-bold text-left">Upload or Take Photo</p>
+            <div className="flex flex-col gap-5 w-[250px]">
+              <PrimaryButton onClick={() => inputRef.current.click()}>
+                Select
+              </PrimaryButton>
+            </div>
+          </div>
+
+    } else if (os === "Android") {
+      <div className="flex flex-col gap-5 w-full">
             <PrimaryButton onClick={() => inputRef.current.click()}>
               Select from Gallery
             </PrimaryButton>
@@ -129,7 +134,39 @@ const ImageCropper = ({
               Take Photo
             </PrimaryButton>
           </div>
-        )}
+    }
+          
+        )} */}
+
+        {!imageSrc &&
+          (() => {
+            if (os === "iOS") {
+              return (
+                <div className="w-full flex flex-col items-center gap-5">
+                  <p className="font-bold text-left">Upload or Take Photo</p>
+                  <p className="w-full text-center">{`OS : ${os}`}</p>
+                  <div className="flex flex-col gap-5 w-[250px]">
+                    <PrimaryButton onClick={() => inputRef.current.click()}>
+                      Select
+                    </PrimaryButton>
+                  </div>
+                </div>
+              );
+            } else if (os === "Android") {
+              return (
+                <div className="flex flex-col gap-5 w-full">
+                  <p className="font-bold text-left">Upload or Take Photo</p>
+                  <p className="w-full text-center">{`OS : ${os}`}</p>
+                  <PrimaryButton onClick={() => inputRef.current.click()}>
+                    Select from Gallery
+                  </PrimaryButton>
+                  <PrimaryButton onClick={() => inputCameraRef.current.click()}>
+                    Take Photo
+                  </PrimaryButton>
+                </div>
+              );
+            }
+          })()}
 
         {imageSrc && (
           <div className="relative w-full h-[400px] bg-black rounded overflow-hidden">
