@@ -407,7 +407,7 @@ const MyProfileView = ({ isVisible }) => {
 
       {confirmationDialog && (
         <div
-          className="w-full h-screen absolute top-0 z-100 flex items-center justify-center"
+          className="w-full h-screen absolute top-0 z-100 flex items-center justify-center bg-gray-500/50"
           onClick={() => {
             setConfirmationDialog(false);
           }}
@@ -419,24 +419,26 @@ const MyProfileView = ({ isVisible }) => {
             }}
           >
             <div className="flex flex-col gap-1 text-left p-4">
-              <p className="font-bold text-lg">Delete Account</p>
-              <p>Are you sure ?</p>
-              <div className="w-full flex justify-around gap-2 mt-4 text-white">
+              <p className="font-bold text-lg text-center">Delete Account</p>
+              <p className="text-center">
+                Are you sure you want to delete the account ?
+              </p>
+              <div className="w-full flex flex-col items-center justify-around gap-2 mt-4 text-white">
                 <button
                   onClick={() => {
                     handleDeleteAccount();
                   }}
-                  className="w-[50%] py-2 rounded-xl bg-red-500 "
+                  className="w-[90%] py-2 rounded-xl bg-white border border-red-500 text-red-500"
                 >
-                  Yes
+                  Yes, I want to delete
                 </button>
                 <button
                   onClick={() => {
                     setConfirmationDialog(false);
                   }}
-                  className="w-[50%] rounded-xl bg-gray-500"
+                  className="w-[90%] py-2 rounded-xl bg-white border border-gray-500 text-violet-600"
                 >
-                  No
+                  Cancel
                 </button>
               </div>
             </div>

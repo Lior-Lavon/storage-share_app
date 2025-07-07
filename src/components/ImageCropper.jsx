@@ -114,37 +114,13 @@ const ImageCropper = ({
           onChange={handleFileChange}
         />
 
-        {/* {!imageSrc && (
-          if (os === "iOS") {
-                <div className="w-full flex flex-col items-center gap-5">
-            <p className="font-bold text-left">Upload or Take Photo</p>
-            <div className="flex flex-col gap-5 w-[250px]">
-              <PrimaryButton onClick={() => inputRef.current.click()}>
-                Select
-              </PrimaryButton>
-            </div>
-          </div>
-
-    } else if (os === "Android") {
-      <div className="flex flex-col gap-5 w-full">
-            <PrimaryButton onClick={() => inputRef.current.click()}>
-              Select from Gallery
-            </PrimaryButton>
-            <PrimaryButton onClick={() => inputCameraRef.current.click()}>
-              Take Photo
-            </PrimaryButton>
-          </div>
-    }
-          
-        )} */}
-
         {!imageSrc &&
           (() => {
             if (os === "iOS") {
               return (
                 <div className="w-full flex flex-col items-center gap-5">
                   <p className="font-bold text-left">Upload or Take Photo</p>
-                  <p className="w-full text-center">{`OS : ${os}`}</p>
+                  {/* <p className="w-full text-center">{`OS : ${os}`}</p> */}
                   <div className="flex flex-col gap-5 w-[250px]">
                     <PrimaryButton onClick={() => inputRef.current.click()}>
                       Select
@@ -156,7 +132,7 @@ const ImageCropper = ({
               return (
                 <div className="flex flex-col gap-5 w-full">
                   <p className="font-bold text-left">Upload or Take Photo</p>
-                  <p className="w-full text-center">{`OS : ${os}`}</p>
+                  {/* <p className="w-full text-center">{`OS : ${os}`}</p> */}
                   <PrimaryButton onClick={() => inputRef.current.click()}>
                     Select from Gallery
                   </PrimaryButton>
