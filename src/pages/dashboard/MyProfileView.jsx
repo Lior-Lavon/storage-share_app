@@ -190,6 +190,9 @@ const MyProfileView = ({ isVisible }) => {
   };
 
   function blobToBase64(blob) {
+    console.log(blob instanceof Blob); // should be true
+    console.log(blob); // inspect the actual object
+
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
       reader.onloadend = () => resolve(reader.result);
@@ -197,6 +200,35 @@ const MyProfileView = ({ isVisible }) => {
       reader.readAsDataURL(blob); // produces base64 string
     });
   }
+
+  const handleCropped = (base64) => {
+    console.log("handleCropped");
+
+    dispatch(
+      uploadAvatar({
+        filename: "image.jpg",
+        image: base64.substring("data:image/jpeg;base64,".length),
+      })
+    )
+      .unwrap()
+      .then(() => {
+        console.log("uploadAvatar success");
+        setCropModel(!cropModel);
+      })
+      .catch((err) => {
+        console.error("uploadAvatar failed:", err);
+      });
+  };
+
+  //     dispatch(uploadAvatar(fd))
+  // .unwrap()
+  // .then(() => {
+  //   console.log("uploadAvatar success");
+  //   setCropModel(!cropModel);
+  // })
+  // .catch((err) => {
+  //   console.error("uploadAvatar failed:", err);
+  // });
 
   return (
     <div
@@ -374,25 +406,29 @@ const MyProfileView = ({ isVisible }) => {
           closeModal={() => {
             setCropModel(!cropModel);
           }}
-          onCropped={(blob) => {
-            blobToBase64(blob).then((base64String) => {
-              const fd = new FormData();
-              fd.append("filename", "cropped.jpg");
-              fd.append(
-                "body",
-                base64String.substring("data:image/jpeg;base64,".length)
-              );
-              dispatch(uploadAvatar(fd))
-                .unwrap()
-                .then(() => {
-                  console.log("uploadAvatar success");
-                  setCropModel(!cropModel);
-                })
-                .catch((err) => {
-                  console.error("uploadAvatar failed:", err);
-                });
-            });
-          }}
+          shape={"circle"}
+          onCropped={handleCropped}
+          // onCropped={(blob) => {
+          //   console.log("onCropped");
+
+          //   blobToBase64(blob).then((base64String) => {
+          //     const fd = new FormData();
+          //     fd.append("filename", "cropped.jpg");
+          //     fd.append(
+          //       "body",
+          //       base64String.substring("data:image/jpeg;base64,".length)
+          //     );
+          //     dispatch(uploadAvatar(fd))
+          //       .unwrap()
+          //       .then(() => {
+          //         console.log("uploadAvatar success");
+          //         setCropModel(!cropModel);
+          //       })
+          //       .catch((err) => {
+          //         console.error("uploadAvatar failed:", err);
+          //       });
+          //   });
+          // }}
         />
       )}
 

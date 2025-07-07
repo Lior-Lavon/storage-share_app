@@ -41,12 +41,22 @@ const ImageCropper = ({
   }, []);
 
   const handleCropImage = async () => {
-    const croppedImage = await getCroppedImg(
-      imageSrc,
-      croppedAreaPixels,
-      shape === "circle"
-    );
-    onCropped(croppedImage);
+    try {
+      const croppedImage = await getCroppedImg(
+        imageSrc,
+        croppedAreaPixels,
+        shape === "circle"
+      );
+
+      if (!croppedImage) {
+        console.error("Cropped image is null or undefined");
+        return;
+      }
+
+      onCropped(croppedImage);
+    } catch (err) {
+      console.error("Cropping failed:", err);
+    }
   };
 
   const resizeImage = (base64Str, maxWidth, maxHeight) => {
@@ -92,14 +102,6 @@ const ImageCropper = ({
           className="hidden"
           onChange={handleFileChange}
         />
-        {/* <input
-          ref={inputCameraRef}
-          type="file"
-          accept="image/*"
-          capture="environment"
-          className="hidden"
-          onChange={handleFileChange}
-        /> */}
         {/* Camera Input (Android-friendly) */}
         <input
           ref={inputCameraRef}
@@ -119,16 +121,6 @@ const ImageCropper = ({
               </PrimaryButton>
             </div>
           </div>
-          // <div className="flex flex-col gap-5 w-[250px]">
-          //   <div className="flex flex-col gap-5 w-[250px]">
-          //     <PrimaryButton onClick={() => inputRef.current.click()}>
-          //       Select from Gallery
-          //     </PrimaryButton>
-          //     <PrimaryButton onClick={() => inputCameraRef.current.click()}>
-          //       Take Photo
-          //     </PrimaryButton>
-          //   </div>
-          // </div>
         )}
 
         {imageSrc && (
