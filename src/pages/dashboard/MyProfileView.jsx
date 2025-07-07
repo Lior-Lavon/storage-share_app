@@ -176,34 +176,7 @@ const MyProfileView = ({ isVisible }) => {
     return !retVal;
   };
 
-  const updateAvatar = (fileName, imgSrc) => {
-    console.log("updateAvatar : ");
-
-    // const updatedProfile = { ...profile, avatar: imgSrc };
-    // dispatch(updateUserProfile(updatedProfile));
-
-    // update server
-    const fd = new FormData();
-    fd.append("filename", fileName);
-    fd.append("body", imgSrc.substring("data:image/jpeg;base64,".length));
-    dispatch(uploadAvatar(fd));
-  };
-
-  function blobToBase64(blob) {
-    console.log(blob instanceof Blob); // should be true
-    console.log(blob); // inspect the actual object
-
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onloadend = () => resolve(reader.result);
-      reader.onerror = reject;
-      reader.readAsDataURL(blob); // produces base64 string
-    });
-  }
-
   const handleCropped = (base64) => {
-    console.log("handleCropped");
-
     dispatch(
       uploadAvatar({
         filename: "image.jpg",
