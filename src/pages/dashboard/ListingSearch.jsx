@@ -5,6 +5,7 @@ import { MapView } from "../../components";
 import MultiSelectTag from "../../components/SharedComponents/MultiSelectTag";
 import SelectField from "../../components/SharedComponents/SelectField";
 import DatePickerField from "../../components/SharedComponents/DatePickerField";
+import PrimaryButton from "../../components/SharedComponents/PrimaryButton";
 
 const ListingSearch = () => {
   const [address, setAddress] = useState("");
@@ -39,6 +40,9 @@ const ListingSearch = () => {
 
   const searchAddress = () => {
     console.log("searchAddress");
+  };
+  const viewResults = () => {
+    console.log("viewResults");
   };
   return (
     <div className="w-full h-full mt-[112px] relative">
@@ -134,6 +138,10 @@ const ListingSearch = () => {
                 className="w-full"
               />
             </div>
+          </div>
+
+          <div className="pt-4">
+            <PrimaryButton onClick={viewResults}>View results</PrimaryButton>
           </div>
 
           {/* spacing  */}

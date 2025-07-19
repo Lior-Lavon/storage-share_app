@@ -5,7 +5,7 @@ const PrimaryButton = ({
   type = "submit",
   onClick,
   disabled,
-  bgColor = "bg-violet-600",
+  bgColor = "bg-[#F26200]",
   textColor = "text-white",
   borderColor = "", // e.g., "border border-gray-300"
 }) => {
