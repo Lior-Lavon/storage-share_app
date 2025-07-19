@@ -63,10 +63,10 @@ const ListingSearch = () => {
       />
       <div
         ref={filterRef}
-        className="w-full rounded-t-2xl bg-white -mt-5 z-10 absolute"
+        className="w-full rounded-t-2xl bg-white -mt-5 z-10 absolute overflow-y-auto"
         style={{ height: viewHeight }}
       >
-        <div className="vertical-scroll mt-4 mx-4 space-y-4 overflow-y-auto">
+        <div className="vertical-scroll mt-4 mx-4 space-y-4">
           <SelectField
             label={<>Type</>}
             value={storageType}
