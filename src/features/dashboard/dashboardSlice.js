@@ -10,6 +10,10 @@ const initialState = {
   isCropView: false,
   isCreateListing: false,
   isPreviewListing: false,
+  isSingleChatView: {
+    visible: false,
+    chatId: null,
+  },
 };
 
 const dashboardSlice = createSlice({
@@ -23,12 +27,20 @@ const dashboardSlice = createSlice({
       state.isCreateListing = false;
       state.isPreviewListing = false;
       state.isCropView = false;
+      state.isSingleChatView = {
+        visible: false,
+        chatId: null,
+      };
     },
     showProfile: (state, { payload }) => {
       if (payload == "ForceClose") {
         state.isProfile = false;
+        state.isMyProfile = false;
       } else {
         state.isProfile = !state.isProfile;
+        if (!state.isProfile) {
+          state.isMyProfile = false;
+        }
       }
     },
     showMyProfile: (state, { payload }) => {
@@ -66,6 +78,19 @@ const dashboardSlice = createSlice({
         state.isCropView = !state.isCropView;
       }
     },
+    showSingleChatView: (state, { payload }) => {
+      if (payload == "ForceClose") {
+        state.isSingleChatView = {
+          visible: false,
+          chatId: null,
+        };
+      } else {
+        state.isSingleChatView.visible = !state.isSingleChatView.visible;
+        if (payload != undefined) {
+          state.isSingleChatView.chatId = payload;
+        }
+      }
+    },
   },
   extraReducers: (builder) => {},
 });
@@ -78,5 +103,6 @@ export const {
   showCreateListing,
   showCropImageView,
   showPreviewListing,
+  showSingleChatView,
 } = dashboardSlice.actions;
 export default dashboardSlice.reducer;

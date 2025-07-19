@@ -6,13 +6,14 @@ import {
   ActivityView,
   ChatView,
   CreateListing,
+  PreviewListing,
+  SingleChatView,
 } from "../index";
 
 import { TabBar, TopBar } from "../../components";
 import ProfileView from "./ProfileView";
 import { useDispatch, useSelector } from "react-redux";
 import { showProfile } from "../../features/dashboard/dashboardSlice";
-import PreviewListing from "./PreviewListing";
 
 function renderTabContent(activeTab) {
   switch (activeTab) {
@@ -54,16 +55,15 @@ const Dashboard = () => {
     return () => window.removeEventListener("resize", updateHeight);
   }, []);
 
-  const { isProfile, isCreateListing, isPreviewListing } = useSelector(
-    (store) => store.dashboard
-  );
+  const { isProfile, isCreateListing, isPreviewListing, isSingleChatView } =
+    useSelector((store) => store.dashboard);
 
   const handleShowProfile = () => {
     dispatch(showProfile());
   };
 
   return (
-    <div className="w-full items-center">
+    <div className="relative w-full items-center">
       <div
         className="flex flex-col h-screen w-full bg-white overflow-y-hidden"
         style={{
@@ -77,13 +77,6 @@ const Dashboard = () => {
           showProfile={handleShowProfile}
           title="StorageShare"
         />
-        {/* Main content */}
-        {/* <div
-          className="scroll-content mt-14 bg-white"
-          style={{ height: viewHeight }}
-        >
-          <div className="">{renderTabContent(activeTab)}</div>
-        </div> */}
 
         <div className="scroll-content flex-1 min-h-0 bg-white">
           {renderTabContent(activeTab)}
@@ -96,9 +89,11 @@ const Dashboard = () => {
           setActiveTab={setActiveTab}
         />
       </div>
+
       <ProfileView isVisible={isProfile} />
       <CreateListing isVisible={isCreateListing} />
       <PreviewListing isVisible={isPreviewListing} />
+      <SingleChatView isVisible={isSingleChatView.visible} />
     </div>
   );
 };

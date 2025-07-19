@@ -77,7 +77,7 @@ const SettingsView = ({ isVisible }) => {
 
   return (
     <div
-      className={`w-full h-full z-90 fixed top-0 right-0 transition-transform duration-500 flex flex-col bg-white ${
+      className={`w-full h-full z-10 fixed top-0 right-0 transition-transform duration-500 flex flex-col bg-white ${
         isVisible ? "translate-x-0" : "translate-x-full"
       }`}
       // style={{

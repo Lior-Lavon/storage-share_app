@@ -42,11 +42,6 @@ const PreviewListing = ({ isVisible }) => {
 
   // useEffect(() => {
   const updateHeight = () => {
-    console.log("updateHeight");
-    console.log("contentRef.current : ", contentRef.current);
-    console.log("galleryRef.current : ", galleryRef.current);
-    console.log("bottomRef.current : ", bottomRef.current);
-
     if (contentRef.current && galleryRef.current) {
       const topBottom = galleryRef.current.getBoundingClientRect().bottom;
       console.log("topBottom : ", topBottom);
@@ -58,10 +53,7 @@ const PreviewListing = ({ isVisible }) => {
         bottomTop = window.innerHeight;
       }
 
-      console.log("bottomTop : ", bottomTop);
-
       const availableHeight = bottomTop - topBottom - 17;
-      console.log("availableHeight : ", availableHeight);
 
       setViewHeight(availableHeight);
     }
@@ -75,13 +67,11 @@ const PreviewListing = ({ isVisible }) => {
   // }, []);
 
   useEffect(() => {
-    console.log("isVisible : ", isVisible);
-
     if (isVisible) {
-      console.log("PreviewListing is now visible");
+      // console.log("PreviewListing is now visible");
       updateHeight();
     } else {
-      console.log("PreviewListing is now hidden");
+      // console.log("PreviewListing is now hidden");
       // galleryRef?.current?.reset(); // Clear the image
       // dispatch(clearListing());
     }
@@ -123,11 +113,7 @@ const PreviewListing = ({ isVisible }) => {
       .unwrap()
       .then(() => {
         dispatch(closeAllViews());
-        dispatch(
-          getMyListings({
-            user_id: listing?.userId,
-          })
-        );
+        dispatch(getMyListings(listing?.userId));
       })
       .catch((err) => {
         console.error("createListing failed:", err);
@@ -136,7 +122,7 @@ const PreviewListing = ({ isVisible }) => {
 
   return (
     <div
-      className={`w-full h-full z-900 fixed top-0 right-0 transition-transform duration-500 flex flex-col bg-white ${
+      className={`w-full h-full z-10 fixed top-0 right-0 transition-transform duration-500 flex flex-col bg-white ${
         isVisible ? "translate-x-0" : "translate-x-full"
       }`}
       // style={{
@@ -151,7 +137,7 @@ const PreviewListing = ({ isVisible }) => {
           onClick={() => {
             dispatch(showPreviewListing());
           }}
-          className="absolute top-3 left-4 w-8 h-8 cursor-pointer hover:scale-105 active:scale-95 text-black transition-transform duration-150 z-999 bg-white rounded-full"
+          className="absolute top-3 left-4 w-8 h-8 cursor-pointer hover:scale-105 active:scale-95 text-black transition-transform duration-150 z-10 bg-white rounded-full"
         />
 
         {/* Gallery slider */}

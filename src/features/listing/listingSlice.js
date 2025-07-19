@@ -10,8 +10,6 @@ import {
 export const createListing = createAsyncThunk(
   "user/createListing",
   async (body, thunkAPI) => {
-    console.log("createListing : ", body);
-
     return createListingThunk("/listings", body, thunkAPI);
   }
 );
@@ -26,8 +24,6 @@ export const updateListing = createAsyncThunk(
 export const updateListingImage = createAsyncThunk(
   "user/updateListingImage",
   async (body, thunkAPI) => {
-    console.log("body : ", body);
-
     return updateListingsImageThunk("/listings/image", body, thunkAPI);
   }
 );
@@ -41,10 +37,9 @@ export const deleteListingImage = createAsyncThunk(
 
 export const getMyListings = createAsyncThunk(
   "user/getMyListings",
-  async (body, thunkAPI) => {
+  async (userId, thunkAPI) => {
     return getMyListingsThunk(
-      "/listings/?page_size=10&page_id=0",
-      body,
+      `/listings/?user_id=${userId}&page_size=10&page_id=0`,
       thunkAPI
     );
   }

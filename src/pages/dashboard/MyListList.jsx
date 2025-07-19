@@ -14,10 +14,6 @@ const MyListList = () => {
   const wrapperRef = useRef(null);
 
   useEffect(() => {
-    console.log("MyListList : myListings : ", myListings);
-  }, [myListings]);
-
-  useEffect(() => {
     const updateTabBarTop = () => {
       const tabBar = document.querySelector(".tab-bar");
       const button = buttonRef.current;

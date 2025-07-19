@@ -8,6 +8,7 @@ import {
   TopBar,
 } from "../../components";
 import {
+  closeAllViews,
   showCreateListing,
   showCropImageView,
   showPreviewListing,
@@ -54,6 +55,7 @@ const CreateListing = ({ isVisible }) => {
   const [listDescription, setListDescription] = useState("");
   const [formattedAddress, setFormattedAddress] = useState("");
   const [mapCoordinate, setMapCoordinate] = useState(null);
+  const [errorView, setErrorView] = useState(false);
 
   const [storageType, setStorageType] = useState([]);
   const [allowedStorage, setAllowedStorage] = useState([]);
@@ -82,13 +84,13 @@ const CreateListing = ({ isVisible }) => {
   });
 
   useEffect(() => {
-    console.log("CreateListing : ", listing);
+    // console.log("CreateListing : ", listing);
 
     setDefaultValues();
   }, [listing]);
 
   const setDefaultValues = () => {
-    console.log("listing : ", listing);
+    // console.log("listing : ", listing);
     galleryRef?.current?.reset(); // Clear the image
     setImages([]);
 
@@ -138,10 +140,10 @@ const CreateListing = ({ isVisible }) => {
 
   useEffect(() => {
     if (isVisible) {
-      console.log("CreateListing is now visible");
+      // console.log("CreateListing is now visible");
       setDefaultValues();
     } else {
-      console.log("CreateListing is now hidden");
+      // console.log("CreateListing is now hidden");
       galleryRef?.current?.reset(); // Clear the image
       dispatch(clearListing());
     }
@@ -225,9 +227,10 @@ const CreateListing = ({ isVisible }) => {
   };
 
   const handlePreviewListing = () => {
-    if (!validation()) return;
-
-    console.log("handlePreviewListing mapCoordinate : ", mapCoordinate);
+    if (!validation()) {
+      setErrorView(true);
+      return;
+    }
     dispatch(
       setListing({
         user_id: profile.id,
@@ -274,14 +277,15 @@ const CreateListing = ({ isVisible }) => {
         status: "in_review",
         images: images,
       })
-    );
-    // .unwrap()
-    // .then(() => {
-    //   console.log("updateListing - succesfully");
-    // })
-    // .catch((err) => {
-    //   console.log("updateListing - failed");
-    // });
+    )
+      .unwrap()
+      .then(() => {
+        // console.log("updateListing - succesfully");
+        dispatch(closeAllViews());
+      })
+      .catch((err) => {
+        console.log("updateListing - failed");
+      });
   };
 
   const handleDeleteImage = (imageUrl) => {
@@ -298,7 +302,7 @@ const CreateListing = ({ isVisible }) => {
 
   return (
     <div
-      className={`w-full h-full z-100 fixed top-0 right-0 transition-transform duration-500 flex flex-col bg-gray-100 ${
+      className={`w-full h-full z-10 fixed top-0 right-0 transition-transform duration-500 flex flex-col bg-gray-100 ${
         isVisible ? "translate-x-0" : "translate-x-full"
       }`}
       style={{
@@ -588,6 +592,30 @@ const CreateListing = ({ isVisible }) => {
           closeModal={() => dispatch(showCropImageView())}
           onCropped={handleCropped}
         />
+      )}
+
+      {errorView && (
+        <div className="w-full h-screen bg-gray-500/20 absolute top-0 z-20 flex items-center justify-center">
+          <div className="w-[90%] max-w-[400px] rounded-lg shadow-2xl bg-white space-y-8">
+            <div className="mt-2">
+              <p className="text-center pt-2 font-bold">
+                Ops you missed something !
+              </p>
+              <p className="text-center pt-2 text-sm">
+                Please check for the red mark in the form
+              </p>
+            </div>
+
+            <button
+              className="block w-[80%] py-1 mx-auto my-4 rounded-lg bg-white border border-red-500 text-red-500"
+              onClick={() => {
+                setErrorView(false);
+              }}
+            >
+              Close
+            </button>
+          </div>
+        </div>
       )}
     </div>
   );

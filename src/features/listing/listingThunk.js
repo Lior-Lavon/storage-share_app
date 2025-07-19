@@ -41,9 +41,9 @@ export const deleteListingsImageThunk = async (url, body, thunkAPI) => {
   }
 };
 
-export const getMyListingsThunk = async (url, body, thunkAPI) => {
+export const getMyListingsThunk = async (url, thunkAPI) => {
   try {
-    const resp = await customFetch.get(url, { body });
+    const resp = await customFetch.get(url);
     return resp.data;
   } catch (error) {
     return thunkAPI.rejectWithValue(error.response?.data?.msg);

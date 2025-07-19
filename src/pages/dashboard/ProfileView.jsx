@@ -77,7 +77,7 @@ const ProfileView = ({ isVisible }) => {
 
   return (
     <div
-      className={`w-full h-full z-90 fixed top-0 right-0 transition-transform duration-500 flex flex-col bg-white ${
+      className={`w-full h-full z-10 fixed top-0 right-0 transition-transform duration-500 flex flex-col bg-white ${
         isVisible ? "translate-x-0" : "translate-x-full"
       }`}
       style={{
@@ -88,7 +88,10 @@ const ProfileView = ({ isVisible }) => {
     >
       <TopBar
         ref={topRef}
-        showBackIcon={() => dispatch(showProfile())}
+        showBackIcon={(e) => {
+          e.stopPropagation();
+          dispatch(showProfile());
+        }}
         title={"Profile"}
       />
       <div
@@ -102,10 +105,9 @@ const ProfileView = ({ isVisible }) => {
             profile.firstname !== "" ? profile.firstname : "Unknown"
           } ${profile?.lastname !== "" ? profile?.lastname : "Unknown"}`}</p>
 
-          <p className="text-base text-gray-400">{profile?.email}</p>
+          <p className="text-base text-red-400">{profile?.email}</p>
         </div>
 
-        {/* menu */}
         <div className="w-[90%] mx-auto my-4 flex flex-col text-left border-b border-gray-300">
           {menu.map((item) => (
             <button
@@ -133,6 +135,7 @@ const ProfileView = ({ isVisible }) => {
           ))}
         </div>
       </div>
+
       {/* logout */}
       <div
         ref={bottomRef}

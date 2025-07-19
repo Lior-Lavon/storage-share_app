@@ -15,6 +15,9 @@ import GallerySlider from "./GallerySlider";
 import ImageSlider from "./ImageSlider";
 import PlacesAutocomplete from "./PlacesAutocomplete";
 import MapView from "./MapView";
+import ChatItem from "./ChatItem";
+import Spinner from "./Spinner";
+import ListingBar from "./ListingBar";
 
 export {
   LoginView,
@@ -34,4 +37,7 @@ export {
   ImageSlider,
   PlacesAutocomplete,
   MapView,
+  ChatItem,
+  Spinner,
+  ListingBar,
 };
