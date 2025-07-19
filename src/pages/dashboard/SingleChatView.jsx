@@ -2,7 +2,10 @@ import React, { useEffect, useRef, useState, CSSProperties } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { ChatItem, ListingBar, TopBar } from "../../components";
-import { showSingleChatView } from "../../features/dashboard/dashboardSlice";
+import {
+  showPreviewListing,
+  showSingleChatView,
+} from "../../features/dashboard/dashboardSlice";
 import InputField from "../../components/SharedComponents/InputField";
 import { BsSend } from "react-icons/bs";
 import {
@@ -65,7 +68,12 @@ const SingleChatView = ({ isVisible }) => {
       {/* Top Bar (static height) */}
       <TopBar ref={topRef} showBackIcon={hideSingleChatView} title="Chat" />
 
-      <div className="mt-[4.5rem]">
+      <div
+        className="mt-[4.5rem]"
+        onClick={() => {
+          dispatch(showPreviewListing());
+        }}
+      >
         <ListingBar chat={chat} />
       </div>
 

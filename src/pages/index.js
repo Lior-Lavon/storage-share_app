@@ -15,6 +15,7 @@ import MyListList from "./dashboard/MyListList";
 import CreateListing from "./dashboard/CreateListing";
 import PreviewListing from "./dashboard/PreviewListing";
 import SingleChatView from "./dashboard/SingleChatView";
+import ListingSearch from "./dashboard/ListingSearch";
 
 export {
   NotFound,
@@ -34,4 +35,5 @@ export {
   CreateListing,
   PreviewListing,
   SingleChatView,
+  ListingSearch,
 };

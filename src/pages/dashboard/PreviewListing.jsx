@@ -122,7 +122,7 @@ const PreviewListing = ({ isVisible }) => {
 
   return (
     <div
-      className={`w-full h-full z-10 fixed top-0 right-0 transition-transform duration-500 flex flex-col bg-white ${
+      className={`w-full h-full z-20 fixed top-0 right-0 transition-transform duration-500 flex flex-col bg-white ${
         isVisible ? "translate-x-0" : "translate-x-full"
       }`}
       // style={{
@@ -180,7 +180,11 @@ const PreviewListing = ({ isVisible }) => {
           <p className="text-sm text-gray-600">{listing?.description}</p>
 
           {/* map */}
-          <MapView className="w-full h-40 bg-gray-300 rounded-2xl" />
+          <MapView
+            className="w-full h-40 bg-gray-300 rounded-2xl"
+            additionalClass={"h-40"}
+            showControls={true}
+          />
 
           {/* type of space */}
           <div className="w-full">
