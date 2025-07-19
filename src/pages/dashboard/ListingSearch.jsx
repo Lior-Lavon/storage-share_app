@@ -137,7 +137,7 @@ const ListingSearch = () => {
           </div>
 
           {/* spacing  */}
-          <div className="w-full h-10 bg-red-500"></div>
+          <div className="w-full h-10"></div>
         </div>
       </div>
     </div>
