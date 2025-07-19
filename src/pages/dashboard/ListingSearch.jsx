@@ -66,7 +66,7 @@ const ListingSearch = () => {
         className="w-full rounded-t-2xl bg-white -mt-5 z-10 absolute"
         style={{ height: viewHeight }}
       >
-        <div className="mt-4 mx-4 space-y-4">
+        <div className="vertical-scroll mt-4 mx-4 space-y-4 overflow-y-auto">
           <SelectField
             label={<>Type</>}
             value={storageType}
@@ -75,8 +75,6 @@ const ListingSearch = () => {
               setStorageType(selected.target.value);
             }}
             options={["garage", "attic", "shed", "room", "basement", "others"]}
-            // error={formValidation.minimumStoragePeriod}
-            // disabled={formattedAddress == ""}
           />
 
           {/* Availability */}
@@ -113,20 +111,17 @@ const ListingSearch = () => {
           </div>
 
           {/* Price range */}
-          <div className="w-full flex flex-col">
+          <div className="w-full ">
             <label className="text-base font-medium">Price range</label>
-            <div className="w-full flex items-center gap-2 mt-1">
+            <div className="w-full flex items-center justify-between gap-2">
               <InputField
                 name="startDate"
                 value={listingStartDate}
                 placeholder={"From:"}
                 onChange={(e) => {
-                  clearError("availability");
                   setListingStartDate(e.target.value);
                 }}
-                min="2023-01-01"
-                max="2025-12-31"
-                className="w-1/2"
+                className="w-full"
               />
 
               <InputField
@@ -134,15 +129,15 @@ const ListingSearch = () => {
                 value={listingEndDate}
                 placeholder={"To:"}
                 onChange={(e) => {
-                  clearError("availability");
                   setListingEndDate(e.target.value);
                 }}
-                min="2023-01-01"
-                max="2025-12-31"
-                className="w-1/2"
+                className="w-full"
               />
             </div>
           </div>
+
+          {/* spacing  */}
+          <div className="w-full h-10 bg-red-500"></div>
         </div>
       </div>
     </div>
