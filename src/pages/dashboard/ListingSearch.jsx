@@ -15,6 +15,10 @@ const ListingSearch = () => {
   const [storageType, setStorageType] = useState([]);
   const [listingStartDate, setListingStartDate] = useState("");
   const [listingEndDate, setListingEndDate] = useState("");
+  const [minimumSize, setMinimumSize] = useState("");
+  const [maximumSize, setMaximumSize] = useState("");
+  const [minimumPrice, setMinimumPrice] = useState("");
+  const [maximumPrice, setMaximumPrice] = useState("");
 
   useEffect(() => {
     const updateTabBarTop = () => {
@@ -67,41 +71,68 @@ const ListingSearch = () => {
       >
         <div className="vertical-scroll mt-2 space-y-4">
           <MapView
-            className="w-full h-50 bg-gray-300 rounded-2xl"
-            additionalClass={"h-60"}
+            className="w-full"
+            additionalClass={"h-40"}
             showControls={false}
           />
 
           <div className="flex flex-col mx-4 space-y-4 ">
-            <SelectField
-              label={<>Type</>}
-              value={storageType}
-              onChange={(selected) => {
-                clearError("minimumStoragePeriod");
-                setStorageType(selected.target.value);
-              }}
-              options={[
-                "garage",
-                "attic",
-                "shed",
-                "room",
-                "basement",
-                "others",
-              ]}
-            />
+            <div className="w-full ">
+              <label className="text-sm font-medium">Size</label>
+              <div className="w-full flex items-center justify-between gap-2">
+                <InputField
+                  name="minimumSize"
+                  value={minimumSize}
+                  placeholder={"From:"}
+                  onChange={(e) => {
+                    setMinimumSize(e.target.value);
+                  }}
+                  className="w-full"
+                />
+
+                <InputField
+                  name="maxSize"
+                  value={maximumSize}
+                  placeholder={"To:"}
+                  onChange={(e) => {
+                    setMaximumSize(e.target.value);
+                  }}
+                  className="w-full"
+                />
+              </div>
+            </div>
+
+            {/* Type of space */}
+            <div className="w-full ">
+              <label className="text-sm font-medium">Type</label>
+              <MultiSelectTag
+                chipFontSize="text-sm"
+                value={storageType}
+                onChange={(selected) => {
+                  // clearError("storageType");
+                  setStorageType(selected);
+                }}
+                options={[
+                  "garage",
+                  "attic",
+                  "shed",
+                  "room",
+                  "basement",
+                  "others",
+                ]}
+                // error={formValidation.storageType}
+              />
+            </div>
 
             {/* Availability */}
             <div className="w-full flex flex-col">
-              <label className="text-base font-medium">
-                Availability / Calendar Blocking{" "}
-                <span style={{ color: "red" }}>*</span>
-              </label>
+              <label className="text-sm font-medium">Availability</label>
               <div className="w-full flex items-center gap-2 mt-1">
                 <DatePickerField
                   name="startDate"
                   value={listingStartDate}
                   onChange={(e) => {
-                    clearError("availability");
+                    // clearError("availability");
                     setListingStartDate(e.target.value);
                   }}
                   min="2023-01-01"
@@ -113,7 +144,7 @@ const ListingSearch = () => {
                   name="endDate"
                   value={listingEndDate}
                   onChange={(e) => {
-                    clearError("availability");
+                    // clearError("availability");
                     setListingEndDate(e.target.value);
                   }}
                   min="2023-01-01"
@@ -125,24 +156,24 @@ const ListingSearch = () => {
 
             {/* Price range */}
             <div className="w-full ">
-              <label className="text-base font-medium">Price range</label>
+              <label className="text-sm font-medium">Price range</label>
               <div className="w-full flex items-center justify-between gap-2">
                 <InputField
-                  name="startDate"
-                  value={listingStartDate}
+                  name="minimumPrice"
+                  value={minimumPrice}
                   placeholder={"From:"}
                   onChange={(e) => {
-                    setListingStartDate(e.target.value);
+                    setMinimumPrice(e.target.value);
                   }}
                   className="w-full"
                 />
 
                 <InputField
-                  name="endDate"
-                  value={listingEndDate}
+                  name="maxPrice"
+                  value={maximumPrice}
                   placeholder={"To:"}
                   onChange={(e) => {
-                    setListingEndDate(e.target.value);
+                    setMaximumPrice(e.target.value);
                   }}
                   className="w-full"
                 />

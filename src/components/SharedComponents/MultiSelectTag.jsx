@@ -5,6 +5,7 @@ const arraysEqual = (a, b) =>
 
 const MultiSelectTag = ({
   label,
+  chipFontSize,
   options,
   value = [],
   onChange,
@@ -35,16 +36,16 @@ const MultiSelectTag = ({
 
   return (
     <div className="flex flex-col gap-1">
-      <label className="text-base font-medium">{label}</label>
+      {label != "" && <label className="text-base font-medium">{label}</label>}
       <div
-        className={`px-4 py-2 flex flex-wrap gap-2 ${
+        className={`flex flex-wrap gap-2 ${
           error ? "border border-red-500" : ""
         }`}
       >
         {options?.map((item, index) => (
           <div
             key={index}
-            className={`w-fit py-1 px-4 rounded-full cursor-pointer transition ${
+            className={`w-fit py-1 px-4 rounded-full cursor-pointer transition ${chipFontSize} ${
               isSelected(item)
                 ? "bg-violet-600 text-white"
                 : "bg-gray-100 hover:bg-gray-200"
