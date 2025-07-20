@@ -30,6 +30,7 @@ const DatePickerField = ({
     }
     // Format date as 'yyyy-MM-dd'
     const formattedDate = date.toISOString().split("T")[0];
+    setOpen(false); // Close after selection
     onChange({ target: { name, value: formattedDate } });
   };
 
@@ -55,7 +56,10 @@ const DatePickerField = ({
           open={open}
           onCalendarClose={() => setOpen(false)}
           onCalendarOpen={() => setOpen(true)}
+          shouldCloseOnSelect={true} // default, but keep it explicit
+          onClickOutside={() => setOpen(false)} // <- this is crucial
           popperClassName="z-50"
+
           // withPortal
         />
         <FaRegCalendarAlt
