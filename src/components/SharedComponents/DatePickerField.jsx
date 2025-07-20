@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import DatePicker from "react-datepicker";
 import { parseISO } from "date-fns";
 import "react-datepicker/dist/react-datepicker.css";
@@ -19,6 +19,8 @@ const DatePickerField = ({
   const selectedDate = value ? parseISO(value) : null;
   const minDate = min ? parseISO(min) : null;
   const maxDate = max ? parseISO(max) : null;
+
+  const [open, setOpen] = useState(false);
 
   // Wrap onChange to send date string back (yyyy-MM-dd)
   const handleChange = (date) => {
@@ -48,8 +50,12 @@ const DatePickerField = ({
           placeholderText="dd/mm/yyyy"
           dateFormat="dd/MM/yyyy"
           name={name}
-          popperClassName="z-50"
           readOnly
+          onInputClick={() => setOpen(true)}
+          open={open}
+          onCalendarClose={() => setOpen(false)}
+          onCalendarOpen={() => setOpen(true)}
+          popperClassName="z-50"
           // withPortal
         />
         <FaRegCalendarAlt
