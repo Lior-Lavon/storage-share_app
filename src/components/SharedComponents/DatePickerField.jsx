@@ -49,6 +49,7 @@ const DatePickerField = ({
           dateFormat="dd/MM/yyyy"
           name={name}
           popperClassName="z-50"
+          readOnly
           // withPortal
         />
         <FaRegCalendarAlt
