@@ -60,88 +60,98 @@ const ListingSearch = () => {
         </div>
       </div>
 
-      <MapView
-        className="w-full h-50 bg-gray-300 rounded-2xl"
-        additionalClass={"h-60"}
-        showControls={false}
-      />
       <div
         ref={filterRef}
-        className="w-full rounded-t-2xl bg-white -mt-5 z-10 absolute overflow-y-auto"
+        className="w-full bg-white overflow-y-auto"
         style={{ height: viewHeight }}
       >
-        <div className="vertical-scroll mt-4 mx-4 space-y-4">
-          <SelectField
-            label={<>Type</>}
-            value={storageType}
-            onChange={(selected) => {
-              clearError("minimumStoragePeriod");
-              setStorageType(selected.target.value);
-            }}
-            options={["garage", "attic", "shed", "room", "basement", "others"]}
+        <div className="vertical-scroll mt-2 space-y-4">
+          <MapView
+            className="w-full h-50 bg-gray-300 rounded-2xl"
+            additionalClass={"h-60"}
+            showControls={false}
           />
 
-          {/* Availability */}
-          <div className="w-full flex flex-col">
-            <label className="text-base font-medium">
-              Availability / Calendar Blocking{" "}
-              <span style={{ color: "red" }}>*</span>
-            </label>
-            <div className="w-full flex items-center gap-2 mt-1">
-              <DatePickerField
-                name="startDate"
-                value={listingStartDate}
-                onChange={(e) => {
-                  clearError("availability");
-                  setListingStartDate(e.target.value);
-                }}
-                min="2023-01-01"
-                max="2025-12-31"
-                className="w-1/2"
-              />
+          <div className="flex flex-col mx-4 space-y-4 ">
+            <SelectField
+              label={<>Type</>}
+              value={storageType}
+              onChange={(selected) => {
+                clearError("minimumStoragePeriod");
+                setStorageType(selected.target.value);
+              }}
+              options={[
+                "garage",
+                "attic",
+                "shed",
+                "room",
+                "basement",
+                "others",
+              ]}
+            />
 
-              <DatePickerField
-                name="endDate"
-                value={listingEndDate}
-                onChange={(e) => {
-                  clearError("availability");
-                  setListingEndDate(e.target.value);
-                }}
-                min="2023-01-01"
-                max="2025-12-31"
-                className="w-1/2"
-              />
+            {/* Availability */}
+            <div className="w-full flex flex-col">
+              <label className="text-base font-medium">
+                Availability / Calendar Blocking{" "}
+                <span style={{ color: "red" }}>*</span>
+              </label>
+              <div className="w-full flex items-center gap-2 mt-1">
+                <DatePickerField
+                  name="startDate"
+                  value={listingStartDate}
+                  onChange={(e) => {
+                    clearError("availability");
+                    setListingStartDate(e.target.value);
+                  }}
+                  min="2023-01-01"
+                  max="2025-12-31"
+                  className="w-1/2"
+                />
+
+                <DatePickerField
+                  name="endDate"
+                  value={listingEndDate}
+                  onChange={(e) => {
+                    clearError("availability");
+                    setListingEndDate(e.target.value);
+                  }}
+                  min="2023-01-01"
+                  max="2025-12-31"
+                  className="w-1/2"
+                />
+              </div>
             </div>
-          </div>
 
-          {/* Price range */}
-          <div className="w-full ">
-            <label className="text-base font-medium">Price range</label>
-            <div className="w-full flex items-center justify-between gap-2">
-              <InputField
-                name="startDate"
-                value={listingStartDate}
-                placeholder={"From:"}
-                onChange={(e) => {
-                  setListingStartDate(e.target.value);
-                }}
-                className="w-full"
-              />
+            {/* Price range */}
+            <div className="w-full ">
+              <label className="text-base font-medium">Price range</label>
+              <div className="w-full flex items-center justify-between gap-2">
+                <InputField
+                  name="startDate"
+                  value={listingStartDate}
+                  placeholder={"From:"}
+                  onChange={(e) => {
+                    setListingStartDate(e.target.value);
+                  }}
+                  className="w-full"
+                />
 
-              <InputField
-                name="endDate"
-                value={listingEndDate}
-                placeholder={"To:"}
-                onChange={(e) => {
-                  setListingEndDate(e.target.value);
-                }}
-                className="w-full"
-              />
+                <InputField
+                  name="endDate"
+                  value={listingEndDate}
+                  placeholder={"To:"}
+                  onChange={(e) => {
+                    setListingEndDate(e.target.value);
+                  }}
+                  className="w-full"
+                />
+              </div>
             </div>
-          </div>
 
-          <div className="pt-4">
-            <PrimaryButton onClick={viewResults}>View results</PrimaryButton>
+            <div className="pt-4">
+              <PrimaryButton onClick={viewResults}>View results</PrimaryButton>
+            </div>
           </div>
 
           {/* spacing  */}
