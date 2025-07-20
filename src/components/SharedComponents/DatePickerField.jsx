@@ -48,7 +48,7 @@ const DatePickerField = ({
           placeholderText="dd/mm/yyyy"
           dateFormat="dd/MM/yyyy"
           name={name}
-          withPortal
+          // withPortal
         />
         <FaRegCalendarAlt
           className="absolute right-1 top-1/2 transform -translate-y-1/2 text-gray-300 pointer-events-none"
