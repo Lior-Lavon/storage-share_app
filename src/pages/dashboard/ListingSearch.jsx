@@ -62,7 +62,7 @@ const ListingSearch = () => {
 
       <div
         ref={filterRef}
-        className="w-full bg-white overflow-y-auto"
+        className="w-full bg-white overflow-y-auto overflow-visible"
         style={{ height: viewHeight }}
       >
         <div className="vertical-scroll mt-2 space-y-4">

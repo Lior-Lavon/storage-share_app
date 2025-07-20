@@ -39,7 +39,7 @@ const DatePickerField = ({
         }`}
       >
         <DatePicker
-          className="w-full bg-gray-100 px-2 py-2 rounded-lg border border-gray-100 focus:outline-none focus:ring-2 focus:ring-violet-500 z-500"
+          className="w-full bg-gray-100 px-2 py-2 rounded-lg border border-gray-100 focus:outline-none focus:ring-2 focus:ring-violet-500"
           selected={selectedDate}
           onChange={handleChange}
           minDate={minDate}
@@ -48,6 +48,7 @@ const DatePickerField = ({
           placeholderText="dd/mm/yyyy"
           dateFormat="dd/MM/yyyy"
           name={name}
+          popperClassName="z-50"
           // withPortal
         />
         <FaRegCalendarAlt
